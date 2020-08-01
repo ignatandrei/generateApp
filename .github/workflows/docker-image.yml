@@ -4,8 +4,7 @@ on:
   push:
     branches: 
       - b2d190ca83af46ddb26cb72cff6ca265
-    branches-ignore:
-      - 'master'
+
 jobs:
 
   build:
