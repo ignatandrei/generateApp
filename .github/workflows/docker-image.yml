@@ -3,7 +3,7 @@ name: Docker Image CI
 on:
   push:
     branches: 
-      - 'b2d190ca83af46ddb26cb72cff6ca265'
+      - b2d190ca83af46ddb26cb72cff6ca265
     branches-ignore:
       - 'master'
 jobs:
