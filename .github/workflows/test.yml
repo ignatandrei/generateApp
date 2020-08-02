@@ -22,3 +22,8 @@ jobs:
           VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
           echo ${VERSION}
           
+      - name: artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: output${GITHUB_REF##*/}
+          path: out
