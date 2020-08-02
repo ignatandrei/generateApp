@@ -15,18 +15,23 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-
+        
+      - name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF##*/})"
+        id: extract_branch
+        
       - name: Run tests
         run: |
           echo ${GITHUB_REF##*/} 
-          # echo "::set-env name=action_state::yellow"
-          echo "::set-env name=action_state::${{GITHUB_REF##*/}}"
+          echo "::set-env name=action_state::yellow"
+          #echo "::set-env name=action_state::${{GITHUB_REF##*/}}"
           
           
       - name: artifacts
         uses: actions/upload-artifact@v2
         with:
-          name: output ${{env.action_state}}
+          name: output ${{ steps.extract_branch.outputs.branch }}         
           path: LICENSE
 
       - name: artifacts
