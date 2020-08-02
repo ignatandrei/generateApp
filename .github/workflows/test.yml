@@ -19,7 +19,8 @@ jobs:
       - name: Run tests
         run: |
           echo ${GITHUB_REF##*/} 
-          echo "::set-env name=action_state::yellow"
+          # echo "::set-env name=action_state::yellow"
+          echo "::set-env name=action_state::${{GITHUB_REF##*/}}"
           
           
       - name: artifacts
