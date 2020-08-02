@@ -27,3 +27,9 @@ jobs:
         with:
           name: output${{github.sha}}
           path: LICENSE
+
+      - name: artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: output ${{github.ref}}
+          path: LICENSE
