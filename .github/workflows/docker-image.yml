@@ -18,12 +18,6 @@ jobs:
     steps:
     - uses: actions/checkout@v2
               
-    - name: artifacts
-      uses: actions/upload-artifact@v2
-      with:
-        name: files
-        path: Generated
-        
     - name: Build the Docker image
       shell: pwsh
       run: |
@@ -84,4 +78,4 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: source code ${{ env.GITHUB_REF_SLUG  }}
-        path: .
+        path: Generated
