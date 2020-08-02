@@ -23,7 +23,7 @@ jobs:
       - name: artifacts
         uses: actions/upload-artifact@v2
         with:
-          name: output $(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+          name: output ${{GITHUB_REF##*/}}
           path: LICENSE
 
       - name: artifacts
