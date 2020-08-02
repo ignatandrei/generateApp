@@ -23,7 +23,7 @@ jobs:
       - name: artifacts
         uses: actions/upload-artifact@v2
         with:
-          name: output ${{GITHUB_REF##*/}}
+          name: output
           path: LICENSE
 
       - name: artifacts
