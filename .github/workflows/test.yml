@@ -41,11 +41,12 @@ jobs:
           echo "   repository : ${{ env.GITHUB_REPOSITORY_SLUG_URL }}"
           echo "Short SHA variables"
           echo "   sha        : ${{ env.GITHUB_SHA_SHORT }}"    
-            - name: artifacts
-              uses: actions/upload-artifact@v2
-              with:
-                name: output ${{ steps.extract_branch.outputs.branch }}         
-                path: LICENSE
+          
+      - name: artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: output ${{ env.GITHUB_REF_SLUG  }}         
+          path: LICENSE
 
       - name: artifacts
         uses: actions/upload-artifact@v2
