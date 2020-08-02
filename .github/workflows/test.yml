@@ -20,7 +20,7 @@ jobs:
         run: |
           echo ${GITHUB_REF##*/} 
           echo "::set-env name=action_state::yellow"
-          echo env.action_state
+          echo ${env.action_state}
           
       - name: artifacts
         uses: actions/upload-artifact@v2
