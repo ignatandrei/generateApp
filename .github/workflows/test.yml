@@ -21,13 +21,13 @@ jobs:
           echo ${GITHUB_REF##*/} 
           VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
           echo ${VERSION}
-          echo "::set-env name=VER::${{VERSION}}"
-          echo ${VER}
+          #echo "::set-env name=VER::${{VERSION}}"
+          #echo ${VER}
           
       - name: artifacts
         uses: actions/upload-artifact@v2
         with:
-          name: output${{VER}}
+          name: output $(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
           path: LICENSE
 
       - name: artifacts
