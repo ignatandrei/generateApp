@@ -17,6 +17,13 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+              
+    - name: artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: files
+        path: Generated
+        
     - name: Build the Docker image
       shell: pwsh
       run: |
@@ -26,28 +33,34 @@ jobs:
         mkdir $currentDir/out
         $dockers = Get-ChildItem -Path $currentDir/Generated -Filter docker.txt -Recurse | %{$_.FullName}
         Write-Host $dockers
-        return
+        
         Foreach($file in $dockers){
 
-        Write-Host $file
-        $dir =(get-item $file ).Directory
-        Write-Host $dir.FullName
-        #cd $dir.FullName
-        #Write-Host $dir.Name
-        Push-Location $dir.FullName
-        [Environment]::CurrentDirectory = $dir.FullName
-        $nameDockerImage = $dir.Name.ToLower()
-        &"docker.exe" build  -f docker.txt -t  $nameDockerImage .
-        $nameDockerContainer =  $nameDockerImage + "container"
+          Write-Host $file
+          $dir =(get-item $file ).Directory
+          Write-Host $dir.FullName
+          #cd $dir.FullName
+          #Write-Host $dir.Name
+          Push-Location $dir.FullName
+          [Environment]::CurrentDirectory = $dir.FullName
+          $nameDockerImage = $dir.Name.ToLower()
+          &"docker" build  -f docker.txt -t  $nameDockerImage .
+          $nameDockerContainer =  $nameDockerImage + "container"
 
-        &"docker" run -p 5000:5000 -d  --name $nameDockerContainer --rm $nameDockerImage
+          &"docker" run -p 5000:5000 -d  --name $nameDockerContainer --rm $nameDockerImage
 
-        Write-Host "!!!"
-        Write-Host "docker" cp ${nameDockerContainer}:/app/out/ $currentDir/out/$nameDockerImage
-        Write-Host "!!!"
-        &"docker" cp ${nameDockerContainer}:/app/out  $currentDir/out/$nameDockerImage
-        &"docker" container kill ${nameDockerContainer}
-        Pop-Location
+          Write-Host "!!!"
+          Write-Host "docker" cp ${nameDockerContainer}:/app/out/ $currentDir/out/$nameDockerImage
+          Write-Host "!!!"
+          &"docker" cp ${nameDockerContainer}:/app/out  $currentDir/out/$nameDockerImage
+          &"docker" container kill ${nameDockerContainer}
+          Pop-Location
 
         }
-      
+        dir $currentDir/out      
+
+    - name: artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: output
+        path: out
