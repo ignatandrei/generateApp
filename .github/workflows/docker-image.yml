@@ -57,7 +57,20 @@ jobs:
           Pop-Location
 
         }
-        dir $currentDir/out      
+        dir $currentDir/out  
+        #spa copy files
+        $spa = @(Get-ChildItem -Path $currentDir/out -Filter Angular* -Recurse | %{$_.FullName})
+        $backend=@(Get-ChildItem -Path $currentDir/out -Filter wwwroot* -Recurse | %{$_.FullName})
+        Write-Host ($spa.length -eq 1)
+        Write-Host ($backend.length -gt 0)
+        if($spa.length -eq 1 ){
+         if($backend.length -gt 0){
+          Foreach($file in $backend){    
+              Copy-Item -Path $spa\*.* -Destination $file -Force -Recurse	
+          }
+         }	
+        }
+    
 
     - name: artifacts
       uses: actions/upload-artifact@v2
