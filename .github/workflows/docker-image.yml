@@ -71,9 +71,17 @@ jobs:
          }	
         }
     
+    - name: Inject slug/short variables
+      uses: rlespinasse/github-slug-action@v2.x
 
-    - name: artifacts
+    - name: artifacts      
       uses: actions/upload-artifact@v2
       with:
-        name: output
+        name: exe ${{ env.GITHUB_REF_SLUG  }}
         path: out
+        
+    - name: artifacts      
+      uses: actions/upload-artifact@v2
+      with:
+        name: source code ${{ env.GITHUB_REF_SLUG  }}
+        path: .
