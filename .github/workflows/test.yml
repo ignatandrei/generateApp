@@ -18,6 +18,7 @@ jobs:
 
       - name: Run tests
         run: |
+          echo ${GITHUB_REF##*/} 
           VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
           echo { VERSION }
           echo 'a'
