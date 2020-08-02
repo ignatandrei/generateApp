@@ -25,5 +25,5 @@ jobs:
       - name: artifacts
         uses: actions/upload-artifact@v2
         with:
-          name: output${{VERSION}}
+          name: output${{github.sha}}
           path: LICENSE
