@@ -79,3 +79,55 @@ jobs:
       with:
         name: source code ${{ env.GITHUB_REF_SLUG  }}
         path: Generated
+        
+    - name: Build zip
+      run: |
+          ls -lh 
+          zip -r  Generated.zip Generated
+          zip -r  out.zip out
+              
+    - name: Create a Release
+      uses: actions/create-release@v1
+      id: create_release
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        # The name of the tag. This should come from the webhook payload, `github.GITHUB_REF` when a user pushes a new tag
+        tag_name: ${{ env.GITHUB_REF_SLUG  }}
+        # The name of the release. For example, `Release v1.0.1`
+        release_name: ${{ env.GITHUB_REF_SLUG  }}
+        draft: false
+        prerelease: false
+      
+    - name: Upload files
+      uses: actions/upload-release-asset@v1.0.2
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      with:
+        # The URL for uploading assets to the release
+        upload_url:  ${{ steps.create_release.outputs.upload_url }}
+        # The path to the asset you want to upload
+        asset_path: Generated.zip
+        asset_name: SourceCode ${{ env.GITHUB_REF_SLUG  }} 
+        # The content-type of the asset you want to upload. See the supported Media Types here: https://www.iana.org/assignments/media-types/media-types.xhtml for more information
+        asset_content_type: application/octet-stream 
+        
+        
+
+    - name: Upload exeet
+      uses: actions/upload-release-asset@v1.0.2
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      with:
+        # The URL for uploading assets to the release
+        upload_url:  ${{ steps.create_release.outputs.upload_url }}
+        # The path to the asset you want to upload
+        asset_path: out.zip
+        asset_name: Exe ${{ env.GITHUB_REF_SLUG  }} 
+        # The content-type of the asset you want to upload. See the supported Media Types here: https://www.iana.org/assignments/media-types/media-types.xhtml for more information
+        asset_content_type: application/octet-stream 
+        
+
+
