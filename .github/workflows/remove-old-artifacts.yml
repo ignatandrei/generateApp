@@ -8,7 +8,7 @@ on:
 jobs:
   remove-old-artifacts:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 120
 
     steps:
     - name: Remove old artifacts
@@ -18,3 +18,8 @@ jobs:
         # Optional inputs
         # skip-tags: true
         # skip-recent: 5
+
+    - name: Delete
+      uses: ame-yu/action-delete-latest-release@v2
+      with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
