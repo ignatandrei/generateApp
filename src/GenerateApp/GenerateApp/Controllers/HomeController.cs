@@ -67,7 +67,7 @@ namespace GenerateApp.Controllers
             {
                 logs = new List<string>(),
                 name = name,
-                folderGenerator = Path.Combine(environment.WebRootPath, "template"),
+                folderGenerator = Path.Combine(environment.WebRootPath, "GenerateAll"),
                 pathFile = path
 
             };

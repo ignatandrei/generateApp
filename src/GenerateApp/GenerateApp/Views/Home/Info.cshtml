@@ -3,9 +3,11 @@
 @{
     ViewData["Title"] = "Info";
     var nrRows = Model.logs.Count;
+    var progress = Model.InProgress();
+
 }
 
-<h1>Info @Model.name  @(Model.InProgress()?"In progress":"Result :"+Model.result)  </h1>
+<h1>Info @Model.name  @(progress?"In progress":"Result :"+Model.result)  </h1>
 
 <div>
     <h4>InfoData</h4>
@@ -30,7 +32,7 @@
         @for (var i = nrRows - 1; i >= 0; i--)
         {
             <dt class="col-sm-2">
-                Log @(i+1)
+                Log @(i+1) for @Model.name
             </dt>
             <dd class="col-sm-10">
                 @Model.logs[i]
@@ -39,3 +41,21 @@
         }
     </dl>
 </div>
+@section scripts {
+    <script type="text/javascript">
+        @if (progress)
+        {
+
+            <text>
+        window.setTimeout(function () {
+
+            
+            window.location = window.location;
+        }, 5000)
+            </text>
+
+        }
+
+
+    </script>
+}

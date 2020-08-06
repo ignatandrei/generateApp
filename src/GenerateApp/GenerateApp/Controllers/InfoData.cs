@@ -136,7 +136,7 @@ namespace GenerateApp.Controllers
                 data = await rec.TransformData(data);
                 Console.WriteLine("after files:" + data.DataToBeSentFurther.Count);
                 var razorTables = nameTablesToRender.Union(new[] { "DataSource" }).ToArray();
-                logs.Add("razoring files");
+                logs.Add("razoring files - it will take some time");
                 var t = new TransformerOneTableToMulti<SenderToRazorFromFile>("InputTemplate", "FullFileName", razorTables, new CtorDictionary());
                 data = await t.TransformData(data);
                 Console.WriteLine("after razor:" + data.DataToBeSentFurther.Count);
@@ -212,8 +212,8 @@ namespace GenerateApp.Controllers
             {
                 
                 logs.Add("ERROR!" + ex.Message);
-
-                Directory.Delete(f, true);
+                Console.WriteLine($"Deleting {outputFolder}");
+                Directory.Delete(outputFolder, true);
                 return false;
             }
             return true;
