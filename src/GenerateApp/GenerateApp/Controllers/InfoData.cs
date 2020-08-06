@@ -87,10 +87,10 @@ namespace GenerateApp.Controllers
                 var frontendFolder = Path.Combine(f, "Frontend", frontendFolderName);
                 logs.Add("copy backend");
 
-                DirectoryCopy(Path.Combine(folderGenerator, "backend", backendFolderName), backendFolder, true);
+                DirectoryCopy(Path.Combine(folderGenerator, "Backend", backendFolderName), backendFolder, true);
                 logs.Add("copy frontend");
 
-                DirectoryCopy(Path.Combine(folderGenerator, "frontend", frontendFolderName), frontendFolder, true);
+                DirectoryCopy(Path.Combine(folderGenerator, "Frontend", frontendFolderName), frontendFolder, true);
                 logs.Add("generating files backend");
 
                 foreach (var fileToCopy in backend.copyTableFiles)
