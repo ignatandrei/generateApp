@@ -7,15 +7,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.5" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.6" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.4" />
     <PackageReference Include="Octokit" Version="0.48.0" />
-    <PackageReference Include="Stankins.Excel" Version="2020.8.5.272" />
-    <PackageReference Include="Stankins.FileOps" Version="2020.8.5.272" />
-    <PackageReference Include="Stankins.Interfaces" Version="2020.8.5.272" />
-    <PackageReference Include="Stankins.Razor" Version="2020.8.5.272" />
-    <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="3.4.0" />
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="3.4.0" />
+    <PackageReference Include="Stankins.Excel" Version="2020.8.5.273" />
+    <PackageReference Include="Stankins.FileOps" Version="2020.8.5.273" />
+    <PackageReference Include="Stankins.Interfaces" Version="2020.8.5.273" />
+    <PackageReference Include="Stankins.Razor" Version="2020.8.5.273" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="3.6.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="3.6.0" />
 
 
   </ItemGroup>

@@ -1,17 +1,71 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
-    
 
-    <div class="text-center">
-        <h1 class="display-4">Welcome</h1>
-        <p>please upload Excel file</p>
 
-        <form asp-controller="Home" asp-action="UploadFile" method="post"
-              enctype="multipart/form-data">
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+
+
+    <form asp-controller="Home" asp-action="UploadFile" method="post"
+          enctype="multipart/form-data">
+        <h2>
+            Add Excel file:
 
             <input type="file" name="file" />
-            <button type="submit">Upload File</button>
-        </form>
 
-    </div>
+        </h2>
+
+
+        <button type="button" onclick="return hideShow();">Options</button>
+        <button type="submit">Generate Application</button>
+        <div id="myDIV" style="display:none">
+            <h2>
+                Backend
+            </h2>
+            <p>
+                <select>
+                    <option>.NET Core</option>
+                </select>
+
+                <select>
+                    <option>API UI</option>
+                    <option>Swagger</option>
+                    <option>Blockly</option>
+                </select>
+            </p>
+            <h2>
+                Database
+            </h2>
+            <p>
+                <select>
+                    <option>SqlServer (In Memory)</option>
+                </select>
+            </p>
+            <hr />
+
+            <h2>
+                Frontend
+            </h2>
+            <p>
+                <select>
+                    <option>Angular</option>
+                </select>
+            </p>
+        </div>
+
+    </form>
+
+
+</div>
+<script>
+    function hideShow() {
+        var x = document.getElementById("myDIV");
+        if (x.style.display === "none") {
+            x.style.display = "block";
+        } else {
+            x.style.display = "none";
+        }
+        return false;
+    }
+</script>
