@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
@@ -29,6 +31,9 @@ namespace GenerateApp
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            var root = env.WebRootPath;
+            var zip = Path.Combine(root, "GenerateAll.zip");
+            ZipFile.ExtractToDirectory(zip, root);
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

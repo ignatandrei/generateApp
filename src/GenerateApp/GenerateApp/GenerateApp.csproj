@@ -21,16 +21,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\Template\" />
+    <Content Update="wwwroot\GenerateAll.zip">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
-  <ItemGroup>
-    <Content Update="wwwroot\Template\*">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Update="wwwroot\Template\**">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
+ 
 
 </Project>
