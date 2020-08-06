@@ -84,7 +84,7 @@ namespace GenerateApp.Controllers
 
                 File.Copy(generator, Path.Combine(outputFolder, "describe.txt"), true);
                 var backendFolder = Path.Combine(f, "Backend", backendFolderName);
-                var frontendFolder = Path.Combine(f, "Frontend", frontendFolderName);
+                var frontendFolder = Path.Combine(f, "FrontEnd", frontendFolderName);
                 logs.Add("copy backend");
 
                 DirectoryCopy(Path.Combine(folderGenerator, "Backend", backendFolderName), backendFolder, true);
