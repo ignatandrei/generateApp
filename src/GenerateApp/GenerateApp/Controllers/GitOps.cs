@@ -145,7 +145,7 @@ namespace GenerateApp.Controllers
             var repo = "generateApp";
             var repoObj = await Client.Repository.Get(owner, repo);
             var assets = await Client.Repository.Release.GetAll(repoObj.Id);
-            return assets.Where(it => it.Name.Contains(name)).ToArray();
+            return assets.Where(it => it.Name.ToLower().Contains(name.ToLower())).ToArray();
 
             //var c = new HttpClient();
             //c.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0");

@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.AspNetCore.Authorization.Infrastructure;
+using Newtonsoft.Json;
 using Stankins.Excel;
 using Stankins.FileOps;
 using Stankins.Interfaces;
@@ -27,6 +28,7 @@ namespace GenerateApp.Controllers
         public List<string> logs { get; set; }
         public string folderGenerator { get; internal set; }
 
+        public Dictionary<string, string> Releases=new Dictionary<string, string>();
         public string[] AssetsLinks { get; internal set; }
         public async  Task<bool> GenerateApp()
         {
@@ -189,23 +191,28 @@ namespace GenerateApp.Controllers
                 logs.Add($"sending data {g}");
 
                 var final = await GitOps.CommitDir(b, outputFolder);
-                logs.Add($"waiting {g}");
+                logs.Add($"waiting {g} -it will take some time");
 
                 var ret = await GitOps.waitForRuns(g);
                 logs.Add($"success?  {ret}");
-
+                await Task.Delay(10 * 1000);//some timeout for finding asserts
                 //Console.WriteLine(string.Join(Environment.NewLine, ret));
                 if (ret)
                 {
                     var assets = await GitOps.FindAssetsInRelease(g);
                     if (assets.Length != 1)
+                    {
+                        logs.Add($" number of assets {assets.Length}");
                         return false;
+                    }
 
                     var realAssets = assets.First().Assets;
-                    logs.AddRange(realAssets.Select(it =>
-                            it.Url + Environment.NewLine +
-                        it.BrowserDownloadUrl + Environment.NewLine));
-
+                    foreach(var item in realAssets)
+                    {
+                        logs.Add($"Release {item.Name} {item.BrowserDownloadUrl}");
+                        this.Releases.Add(item.Name, item.BrowserDownloadUrl);
+                    }
+                    
                 }
             }
             catch(Exception ex)
