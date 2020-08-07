@@ -29,10 +29,10 @@
     </dl>
     @if (!progress && Model.result.Value)
     {
-        <h2>Your Application :</h2>
+        <h2>Download Your Application :</h2>
         @foreach (var download in Model.Releases)
         {
-            <a href="@download.Key">@download.Value</a>
+            <a href="@download.Value" target="_blank">@download.Key.Replace(Model.name,"",StringComparison.InvariantCultureIgnoreCase)</a>
         }
 
     }
