@@ -12,13 +12,13 @@
         <h2>
             Add Excel file:
 
-            <input type="file" name="file" />
+            <input type="file" name="file" id="fileToSubmit" />
 
         </h2>
 
 
         <button type="button" onclick="return hideShow();">Options</button>
-        <button type="submit">Generate Application</button>
+        <button type="button" onclick="return submitData();">Generate Application</button>
         <div id="myDIV" style="display:none">
             <h2>
                 Backend
@@ -59,6 +59,16 @@
 
 </div>
 <script>
+    function submitData() {
+        var notFile = !document.getElementById('fileToSubmit').value;
+        if (notFile) {
+            alert('Please input an excel file');
+            return false;
+        }
+        document.forms[0].submit();
+        return false;
+        
+    }
     function hideShow() {
         var x = document.getElementById("myDIV");
         if (x.style.display === "none") {
