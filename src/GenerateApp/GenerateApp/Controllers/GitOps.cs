@@ -10,7 +10,7 @@ namespace GenerateApp.Controllers
 {
     public static class GitOps
     {
-        static readonly string CredentialsToken;
+        public static readonly string CredentialsToken;
         static GitOps()
         {
             CredentialsToken = Environment.GetEnvironmentVariable("GitHubKey");
