@@ -64,7 +64,7 @@ namespace Generate
             ZipFile.ExtractToDirectory(zipFileName, where,true);
             string folder = Path.Combine(where, "publish");
             ServerManager manager = new ServerManager();
-            Site defaultSite = manager.Sites["Default Web Site"];
+            Site defaultSite = manager.Sites["AppGenerator"];
             var appCreated = defaultSite.Applications.Add($"/{name}", folder);
             appCreated.ApplicationPoolName = "NETCore";
             manager.CommitChanges();
