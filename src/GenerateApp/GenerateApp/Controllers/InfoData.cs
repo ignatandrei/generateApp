@@ -17,6 +17,12 @@ namespace GenerateApp.Controllers
 {
     public class InfoData
     {
+        public static readonly bool InsideIIS;
+        static InfoData()
+        {
+            var str=Environment.GetEnvironmentVariable("APP_POOL_ID") ;
+            InsideIIS = !string.IsNullOrWhiteSpace(str);
+        }
         public readonly DateTime startedDate;
         public InfoData()
         {
@@ -34,7 +40,7 @@ namespace GenerateApp.Controllers
         public string folderGenerator { get; internal set; }
 
         public Dictionary<string, string> Releases=new Dictionary<string, string>();
-        public string[] AssetsLinks { get; internal set; }
+        
         public async  Task<bool> GenerateApp()
         {
             string folderGenerator = this.folderGenerator;
@@ -220,7 +226,7 @@ namespace GenerateApp.Controllers
                     this.Releases.Add(item.Name, item.BrowserDownloadUrl);
                 }
 
-                var zip = await GitOps.DownloadExe(realAssets, "");
+                var zip = await GitOps.DownloadExe(realAssets, "output");
                 var location = GitOps.UnzipAndFindWin64(zip);
                 //add here to run file 
 
