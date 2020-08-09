@@ -1,7 +1,9 @@
-﻿using Octokit;
+﻿using NPOI.SS.Formula.Functions;
+using Octokit;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -136,7 +138,47 @@ namespace GenerateApp.Controllers
 
 
         }
+        public static string UnzipAndFindWin64(string fileZip)
+        {
+            var whereFolder = Path.Combine(Path.GetDirectoryName(fileZip), Path.GetFileNameWithoutExtension(fileZip));
 
+            if (!Directory.Exists(whereFolder))
+                Directory.CreateDirectory(whereFolder);
+
+            ZipFile.ExtractToDirectory(fileZip, whereFolder);
+
+            var publish = Directory.GetDirectories(whereFolder, "win-x64", new EnumerationOptions()
+            {
+                RecurseSubdirectories = true
+            });
+
+            return publish.FirstOrDefault();
+        }
+        static HttpClient client = new HttpClient();
+        public static async Task<string> DownloadExe(ReleaseAsset[] assets, string where)
+        {
+            var exe = assets.First(it => it.Name.Contains("Exe", StringComparison.InvariantCultureIgnoreCase));
+            var newFileName = Path.Combine(where, exe.Name + ".zip");
+            Console.WriteLine(newFileName);
+            if (File.Exists(newFileName))
+                return newFileName;
+
+            //using (HttpClient client = new HttpClient())
+            {
+                string url = exe.BrowserDownloadUrl;
+                using (var response = await client.GetAsync(url, HttpCompletionOption.ResponseHeadersRead))
+                using (var streamToReadFrom = await response.Content.ReadAsStreamAsync())
+                {
+
+                    using (var streamToWriteTo = File.Open(newFileName, System.IO.FileMode.Create))
+                    {
+                        await streamToReadFrom.CopyToAsync(streamToWriteTo);
+                    }
+                }
+            }
+
+            return newFileName;
+        }
         public static async Task<Release[]> FindAssetsInRelease(string name)
         {
             var Client = new GitHubClient(new ProductHeaderValue("GithubCommitTest"));

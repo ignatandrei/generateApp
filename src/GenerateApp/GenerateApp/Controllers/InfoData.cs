@@ -202,27 +202,34 @@ namespace GenerateApp.Controllers
                 logs.Add($"success?  {ret}");
                 await Task.Delay(10 * 1000);//some timeout for finding asserts
                 //Console.WriteLine(string.Join(Environment.NewLine, ret));
-                if (ret)
-                {
-                    var assets = await GitOps.FindAssetsInRelease(g);
-                    if (assets.Length != 1)
-                    {
-                        logs.Add($" number of assets {assets.Length}");
-                        return false;
-                    }
+                if (!ret)
+                    return false;
 
-                    var realAssets = assets.First().Assets;
-                    foreach(var item in realAssets)
-                    {
-                        logs.Add($"Release {item.Name} {item.BrowserDownloadUrl}");
-                        this.Releases.Add(item.Name, item.BrowserDownloadUrl);
-                    }
-                    
+
+                var assets = await GitOps.FindAssetsInRelease(g);
+                if (assets.Length != 1)
+                {
+                    logs.Add($" number of assets {assets.Length}");
+                    return false;
                 }
+
+                var realAssets = assets.First().Assets.ToArray();
+                foreach (var item in realAssets)
+                {
+                    logs.Add($"Release {item.Name} {item.BrowserDownloadUrl}");
+                    this.Releases.Add(item.Name, item.BrowserDownloadUrl);
+                }
+
+                var zip = await GitOps.DownloadExe(realAssets, "");
+                var location = GitOps.UnzipAndFindWin64(zip);
+                //add here to run file 
+
+
+
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                
+
                 logs.Add("ERROR!" + ex.Message);
                 Console.WriteLine($"Deleting {outputFolder}");
                 Directory.Delete(outputFolder, true);
