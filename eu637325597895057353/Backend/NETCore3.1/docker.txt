@@ -17,11 +17,12 @@ RUN dotnet build -r linux-x64 -c Release --no-restore
 
 RUN cd TestWebAPI
 
-RUN dotnet publish -c Release -o /app/out/linux-x64 -r linux-x64 --no-build
-# RUN dotnet publish -c Release -o /app/out/win-x64 -r win-x64
+RUN dotnet publish -c Release -o /app/out/linux-x64 -r linux-x64 --winild
+RUN dotnet publish -c Release -o /app/out/win-x64 -r win-x64
 
 RUN pwd
 RUN ls -lh /app/out/linux-x64/TestWebAPI.dll
+RUN ls -lh /app/out/win-x64/TestWebAPI.dll
 
 #FROM mcr.microsoft.com/dotnet/core/sdk:3.1
 #WORKDIR /app
