@@ -19,7 +19,7 @@ namespace GenerateApp.Controllers
     public class HomeController : Controller
     {
         static ConcurrentDictionary<string,InfoData> data = new ConcurrentDictionary<string, InfoData>();
-        static int NumberItemsInProgress(DateTime fromDate)
+        public static int NumberItemsInProgress(DateTime fromDate)
         {
             return data.Count(it => 
             it.Value.startedDate < fromDate &&
