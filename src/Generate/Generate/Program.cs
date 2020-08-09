@@ -11,7 +11,7 @@ namespace Generate
         {
             Console.WriteLine("https://docs.microsoft.com/en-us/previous-versions/iis/6.0-sdk/ms524896(v=vs.90)");
             //CreateVDir("IIS://Localhost/W3SVC/1/Root", "MyVDir", "E:\\Inetpub\\Wwwroot");
-            CreateVDir("test");
+            CreateVDir("test1");
         }
         static void CreateVDir(string metabasePath, string vDirName, string physicalPath)
         {
@@ -56,7 +56,9 @@ namespace Generate
 
             ServerManager manager = new ServerManager();
             Site defaultSite = manager.Sites["Default Web Site"];
-
+            defaultSite.Applications.Add($"/{name}", @"E:\generateApp\src\GenerateApp\GenerateApp\bin\Release\netcoreapp3.1\publish");
+            manager.CommitChanges();
+            return;
             foreach (Application app in defaultSite.Applications)
             {
                 Console.WriteLine(
@@ -64,7 +66,7 @@ namespace Generate
 
                 
                 
-                app.VirtualDirectories.Add($"/{name}",@$"D:\{name}");
+                var vd = app.VirtualDirectories.Add($"/{name}",@$"D:\{name}");
                 
 
                 //Console.WriteLine("Virtual Directories:");
