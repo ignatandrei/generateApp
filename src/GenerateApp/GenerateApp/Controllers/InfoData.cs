@@ -17,6 +17,11 @@ namespace GenerateApp.Controllers
 {
     public class InfoData
     {
+        public readonly DateTime startedDate;
+        public InfoData()
+        {
+            startedDate = DateTime.UtcNow;
+        }
         public bool InProgress()
         {
             return result == null;

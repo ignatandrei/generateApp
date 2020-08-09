@@ -12,13 +12,19 @@ using Microsoft.AspNetCore.Hosting;
 using System.Runtime.CompilerServices;
 using NPOI.SS.Formula.Functions;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
+using System.Collections.Concurrent;
 
 namespace GenerateApp.Controllers
 {
     public class HomeController : Controller
     {
-        static Dictionary<string,InfoData> data = new Dictionary<string, InfoData>();
-
+        static ConcurrentDictionary<string,InfoData> data = new ConcurrentDictionary<string, InfoData>();
+        static int NumberItemsInProgress(DateTime fromDate)
+        {
+            return data.Count(it => 
+            it.Value.startedDate < fromDate &&
+            it.Value.InProgress());
+        }
         private readonly ILogger<HomeController> _logger;
         private readonly IWebHostEnvironment environment;
 
@@ -50,19 +56,10 @@ namespace GenerateApp.Controllers
             if (file == null || file.Length == 0)
                 return Content("file not selected");
             string name = Path.GetFileNameWithoutExtension(file.FileName);
-            while(data.ContainsKey(name))         
-            {
-                name = name + DateTime.Now.Ticks;
-            }
-
             var path = Path.Combine(
-                        environment.WebRootPath,
-                        Path.GetFileName( file.FileName));
+                      environment.WebRootPath,
+                      Path.GetFileName(file.FileName));
 
-            using (var stream = new FileStream(path, FileMode.Create))
-            {
-                await file.CopyToAsync(stream);
-            }
             var i = new InfoData()
             {
                 logs = new List<string>(),
@@ -71,9 +68,20 @@ namespace GenerateApp.Controllers
                 pathFile = path
 
             };
-            data.Add(name, i);
-            Task t = new Task(async i =>
+            while (!data.TryAdd(name, i))         
+            {
+                name = name + DateTime.Now.Ticks;
 
+            }
+            i.name = name;
+          
+            using (var stream = new FileStream(path, FileMode.Create))
+            {
+                await file.CopyToAsync(stream);
+            }
+           
+            
+            Task t = new Task(async i =>
             {
                 var info = i as InfoData;
                 info.result = await GenerateApp(i as InfoData);
@@ -86,7 +94,11 @@ namespace GenerateApp.Controllers
         {
             try
             {
-
+                while (NumberItemsInProgress(i.startedDate) >0)
+                {
+                    i.logs.Add("There is another application in progress. Please wait ");
+                    await Task.Delay(5*1000);
+                }
                 i.logs.Add("Start generating app");
 
                 var result = await i.GenerateApp();
