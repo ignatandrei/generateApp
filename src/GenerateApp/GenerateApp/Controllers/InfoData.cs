@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization.Infrastructure;
+using Microsoft.Web.Administration;
 using Newtonsoft.Json;
 using Stankins.Excel;
 using Stankins.FileOps;
@@ -40,7 +41,7 @@ namespace GenerateApp.Controllers
         public string folderGenerator { get; internal set; }
 
         public Dictionary<string, string> Releases=new Dictionary<string, string>();
-        
+        public string RealExeLocation;
         public async  Task<bool> GenerateApp()
         {
             string folderGenerator = this.folderGenerator;
@@ -225,11 +226,21 @@ namespace GenerateApp.Controllers
                     logs.Add($"Release {item.Name} {item.BrowserDownloadUrl}");
                     this.Releases.Add(item.Name, item.BrowserDownloadUrl);
                 }
-
+                logs.Add($"getting exes ");
                 var zip = await GitOps.DownloadExe(realAssets, "output");
-                var location = GitOps.UnzipAndFindWin64(zip);
+                logs.Add($"getting downloaded {Path.GetFileName(zip)}");
+                RealExeLocation = GitOps.UnzipAndFindWin64(zip);
+                logs.Add($"getting {Path.GetDirectoryName(RealExeLocation)}");
                 //add here to run file 
-
+                if (!InsideIIS)
+                {
+                    //TODO: run the file
+                }
+                else
+                {
+                    logs.Add($"creating VDir {name}");
+                    CreateVDir(this.name, RealExeLocation);
+                }
 
 
             }
@@ -246,8 +257,17 @@ namespace GenerateApp.Controllers
 
             
         }
-        //https://docs.microsoft.com/en-us/dotnet/standard/io/how-to-copy-directories
-        private static void DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs)
+        static void CreateVDir(string name,string folder)
+        {
+            
+            ServerManager manager = new ServerManager();
+            Site defaultSite = manager.Sites["AppGenerator"];
+            var appCreated = defaultSite.Applications.Add($"/{name}", folder);
+            appCreated.ApplicationPoolName = "NETCore";
+            manager.CommitChanges();
+        }
+            //https://docs.microsoft.com/en-us/dotnet/standard/io/how-to-copy-directories
+            private static void DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs)
         {
             // Get the subdirectories for the specified directory.
             DirectoryInfo dir = new DirectoryInfo(sourceDirName);
