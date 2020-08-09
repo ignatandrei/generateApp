@@ -10,4 +10,10 @@
     <PackageReference Include="System.DirectoryServices" Version="4.7.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="publish.zip">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

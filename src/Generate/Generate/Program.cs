@@ -1,7 +1,10 @@
 ﻿using Microsoft.Web.Administration;
 using System;
 using System.DirectoryServices;
+using System.IO;
+using System.IO.Compression;
 using System.Threading;
+using System.Xml.Xsl;
 
 namespace Generate
 {
@@ -11,8 +14,11 @@ namespace Generate
         {
             Console.WriteLine("https://docs.microsoft.com/en-us/previous-versions/iis/6.0-sdk/ms524896(v=vs.90)");
             //CreateVDir("IIS://Localhost/W3SVC/1/Root", "MyVDir", "E:\\Inetpub\\Wwwroot");
-            CreateVDir("test1");
+            var dir = Environment.CurrentDirectory;
+            var fileName = Path.Combine(dir, "publish.zip");
+            CreateVDir(fileName, @"C:\test");
         }
+        /*
         static void CreateVDir(string metabasePath, string vDirName, string physicalPath)
         {
             //  metabasePath is of the form "IIS://<servername>/<service>/<siteID>/Root[/<vdir>]"
@@ -50,13 +56,17 @@ namespace Generate
             }
         }
 
-
-        static void CreateVDir(string name)
+        */
+        static void CreateVDir(string zipFileName, string where)
         {
-
+            var name = Path.GetFileNameWithoutExtension(zipFileName);
+            
+            ZipFile.ExtractToDirectory(zipFileName, where,true);
+            string folder = Path.Combine(where, "publish");
             ServerManager manager = new ServerManager();
             Site defaultSite = manager.Sites["Default Web Site"];
-            defaultSite.Applications.Add($"/{name}", @"E:\generateApp\src\GenerateApp\GenerateApp\bin\Release\netcoreapp3.1\publish");
+            var appCreated = defaultSite.Applications.Add($"/{name}", folder);
+            appCreated.ApplicationPoolName = "NETCore";
             manager.CommitChanges();
             return;
             foreach (Application app in defaultSite.Applications)
