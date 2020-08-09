@@ -68,11 +68,12 @@ namespace GenerateApp.Controllers
                 pathFile = path
 
             };
-            while (!data.TryAdd(name, i))         
+            do
             {
                 name = name + DateTime.Now.Ticks;
 
-            }
+            } while (!data.TryAdd(name, i));
+
             i.name = name;
           
             using (var stream = new FileStream(path, FileMode.Create))
