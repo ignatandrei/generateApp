@@ -195,10 +195,14 @@ namespace GenerateApp.Controllers
 
                 var remByte = new FilterRemoveTable("OutputByte");
                 data = await remByte.TransformData(data);
-                logs.Add("saving to output");
+                logs.Add($"saving to output {outputFolder}");
 
                 var save = new SenderOutputToFolder(outputFolder, false, "OutputString");
                 data = await save.TransformData(data);
+                
+                if (string.IsNullOrWhiteSpace(GitOps.CredentialsToken))
+                    return true;
+
                 logs.Add($"creating branch {g}");
 
                 Console.WriteLine($"branch : {g} ");
@@ -253,6 +257,7 @@ namespace GenerateApp.Controllers
             {
 
                 logs.Add("ERROR!" + ex.Message);
+                logs.Add("ERROR!" + ex.StackTrace);
                 Console.WriteLine($"Deleting {outputFolder}");
                 //Directory.Delete(outputFolder, true);
                 return false;
