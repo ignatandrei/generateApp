@@ -44,8 +44,8 @@
         ;
         InsideIIS: @GenerateApp.Controllers.InfoData.InsideIIS
         @{
-            string data = "making :" + GenerateApp.Controllers.HomeController.NumberItemsInProgress(new DateTime(1970, 4, 16));
-
+            string data = "waiting :" + GenerateApp.Controllers.HomeController.NumberItemsInProgress(DateTime.Now);
+            
         }
         ;
         @data

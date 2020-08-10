@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization.Infrastructure;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Web.Administration;
 using Newtonsoft.Json;
 using Stankins.Excel;
@@ -25,9 +26,12 @@ namespace GenerateApp.Controllers
             InsideIIS = !string.IsNullOrWhiteSpace(str);
         }
         public readonly DateTime startedDate;
+        
+
         public InfoData()
         {
             startedDate = DateTime.UtcNow;
+            
         }
         public bool InProgress()
         {
@@ -227,7 +231,8 @@ namespace GenerateApp.Controllers
                     this.Releases.Add(item.Name, item.BrowserDownloadUrl);
                 }
                 logs.Add($"getting exes ");
-                var zip = await GitOps.DownloadExe(realAssets, "output");
+                string output = Path.Combine(outputFolder, "output");
+                var zip = await GitOps.DownloadExe(realAssets, output);
                 logs.Add($"getting downloaded {Path.GetFileName(zip)}");
                 RealExeLocation = GitOps.UnzipAndFindWin64(zip);
                 logs.Add($"getting {Path.GetDirectoryName(RealExeLocation)}");
@@ -249,7 +254,7 @@ namespace GenerateApp.Controllers
 
                 logs.Add("ERROR!" + ex.Message);
                 Console.WriteLine($"Deleting {outputFolder}");
-                Directory.Delete(outputFolder, true);
+                //Directory.Delete(outputFolder, true);
                 return false;
             }
             return true;

@@ -157,6 +157,9 @@ namespace GenerateApp.Controllers
         static HttpClient client = new HttpClient();
         public static async Task<string> DownloadExe(ReleaseAsset[] assets, string where)
         {
+            if (!Directory.Exists(where))
+                Directory.CreateDirectory(where);
+
             var exe = assets.First(it => it.Name.Contains("Exe", StringComparison.InvariantCultureIgnoreCase));
             var newFileName = Path.Combine(where, exe.Name + ".zip");
             Console.WriteLine(newFileName);
