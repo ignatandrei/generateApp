@@ -46,6 +46,26 @@ namespace GenerateApp.Controllers
 
         public Dictionary<string, string> Releases=new Dictionary<string, string>();
         public string RealExeLocation;
+        private async Task<IDataToSent> ReadExcel()
+        {
+            string excel = pathFile;
+            logs.Add("start reading excel ");
+
+            var recExcel = new ReceiverExcel(excel);
+
+            var data = await recExcel.TransformData(null);
+            logs.Add("start transforming renaming");
+
+            var renameExcel = new TransformerRenameTable("it=>it.Contains(\".xls\")", "DataSource");
+
+            data = await renameExcel.TransformData(data);
+            logs.Add("start change names from sheet");
+
+            var renameCol = new ChangeColumnName("SheetName", "TableName");
+            data = await renameCol.TransformData(data);
+            return data; ;
+
+        }
         public async  Task<bool> GenerateApp()
         {
             string folderGenerator = this.folderGenerator;
@@ -62,27 +82,11 @@ namespace GenerateApp.Controllers
             var outputFolder = Path.Combine(Path.GetDirectoryName(pathFile),g);
             if (!Directory.Exists(outputFolder))
                 Directory.CreateDirectory(outputFolder);
-            IDataToSent data;
-            string excel = pathFile;
-            logs.Add("generating output");
-            logs.Add("start reading ");
             
-            var recExcel = new ReceiverExcel(excel);
-
-            data = await recExcel.TransformData(null);
-            logs.Add("start transforming renaming");
-
-            var renameExcel = new TransformerRenameTable("it=>it.Contains(\".xls\")", "DataSource");
-
-            data = await renameExcel.TransformData(data);
-            logs.Add("start change names from sheet");
-
-            var renameCol = new ChangeColumnName("SheetName", "TableName");
-            data = await renameCol.TransformData(data);
-
+            
             logs.Add("gathering data");
 
-            IDataToSent Model = data;
+            IDataToSent Model = await ReadExcel();
             var ds = Model.FindAfterName("DataSource").Value;
             var nrRowsDS = ds.Rows.Count;
             var nameTablesToRender = new string[nrRowsDS];
