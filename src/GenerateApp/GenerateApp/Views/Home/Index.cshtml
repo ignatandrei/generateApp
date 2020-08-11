@@ -95,8 +95,12 @@ Andrei,Ignat
                     alert('Please input an excel file');
                     return false;
                 }
+            case 2:
+                //to verify if user put something 
+                break;
             default:
                 window.alert("not implemented" + val);
+                return false;
         }
         document.forms[0].submit();
         return false;
