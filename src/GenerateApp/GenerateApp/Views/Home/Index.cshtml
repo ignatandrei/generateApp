@@ -4,7 +4,8 @@
 
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
+
+    <h1 class="display-4">DataSource</h1>
 
     <select onchange="showData(this.value)" id="datasource">
         <option value="0">Choose source of data </option>
@@ -83,7 +84,7 @@ Andrei,Ignat
 
 <script>
     function submitData() {
-        val = parseInt(document.getElementById('datasource').value);
+        var val = parseInt(document.getElementById('datasource').value);
         switch (val) {
             case 0:
                 window.alert('please choose a data source');
@@ -136,4 +137,7 @@ Andrei,Ignat
         }
 
     }
+    document.getElementById('datasource').value = 1;
+    showData(1);
+
 </script>

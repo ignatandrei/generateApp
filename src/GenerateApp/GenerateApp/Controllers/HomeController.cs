@@ -74,7 +74,7 @@ namespace GenerateApp.Controllers
             i.pathFile = path;
 
             await System.IO.File.WriteAllTextAsync(name + ".csv", id);
-            Task t = new Task(async i =>
+            var t = new Task(async i =>
             {
                 var info = i as InfoData;
                 info.result = await GenerateApp(i as InfoData);
