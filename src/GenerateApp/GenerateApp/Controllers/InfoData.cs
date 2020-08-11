@@ -19,6 +19,7 @@ namespace GenerateApp.Controllers
 {
     public class InfoData
     {
+        
         public static readonly bool InsideIIS;
         static InfoData()
         {
@@ -26,12 +27,12 @@ namespace GenerateApp.Controllers
             InsideIIS = !string.IsNullOrWhiteSpace(str);
         }
         public readonly DateTime startedDate;
-        
+        private readonly SourceData sourceData;
 
-        public InfoData()
+        public InfoData(SourceData sourceData)
         {
             startedDate = DateTime.UtcNow;
-            
+            this.sourceData = sourceData;
         }
         public bool InProgress()
         {

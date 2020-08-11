@@ -50,6 +50,41 @@ namespace GenerateApp.Controllers
             return t.AssemblyQualifiedName;
         }
         [HttpPost]
+        public async Task<IActionResult> UploadCSV(string id)
+        {
+            if (string.IsNullOrWhiteSpace(id))
+                return Content("please add some content to the csv");
+            var name = "CSV";
+            var i = new InfoData(SourceData.CSV)
+            {
+                logs = new List<string>(),
+                name = name,
+                folderGenerator = Path.Combine(environment.WebRootPath, "GenerateAll"),
+                pathFile = ""
+
+            };
+
+            do
+            {
+                name = name + DateTime.Now.Ticks;
+
+            } while (!data.TryAdd(name, i));
+            i.name = name;
+            var path = Path.Combine(environment.WebRootPath,name+".csv");
+            i.pathFile = path;
+
+            await System.IO.File.WriteAllTextAsync(name + ".csv", id);
+            Task t = new Task(async i =>
+            {
+                var info = i as InfoData;
+                info.result = await GenerateApp(i as InfoData);
+            }
+            , i);
+
+            return RedirectToAction("Info", new { id = name });
+
+        }
+        [HttpPost]
         public async Task<IActionResult> UploadFile(IFormFile file)
         {
             
@@ -60,7 +95,7 @@ namespace GenerateApp.Controllers
                       environment.WebRootPath,
                       Path.GetFileName(file.FileName));
 
-            var i = new InfoData()
+            var i = new InfoData(SourceData.Excel)
             {
                 logs = new List<string>(),
                 name = name,
