@@ -110,7 +110,7 @@ namespace GenerateApp.Controllers
             } while (!data.TryAdd(name, i));
 
             i.name = name;
-          
+            Console.WriteLine($"added {name} to {data} ");
             using (var stream = new FileStream(path, FileMode.Create))
             {
                 await file.CopyToAsync(stream);
