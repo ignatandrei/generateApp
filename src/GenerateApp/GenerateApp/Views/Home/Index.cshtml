@@ -3,67 +3,84 @@
 }
 
 
-    <div class="text-center">
-        <h1 class="display-4">Welcome</h1>
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
 
-        <select onchange="showData(this.value)">
-            <option value="0">Choose source of data </option>
-            <option value="1">Excel</option>
-            <option value="2">CSV</option>
-        </select>
+    <select onchange="showData(this.value)">
+        <option value="0">Choose source of data </option>
+        <option value="1">Excel</option>
+        <option value="2">CSV</option>
+    </select>
+
+    <form asp-controller="Home" asp-action="UploadFile" method="post"
+          enctype="multipart/form-data">
 
         <div id="excel" style="display:none">
-            <form asp-controller="Home" asp-action="UploadFile" method="post"
-                  enctype="multipart/form-data">
-                <h2>
-                    Add Excel file:
+            <h2>
+                Add Excel file:
 
-                    <input type="file" name="file" id="fileToSubmit" />
+                <input type="file" name="file" id="fileToSubmit" />
 
-                </h2>
-
-
-                <button type="button" onclick="return hideShow();">Options</button>
-                <button type="button" onclick="return submitData();">Generate Application</button>
-                <div id="myDIV" style="display:none">
-                    <h2>
-                        Backend
-                    </h2>
-                    <p>
-                        <select>
-                            <option>.NET Core</option>
-                        </select>
-
-                        <select>
-                            <option>API UI</option>
-                            <option>Swagger</option>
-                            <option>Blockly</option>
-                        </select>
-                    </p>
-                    <h2>
-                        Database
-                    </h2>
-                    <p>
-                        <select>
-                            <option>SqlServer (In Memory)</option>
-                        </select>
-                    </p>
-                    <hr />
-
-                    <h2>
-                        Frontend
-                    </h2>
-                    <p>
-                        <select>
-                            <option>Angular</option>
-                        </select>
-                    </p>
-                </div>
-
-            </form>
-
+            </h2>
+            <button type="button" onclick="return hideShow();">Options</button>
+            <button type="button" onclick="return submitData();">Generate Application</button>
 
         </div>
+        <div id="csv" style="display:none">
+            <h2>
+                
+
+                <textarea name="myCSV" rows="10" cols="50">
+FirstName,LastName
+Andrei,Ignat
+
+
+</textarea>
+
+            </h2>
+            <button type="button" onclick="return hideShow();">Options</button>
+            <button type="button" onclick="return submitData();">Generate Application</button>
+
+        </div>
+
+    </form>
+
+    <div id="myDIV" style="display:none">
+        <h2>
+            Backend
+        </h2>
+        <p>
+            <select>
+                <option>.NET Core</option>
+            </select>
+
+            <select>
+                <option>API UI</option>
+                <option>Swagger</option>
+                <option>Blockly</option>
+            </select>
+        </p>
+        <h2>
+            Database
+        </h2>
+        <p>
+            <select>
+                <option>SqlServer (In Memory)</option>
+            </select>
+        </p>
+        <hr />
+
+        <h2>
+            Frontend
+        </h2>
+        <p>
+            <select>
+                <option>Angular</option>
+            </select>
+        </p>
+    </div>
+
+</div>
     </div>
 <script>
     function submitData() {
@@ -74,7 +91,7 @@
         }
         document.forms[0].submit();
         return false;
-        
+
     }
     function hideShow() {
         var x = document.getElementById("myDIV");
@@ -88,10 +105,17 @@
     function showData(val) {
         var excel = document.getElementById("excel");
         excel.style.display = "none";
+        var csv = document.getElementById("csv");
+        csv.style.display = "none";
         val = parseInt(val);
         switch (val) {
+            case 0:
+                break;
             case 1:
                 excel.style.display = "block";
+                break;
+            case 2:
+                csv.style.display = "block";
                 break;
 
             default:
