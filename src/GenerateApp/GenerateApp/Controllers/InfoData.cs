@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization.Infrastructure;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Web.Administration;
 using Newtonsoft.Json;
 using Stankins.Excel;
 using Stankins.FileOps;
@@ -17,10 +19,19 @@ namespace GenerateApp.Controllers
 {
     public class InfoData
     {
+        public static readonly bool InsideIIS;
+        static InfoData()
+        {
+            var str=Environment.GetEnvironmentVariable("APP_POOL_ID") ;
+            InsideIIS = !string.IsNullOrWhiteSpace(str);
+        }
         public readonly DateTime startedDate;
+        
+
         public InfoData()
         {
             startedDate = DateTime.UtcNow;
+            
         }
         public bool InProgress()
         {
@@ -34,7 +45,7 @@ namespace GenerateApp.Controllers
         public string folderGenerator { get; internal set; }
 
         public Dictionary<string, string> Releases=new Dictionary<string, string>();
-        public string[] AssetsLinks { get; internal set; }
+        public string RealExeLocation;
         public async  Task<bool> GenerateApp()
         {
             string folderGenerator = this.folderGenerator;
@@ -184,10 +195,14 @@ namespace GenerateApp.Controllers
 
                 var remByte = new FilterRemoveTable("OutputByte");
                 data = await remByte.TransformData(data);
-                logs.Add("saving to output");
+                logs.Add($"saving to output {outputFolder}");
 
                 var save = new SenderOutputToFolder(outputFolder, false, "OutputString");
                 data = await save.TransformData(data);
+                
+                if (string.IsNullOrWhiteSpace(GitOps.CredentialsToken))
+                    return true;
+
                 logs.Add($"creating branch {g}");
 
                 Console.WriteLine($"branch : {g} ");
@@ -219,11 +234,22 @@ namespace GenerateApp.Controllers
                     logs.Add($"Release {item.Name} {item.BrowserDownloadUrl}");
                     this.Releases.Add(item.Name, item.BrowserDownloadUrl);
                 }
-
-                var zip = await GitOps.DownloadExe(realAssets, "");
-                var location = GitOps.UnzipAndFindWin64(zip);
+                logs.Add($"getting exes ");
+                string output = Path.Combine(outputFolder, "output");
+                var zip = await GitOps.DownloadExe(realAssets, output);
+                logs.Add($"getting downloaded {Path.GetFileName(zip)}");
+                RealExeLocation = GitOps.UnzipAndFindWin64(zip);
+                logs.Add($"getting {Path.GetDirectoryName(RealExeLocation)}");
                 //add here to run file 
-
+                if (!InsideIIS)
+                {
+                    //TODO: run the file
+                }
+                else
+                {
+                    logs.Add($"creating VDir {name}");
+                    CreateVDir(this.name, RealExeLocation);
+                }
 
 
             }
@@ -231,8 +257,9 @@ namespace GenerateApp.Controllers
             {
 
                 logs.Add("ERROR!" + ex.Message);
+                logs.Add("ERROR!" + ex.StackTrace);
                 Console.WriteLine($"Deleting {outputFolder}");
-                Directory.Delete(outputFolder, true);
+                //Directory.Delete(outputFolder, true);
                 return false;
             }
             return true;
@@ -240,8 +267,17 @@ namespace GenerateApp.Controllers
 
             
         }
-        //https://docs.microsoft.com/en-us/dotnet/standard/io/how-to-copy-directories
-        private static void DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs)
+        static void CreateVDir(string name,string folder)
+        {
+            
+            ServerManager manager = new ServerManager();
+            Site defaultSite = manager.Sites["AppGenerator"];
+            var appCreated = defaultSite.Applications.Add($"/{name}", folder);
+            appCreated.ApplicationPoolName = "NETCore";
+            manager.CommitChanges();
+        }
+            //https://docs.microsoft.com/en-us/dotnet/standard/io/how-to-copy-directories
+            private static void DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs)
         {
             // Get the subdirectories for the specified directory.
             DirectoryInfo dir = new DirectoryInfo(sourceDirName);

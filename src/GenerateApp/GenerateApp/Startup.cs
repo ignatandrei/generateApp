@@ -33,7 +33,11 @@ namespace GenerateApp
         {
             var root = env.WebRootPath;
             var zip = Path.Combine(root, "GenerateAll.zip");
-            ZipFile.ExtractToDirectory(zip, root,true);
+            var folder = Path.Combine(root, "GenerateAll");
+            if (!Directory.Exists( folder))
+            {
+                ZipFile.ExtractToDirectory(zip, root, false);
+            }
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

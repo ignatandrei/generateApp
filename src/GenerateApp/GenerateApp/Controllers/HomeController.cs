@@ -19,7 +19,7 @@ namespace GenerateApp.Controllers
     public class HomeController : Controller
     {
         static ConcurrentDictionary<string,InfoData> data = new ConcurrentDictionary<string, InfoData>();
-        static int NumberItemsInProgress(DateTime fromDate)
+        public static int NumberItemsInProgress(DateTime fromDate)
         {
             return data.Count(it => 
             it.Value.startedDate < fromDate &&
@@ -68,11 +68,12 @@ namespace GenerateApp.Controllers
                 pathFile = path
 
             };
-            while (!data.TryAdd(name, i))         
+            do
             {
                 name = name + DateTime.Now.Ticks;
 
-            }
+            } while (!data.TryAdd(name, i));
+
             i.name = name;
           
             using (var stream = new FileStream(path, FileMode.Create))

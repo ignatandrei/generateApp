@@ -39,11 +39,22 @@
         <div class="container">
             &copy; 2020 - GenerateApp - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
+
+        Ready: @(!(string.IsNullOrWhiteSpace(GenerateApp.Controllers.GitOps.CredentialsToken)))
+        ;
+        InsideIIS: @GenerateApp.Controllers.InfoData.InsideIIS
+        @{
+            string data = "waiting :" + GenerateApp.Controllers.HomeController.NumberItemsInProgress(DateTime.Now);
+            
+        }
+        ;
+        @data
+
     </footer>
-    Ready: @(!(string.IsNullOrWhiteSpace(GenerateApp.Controllers.GitOps.CredentialsToken)))
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @RenderSection("Scripts", required: false)
+    
 </body>
 </html>
