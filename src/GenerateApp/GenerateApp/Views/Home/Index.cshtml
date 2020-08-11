@@ -3,61 +3,68 @@
 }
 
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
+    <div class="text-center">
+        <h1 class="display-4">Welcome</h1>
+
+        <select onchange="showData(this.value)">
+            <option value="0">Choose source of data </option>
+            <option value="1">Excel</option>
+            <option value="2">CSV</option>
+        </select>
+
+        <div id="excel" style="display:none">
+            <form asp-controller="Home" asp-action="UploadFile" method="post"
+                  enctype="multipart/form-data">
+                <h2>
+                    Add Excel file:
+
+                    <input type="file" name="file" id="fileToSubmit" />
+
+                </h2>
 
 
-    <form asp-controller="Home" asp-action="UploadFile" method="post"
-          enctype="multipart/form-data">
-        <h2>
-            Add Excel file:
+                <button type="button" onclick="return hideShow();">Options</button>
+                <button type="button" onclick="return submitData();">Generate Application</button>
+                <div id="myDIV" style="display:none">
+                    <h2>
+                        Backend
+                    </h2>
+                    <p>
+                        <select>
+                            <option>.NET Core</option>
+                        </select>
 
-            <input type="file" name="file" id="fileToSubmit" />
+                        <select>
+                            <option>API UI</option>
+                            <option>Swagger</option>
+                            <option>Blockly</option>
+                        </select>
+                    </p>
+                    <h2>
+                        Database
+                    </h2>
+                    <p>
+                        <select>
+                            <option>SqlServer (In Memory)</option>
+                        </select>
+                    </p>
+                    <hr />
 
-        </h2>
+                    <h2>
+                        Frontend
+                    </h2>
+                    <p>
+                        <select>
+                            <option>Angular</option>
+                        </select>
+                    </p>
+                </div>
+
+            </form>
 
 
-        <button type="button" onclick="return hideShow();">Options</button>
-        <button type="button" onclick="return submitData();">Generate Application</button>
-        <div id="myDIV" style="display:none">
-            <h2>
-                Backend
-            </h2>
-            <p>
-                <select>
-                    <option>.NET Core</option>
-                </select>
-
-                <select>
-                    <option>API UI</option>
-                    <option>Swagger</option>
-                    <option>Blockly</option>
-                </select>
-            </p>
-            <h2>
-                Database
-            </h2>
-            <p>
-                <select>
-                    <option>SqlServer (In Memory)</option>
-                </select>
-            </p>
-            <hr />
-
-            <h2>
-                Frontend
-            </h2>
-            <p>
-                <select>
-                    <option>Angular</option>
-                </select>
-            </p>
         </div>
-
-    </form>
-
-
-</div>
+    </div>
 <script>
     function submitData() {
         var notFile = !document.getElementById('fileToSubmit').value;
@@ -77,5 +84,19 @@
             x.style.display = "none";
         }
         return false;
+    }
+    function showData(val) {
+        var excel = document.getElementById("excel");
+        excel.style.display = "none";
+        val = parseInt(val);
+        switch (val) {
+            case 1:
+                excel.style.display = "block";
+                break;
+
+            default:
+                window.alert("not implemented" + val);
+        }
+
     }
 </script>
