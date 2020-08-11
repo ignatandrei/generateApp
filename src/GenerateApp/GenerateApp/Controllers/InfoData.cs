@@ -65,8 +65,8 @@ namespace GenerateApp.Controllers
             IDataToSent data;
             string excel = pathFile;
             logs.Add("generating output");
-            logs.Add("start reading excel");
-
+            logs.Add("start reading ");
+            
             var recExcel = new ReceiverExcel(excel);
 
             data = await recExcel.TransformData(null);
