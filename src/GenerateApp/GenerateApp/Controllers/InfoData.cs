@@ -86,14 +86,14 @@ namespace GenerateApp.Controllers
             
             logs.Add("gathering data");
 
-            IDataToSent Model = await ReadExcel();
-            var ds = Model.FindAfterName("DataSource").Value;
+            IDataToSent data = await ReadExcel();
+            var ds = data.FindAfterName("DataSource").Value;
             var nrRowsDS = ds.Rows.Count;
             var nameTablesToRender = new string[nrRowsDS];
             for (int iRowDS = 0; iRowDS < nrRowsDS; iRowDS++)
             {
                 var nameTable = ds.Rows[iRowDS]["TableName"].ToString();
-                var dt = Model.FindAfterName(nameTable).Value;
+                var dt = data.FindAfterName(nameTable).Value;
                 Console.WriteLine(dt.TableName);
                 nameTablesToRender[iRowDS] = dt.TableName;
             }
@@ -122,7 +122,7 @@ namespace GenerateApp.Controllers
                     foreach (DataRow item in ds.Rows)
                     {
                         var nameTable = item["TableName"].ToString();
-                        var data1 = Model.FindAfterName(nameTable).Value;
+                        var data1 = data.FindAfterName(nameTable).Value;
 
                         var newFileName = pathFile.Replace("@Name@", nameTable, StringComparison.InvariantCultureIgnoreCase);
                         var newContent = content.Replace("@Name@", nameTable, StringComparison.InvariantCultureIgnoreCase);
@@ -139,7 +139,7 @@ namespace GenerateApp.Controllers
                     foreach (DataRow item in ds.Rows)
                     {
                         var nameTable = item["TableName"].ToString();
-                        var data1 = Model.FindAfterName(nameTable).Value;
+                        var data1 = data.FindAfterName(nameTable).Value;
 
                         var newFileName = pathFile.Replace("@Name@", nameTable, StringComparison.InvariantCultureIgnoreCase);
                         var newContent = content.Replace("@Name@", nameTable, StringComparison.InvariantCultureIgnoreCase);
