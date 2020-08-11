@@ -6,7 +6,7 @@
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
 
-    <select onchange="showData(this.value)">
+    <select onchange="showData(this.value)" id="datasource">
         <option value="0">Choose source of data </option>
         <option value="1">Excel</option>
         <option value="2">CSV</option>
@@ -80,13 +80,23 @@ Andrei,Ignat
     </div>
 
 </div>
-    </div>
+
 <script>
     function submitData() {
-        var notFile = !document.getElementById('fileToSubmit').value;
-        if (notFile) {
-            alert('Please input an excel file');
-            return false;
+        val = parseInt(document.getElementById('datasource').value);
+        switch (val) {
+            case 0:
+                window.alert('please choose a data source');
+                return false;
+            case 1:
+
+                var notFile = !document.getElementById('fileToSubmit').value;
+                if (notFile) {
+                    alert('Please input an excel file');
+                    return false;
+                }
+            default:
+                window.alert("not implemented" + val);
         }
         document.forms[0].submit();
         return false;
