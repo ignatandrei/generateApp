@@ -40,7 +40,7 @@ const routes: Routes = [
 @foreach(var nameTable in nameTablesToRender){
 <text>
 { path: '@(nameTable.ToLower())', component: @(nameTable)Component },
-{ path: '@(nameTable.ToLower())/edit:id', component: @(nameTable)EditComponent },
+{ path: '@(nameTable.ToLower())/edit/:id', component: @(nameTable)EditComponent },
 
 </text>
 }

@@ -21,7 +21,7 @@ var ds= Model.FindAfterName("DataSource").Value;
 
  @foreach(var nameTable in nameTablesToRender){
 
-      <a mat-list-item routerLink="/@nameTable" routerLinkActive="active">@nameTable </a>
+      <a mat-list-item routerLink="/@(nameTable.ToLower())" routerLinkActive="active">@nameTable </a>
 	  <br />
       }
       
