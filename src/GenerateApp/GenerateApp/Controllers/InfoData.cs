@@ -17,6 +17,12 @@ using System.Threading.Tasks;
 
 namespace GenerateApp.Controllers
 {
+    public class TablesFromDataSource
+    {
+        public bool Success { get; set; }
+        public string error { get; set; }
+        public string[] TableNames { get; set; }
+    }
     public class InfoData
     {
         

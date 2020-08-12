@@ -13,6 +13,8 @@ using System.Runtime.CompilerServices;
 using NPOI.SS.Formula.Functions;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using System.Collections.Concurrent;
+using StankinsObjects;
+using Stankins.Excel;
 
 namespace GenerateApp.Controllers
 {
@@ -84,6 +86,63 @@ namespace GenerateApp.Controllers
             return RedirectToAction("Info", new { id = name });
 
         }
+        public async Task<TablesFromDataSource> UploadExcelToObtainFields(IFormFile file)
+        {
+            try
+            {
+                string name = Path.GetFileNameWithoutExtension(file.FileName);
+                var path = Path.Combine(
+                          environment.WebRootPath,
+                          Path.GetFileName(file.FileName));
+                if (System.IO.File.Exists(path))
+                    System.IO.File.Delete(path);
+
+                using (var stream = new FileStream(path, FileMode.Create))
+                {
+                    await file.CopyToAsync(stream);
+                }
+                var recExcel = new ReceiverExcel(path);
+
+                var data = await recExcel.TransformData(null);
+
+                var renameExcel = new TransformerRenameTable("it=>it.Contains(\".xls\")", "DataSource");
+
+                data = await renameExcel.TransformData(data);
+
+                var renameCol = new ChangeColumnName("SheetName", "TableName");
+                data = await renameCol.TransformData(data);
+                
+                var ds = data.FindAfterName("DataSource").Value;
+                var nrRowsDS = ds.Rows.Count;
+                var nameTablesToRender = new string[nrRowsDS];
+
+                for (int iRowDS = 0; iRowDS < nrRowsDS; iRowDS++)
+                {
+                    var nameTable = ds.Rows[iRowDS]["TableName"].ToString();
+                    var dt = data.FindAfterName(nameTable).Value;
+                    nameTablesToRender[iRowDS] = dt.TableName;
+                }
+                var res = new TablesFromDataSource();
+                res.Success = true;
+                res.TableNames = nameTablesToRender;
+                return res;
+
+
+            }
+            catch (Exception ex)
+            {
+                var res = new TablesFromDataSource();
+                res.Success = false;
+                res.error = ex.Message + "!!" + ex.StackTrace;
+                return res;
+            }
+        }
+
+        public IActionResult TestExcel()
+        {
+            return View();
+        }
+
         [HttpPost]
         public async Task<IActionResult> UploadFile(IFormFile file)
         {
