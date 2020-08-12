@@ -10,29 +10,51 @@
 	}
 }
 
+<div *ngIf="dataToEdit == null">Loading data for {{id}} ...</div>
+<div *ngIf="dataToEdit != null">
+	Edit 
+
 
 <table>
 	<thead>
-					<tr>
-						<th>Name</th>
-						<th>Value</th>
-					</tr>
-				</thead>
+		<tr>
+			<th>Name</th>
+			<th>Value</th>
+		</tr>
+	</thead>
 	
 		@for(int iCol = 0;iCol < nrCols; iCol++){
                 var col = dt.Columns[iCol];
                 var colName= col.ColumnName ;
                 
-                <text>
-				<tr>
-				<td>@colName</td>
-								<td>
-					<input type="text"  [(ngModel)]="dataToEdit.@(colName)" />
+	<text>
+	<tr>
+	<td>@colName</td>
+	<td>
+		<input type="text"  [(ngModel)]="dataToEdit.@(lowerCaseFirst(colName))" />
+	</td>
+	</tr>
+
+	
+	</text>
+
+			}
+			
+			<tr>
+				<td>&nbsp;</td>
+				<td>
+				  &nbsp;
 				</td>
-				</tr>
-
-				
-                </text>
-
-            }
+			  </tr>
+			
+			  <tr>
+				<td align="left">
+				  <button (click)="save()">Save</button>
+				</td>
+				<td align="left">
+				  <button (click)="cancel()">Back to list of @(nameTable)</button>
+				</td>
+			  </tr>
+			
 </table>
+</div>
