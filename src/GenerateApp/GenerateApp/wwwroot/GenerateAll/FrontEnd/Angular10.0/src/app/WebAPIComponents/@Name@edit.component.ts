@@ -19,7 +19,7 @@ export class @(nameTable)EditComponent implements OnInit {
 
   public id: number;
   public dataToEdit: @(nameTable);
-  constructor(private route: ActivatedRoute, , private router: Router, private mainService: @(nameTable)Service ) {
+  constructor(private route: ActivatedRoute , private router: Router, private mainService: @(nameTable)Service ) {
 
     // route.paramMap.subscribe(params=>{
     //   this.id = +params.get('id');

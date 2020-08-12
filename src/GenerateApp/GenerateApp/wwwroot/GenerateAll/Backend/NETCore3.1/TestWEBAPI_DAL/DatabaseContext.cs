@@ -75,7 +75,7 @@ namespace TestWEBAPI_DAL
                                 text+=", "+  nameColumn +" = " +  dt.Rows[iRow][iCol]  ;
                                 break;
                             case "decimal":
-								text+=", "+  nameColumn +" = " +  dt.Rows[iRow][iCol]  ;
+								text+=", "+  nameColumn +" = " +  dt.Rows[iRow][iCol] +"M" ;
                                 break;
                             default:
                                 text+=", "+ column.DataType.Name +"???"+ nameColumn +" = "+ dt.Rows[iRow][iCol];  
