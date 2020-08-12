@@ -35,6 +35,7 @@ import { MatListModule } from '@angular/material/list';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { APP_BASE_HREF, PlatformLocation } from '@angular/common';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { FormsModule } from '@angular/forms';
 
 @foreach(var nameTable in nameTablesToRender){
 <text>
@@ -59,6 +60,7 @@ import { @(nameTable)EditComponent } from './WebAPIComponents/@(nameTable)edit.c
     DashboardComponent 
   ],
   imports: [
+    FormsModule,
     HttpClientModule,
     BrowserModule,
     BrowserAnimationsModule,

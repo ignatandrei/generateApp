@@ -12,6 +12,12 @@
 
 
 <table>
+	<thead>
+					<tr>
+						<th>Name</th>
+						<th>Value</th>
+					</tr>
+				</thead>
 	
 		@for(int iCol = 0;iCol < nrCols; iCol++){
                 var col = dt.Columns[iCol];
@@ -19,8 +25,13 @@
                 
                 <text>
 				<tr>
-				<th>@colName</th>
+				<td>@colName</td>
+								<td>
+					<input type="text"  [(ngModel)]="dataToEdit.@(colName)" />
+				</td>
 				</tr>
+
+				
                 </text>
 
             }

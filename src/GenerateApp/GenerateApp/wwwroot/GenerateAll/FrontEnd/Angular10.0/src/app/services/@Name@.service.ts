@@ -33,7 +33,7 @@ export class @(nameTable)Service {
     return this.client.get<@(nameTable)[]>(url);
   }
   public Get(id:number):Observable<@(nameTable)>{
-    const url = this.baseUrl+'api/@(nameTable)/GetAll/'+id;
+    const url = this.baseUrl+'api/@(nameTable)/Get/'+id;
     
     return this.client.get<@(nameTable)>(url);
   }
