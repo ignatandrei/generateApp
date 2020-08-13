@@ -43,12 +43,7 @@
 			<td>
 			<a routerLink="/@(nameTable.ToLower())/edit/{{row.id}}" >Edit</a>
 &nbsp;
-				<a href='javascript:window.alert("not yet ready")'>Delete</a>
+<button (click)="deleteData(row.id)">Delete</button>
 			</td>
 	</tr>	
 </table>
-<script>
-	function notReady(){
-		window.alert('not yet ready');
-	}
-</script>

@@ -24,4 +24,18 @@ export class @Name@Component implements OnInit {
     })
   }
 
+  public deleteData(id: number): void{
+
+    this.mainService
+    .Delete(id)
+    .pipe(
+      
+      tap(idDeleted=>{
+      const ndx = this.rows.findIndex(it=>it.id == idDeleted);
+      this.rows.splice(ndx,1);
+    })
+    )
+    .subscribe();
+  }
+
 }
