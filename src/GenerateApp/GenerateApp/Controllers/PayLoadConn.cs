@@ -9,6 +9,7 @@
         public string connUser { get; set; }
         public string connPassword { get; set; }
         public string connDatabase { get; set; }
+        public string connPort { get; set; }
 
     }
     public enum connTypes

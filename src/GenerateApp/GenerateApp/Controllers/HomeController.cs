@@ -144,6 +144,10 @@ namespace GenerateApp.Controllers
                         b.Server = payLoadConn.connHost;
                         b.UserID = payLoadConn.connUser;
                         b.Password = payLoadConn.connPassword;
+                        if(int.TryParse(payLoadConn.connPort, out var port))
+                        {
+                            b.Port = (uint)port;
+                        }
                         return await MariaDBConnectionToObtainFields(b.ConnectionString);
                     case connTypes.XLS:
                         var bytes = Convert.FromBase64String(payLoadConn.connFileContent);
