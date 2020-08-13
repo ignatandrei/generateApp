@@ -16,6 +16,7 @@ using System.Collections.Concurrent;
 using StankinsObjects;
 using Stankins.Excel;
 using Stankins.MariaDB;
+using System.Data;
 
 namespace GenerateApp.Controllers
 {
@@ -96,10 +97,16 @@ namespace GenerateApp.Controllers
 
                 var data = await recData.TransformData(null);
 
-                
+                var rows = data.FindAfterName("tables").Value.Rows;
+                var nameTables = new List<String>();
+                foreach(DataRow dr in rows)
+                {
+                    nameTables.Add(dr["name"].ToString());
+                }
                 var res = new TablesFromDataSource();
                 res.Success = true;
-                res.TableNames = new string[] { connection };
+                res.TableNames = nameTables.ToArray();
+
                 return res;
             }
             catch (Exception ex)
