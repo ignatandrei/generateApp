@@ -27,18 +27,25 @@
             @Html.DisplayFor(model => model.pathFile)
         </dd>
     </dl>
-    @if (!progress && Model.result.Value)
+    @if (!progress)
     {
-        @if (GenerateApp.Controllers.InfoData.InsideIIS)
+        if (Model.result.Value)
         {
-        <h2><a href="/@Model.name">Click to go to your application</a> </h2>
-        }
-        <br />
-        <p>For programmers </p>
-        @foreach (var download in Model.Releases)
-        {
-            <a href="@download.Value" target="_blank">@download.Key.Replace(Model.name,"",StringComparison.InvariantCultureIgnoreCase)</a>
+            if (GenerateApp.Controllers.InfoData.InsideIIS)
+            {
+                <h2><a href="/@Model.name">Click to go to your application</a> </h2>
+            }
             <br />
+            <p>For programmers </p>
+            @foreach (var download in Model.Releases)
+            {
+                <a href="@download.Value" target="_blank">@download.Key.Replace(Model.name, "", StringComparison.InvariantCultureIgnoreCase)</a>
+                <br />
+            }
+        }
+        else
+        {
+            <h2>There was an error. Please send an email at ignatandrei@yahoo.com with your excel and I will solve </h2>
         }
 
     }
