@@ -24,5 +24,43 @@
 
         </h2>
         <input type="submit" value="Send!" />
+
     </div>
 </form>
+
+<br />
+<br />
+
+<br />
+
+<button onclick="javascript:sendMaria()">XHR send</button>
+
+<script>
+    function sendMaria() {
+
+        var payloadConn = {
+            connType: 'MARIADB',
+            connFileName: null,
+            connFileContent: null,
+            connHost: 'andreiTest',
+            connUser: 'andreiTest',
+            connPassword: 'andreiTest',
+            connDatabase: 'andreiTest'
+        };
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", '/home/FindTables', true);
+
+        //Send the proper header information along with the request
+        xhr.setRequestHeader("Content-Type", "application/json");
+
+        xhr.onreadystatechange = function () { // Call a function when the state changes.
+            if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+                // Request finished. Do processing here.
+                console.log(this);
+                window.alert(this.responseText);
+            }
+        }
+        xhr.send(JSON.stringify(payloadConn));
+    }
+
+</script>

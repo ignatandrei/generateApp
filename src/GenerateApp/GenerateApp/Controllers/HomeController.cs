@@ -17,6 +17,7 @@ using StankinsObjects;
 using Stankins.Excel;
 using Stankins.MariaDB;
 using System.Data;
+using MySqlConnector;
 
 namespace GenerateApp.Controllers
 {
@@ -117,22 +118,61 @@ namespace GenerateApp.Controllers
                 return res;
             }
         }
-        public async Task<TablesFromDataSource> UploadExcelToObtainFields(IFormFile file)
+        [HttpPost]
+        public async Task<TablesFromDataSource> FindTables([FromBody] PayLoadConn payLoadConn)
+        {
+            var ret = new TablesFromDataSource();
+            ret.Success = false;
+            var val = payLoadConn.connType;
+            connTypes typeToLoad;
+            try
+            {
+                typeToLoad=  Enum.Parse<connTypes>(val, true);
+            }
+            catch
+            {
+                ret.error = $" cannot parse {val} ";
+                return ret;
+            }
+            try
+            {
+                switch (typeToLoad)
+                {
+                    case connTypes.MARIADB:
+                        var b = new MySqlConnectionStringBuilder();
+                        b.Database = payLoadConn.connDatabase;
+                        b.Server = payLoadConn.connHost;
+                        b.UserID = payLoadConn.connUser;
+                        b.Password = payLoadConn.connPassword;
+                        return await MariaDBConnectionToObtainFields(b.ConnectionString);
+                    case connTypes.XLS:
+                        var bytes = Convert.FromBase64String(payLoadConn.connFileContent);
+                        var path = Path.Combine(
+                                  environment.WebRootPath,
+                                  payLoadConn.connFileName);
+                        if (System.IO.File.Exists(path))
+                            System.IO.File.Delete(path);
+
+
+
+                        return await UploadExcelToObtainFields(path);
+                    default:
+                        ret.error = $"{val} is not implemented yet";
+                        return ret;
+                }
+            }
+            catch(Exception ex)
+            {
+                ret.error = ex.Message + "!!!" + ex.StackTrace;
+                return ret;
+            }
+
+        }
+        async Task<TablesFromDataSource> UploadExcelToObtainFields(string filePath)
         {
             try
             {
-                string name = Path.GetFileNameWithoutExtension(file.FileName);
-                var path = Path.Combine(
-                          environment.WebRootPath,
-                          Path.GetFileName(file.FileName));
-                if (System.IO.File.Exists(path))
-                    System.IO.File.Delete(path);
-
-                using (var stream = new FileStream(path, FileMode.Create))
-                {
-                    await file.CopyToAsync(stream);
-                }
-                var recExcel = new ReceiverExcel(path);
+                var recExcel = new ReceiverExcel(filePath);
 
                 var data = await recExcel.TransformData(null);
 
@@ -142,7 +182,7 @@ namespace GenerateApp.Controllers
 
                 var renameCol = new ChangeColumnName("SheetName", "TableName");
                 data = await renameCol.TransformData(data);
-                
+
                 var ds = data.FindAfterName("DataSource").Value;
                 var nrRowsDS = ds.Rows.Count;
                 var nameTablesToRender = new string[nrRowsDS];
@@ -158,6 +198,32 @@ namespace GenerateApp.Controllers
                 res.TableNames = nameTablesToRender;
                 return res;
 
+
+            }
+            catch (Exception ex)
+            {
+                var res = new TablesFromDataSource();
+                res.Success = false;
+                res.error = ex.Message + "!!" + ex.StackTrace;
+                return res;
+            }
+        }
+        public async Task<TablesFromDataSource> UploadExcelToObtainFields(IFormFile file)
+        {
+            try
+            {
+                string name = Path.GetFileNameWithoutExtension(file.FileName);
+                var path = Path.Combine(
+                          environment.WebRootPath,
+                          Path.GetFileName(file.FileName));
+                if (System.IO.File.Exists(path))
+                    System.IO.File.Delete(path);
+
+                using (var stream = new FileStream(path, FileMode.Create))
+                {
+                    await file.CopyToAsync(stream);
+                }
+                return await UploadExcelToObtainFields(path);
 
             }
             catch (Exception ex)
