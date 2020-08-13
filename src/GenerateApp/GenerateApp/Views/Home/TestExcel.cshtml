@@ -1,14 +1,28 @@
 ﻿
 <form asp-controller="Home" asp-action="UploadExcelToObtainFields" method="post"
       enctype="multipart/form-data">
-
-    <div id="excel" >
+    Endpoint :  /Home/UploadExcelToObtainFields
+    <div id="excel">
         <h2>
             Put the excel to obtain fields
 
             <input type="file" name="file" id="fileToSubmit" />
 
         </h2>
-        <input type="submit" value="Send!"/>
-</div>
+        <input type="submit" value="Send!" />
+    </div>
+</form>
+
+<form asp-controller="Home" asp-action="MariaDBConnectionToObtainFields" method="post"
+      enctype="multipart/form-data">
+    Endpoint :  /Home/MariaDBConnectionToObtainFields
+    <div id="excel">
+        <h2>
+            Put the MariDB connection
+
+            <input type="text" name="connection" />
+
+        </h2>
+        <input type="submit" value="Send!" />
+    </div>
 </form>

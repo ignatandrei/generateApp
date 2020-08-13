@@ -24,6 +24,7 @@
     <PackageReference Include="Stankins.Excel" Version="2020.8.6.274" />
     <PackageReference Include="Stankins.FileOps" Version="2020.8.6.274" />
     <PackageReference Include="Stankins.Interfaces" Version="2020.8.6.274" />
+    <PackageReference Include="Stankins.MariaDB" Version="2020.8.13.276" />
     <PackageReference Include="Stankins.Razor" Version="2020.8.6.274" />
     <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="3.7.0" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="3.7.0" />

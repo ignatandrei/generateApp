@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using System.Collections.Concurrent;
 using StankinsObjects;
 using Stankins.Excel;
+using Stankins.MariaDB;
 
 namespace GenerateApp.Controllers
 {
@@ -86,6 +87,29 @@ namespace GenerateApp.Controllers
             return RedirectToAction("Info", new { id = name });
 
         }
+        [HttpPost]
+        public async Task<TablesFromDataSource> MariaDBConnectionToObtainFields(string connection)
+        {
+            try
+            {
+                var recData = new ReceiveMetadataFromDatabaseMariaDB (connection);
+
+                var data = await recData.TransformData(null);
+
+                
+                var res = new TablesFromDataSource();
+                res.Success = true;
+                res.TableNames = new string[] { connection };
+                return res;
+            }
+            catch (Exception ex)
+            {
+                var res = new TablesFromDataSource();
+                res.Success = false;
+                res.error = ex.Message + "!!" + ex.StackTrace;
+                return res;
+            }
+        }
         public async Task<TablesFromDataSource> UploadExcelToObtainFields(IFormFile file)
         {
             try
@@ -142,6 +166,7 @@ namespace GenerateApp.Controllers
         {
             return View();
         }
+        
 
         [HttpPost]
         public async Task<IActionResult> UploadFile(IFormFile file)
