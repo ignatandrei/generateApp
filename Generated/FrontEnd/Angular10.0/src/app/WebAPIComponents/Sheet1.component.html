@@ -1,0 +1,33 @@
+
+
+<table>
+	<tr>
+		<th>
+			Number 
+		</th>
+
+				<th>asd</th>
+                
+				<th>basd</th>
+                			<td>Operations</td>
+	</tr>
+	<tr *ngFor="let row of rows;let i=index;">
+		<td>
+		{{i+1}}
+		</td>
+
+				<td>{{row.asd}}</td>
+                
+				<td>{{row.basd}}</td>
+                			<td>
+			<a routerLink="/sheet1/edit/{{row.id}}" >Edit</a>
+&nbsp;
+				<a href='javascript:window.alert("not yet ready")'>Delete</a>
+			</td>
+	</tr>	
+</table>
+<script>
+	function notReady(){
+		window.alert('not yet ready');
+	}
+</script>
