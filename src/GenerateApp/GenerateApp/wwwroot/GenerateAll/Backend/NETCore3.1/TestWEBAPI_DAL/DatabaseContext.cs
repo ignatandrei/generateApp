@@ -67,18 +67,21 @@ namespace TestWEBAPI_DAL
                     for(var iCol=0;iCol<nrColumns;iCol++){
                         var column=dt.Columns[iCol];
                         string nameColumn = column.ColumnName;
+                        var val =dt.Rows[iRow][iCol];
+                        if(val == System.DBNull.Value)
+                            val=null;
                         switch(column.DataType.Name.ToLower()){
                             case "string":
-                                text+=", "+  nameColumn +" = " + "@\"" + dt.Rows[iRow][iCol] + "\"" ;
+                                text+=", "+  nameColumn +" = " + "@\"" + (val??"") + "\"" ;
                                 break;
                             case "int32":
-                                text+=", "+  nameColumn +" = " +  dt.Rows[iRow][iCol]  ;
+                                text+=", "+  nameColumn +" = " +  (val??0)  ;
                                 break;
                             case "decimal":
-								text+=", "+  nameColumn +" = " +  dt.Rows[iRow][iCol] +"M" ;
+								text+=", "+  nameColumn +" = " +  (val??0) +"M" ;
                                 break;
                             default:
-                                text+=", "+ column.DataType.Name +"???"+ nameColumn +" = "+ dt.Rows[iRow][iCol];  
+                                text+=", "+ column.DataType.Name +"???"+ nameColumn +" = "+ val;  
                                 break;  
                         };
                         
