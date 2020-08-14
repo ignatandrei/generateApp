@@ -11,19 +11,16 @@ import { tap, delay, switchMapTo, switchMap } from 'rxjs/operators';
 import { @(nameTable) } from '../WebAPIClasses/@(nameTable)';
 import { @(nameTable)Service } from '../services/@(nameTable).service';
 @(Component)({
-  selector: 'app-@(nameTable)edit',
-  templateUrl: './@(nameTable)edit.component.html',
-  styleUrls: ['./@(nameTable)edit.component.css']
+  selector: 'app-@(nameTable)add',
+  templateUrl: './@(nameTable)add.component.html',
+  styleUrls: ['./@(nameTable)add.component.css']
 })
-export class @(nameTable)EditComponent implements OnInit {
+export class @(nameTable)AddComponent implements OnInit {
 
   public id: number;
-  public dataToEdit: @(nameTable);
-  constructor(private route: ActivatedRoute , private router: Router, private mainService: @(nameTable)Service ) {
+  public dataToAdd: @(nameTable);
+  constructor( private router: Router, private mainService: @(nameTable)Service ) {
 
-    // route.paramMap.subscribe(params=>{
-    //   this.id = +params.get('id');
-    // });
 
    }
 
@@ -31,7 +28,7 @@ export class @(nameTable)EditComponent implements OnInit {
     
   }
   public save(): void{
-    this.mainService.Update(this.dataToEdit).subscribe(
+    this.mainService.Insert(this.dataToAdd).subscribe(
       it => {
         window.alert('saved !');
       }

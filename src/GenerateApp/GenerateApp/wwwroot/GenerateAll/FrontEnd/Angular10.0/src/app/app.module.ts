@@ -40,6 +40,9 @@ import { FormsModule } from '@angular/forms';
 @foreach(var nameTable in nameTablesToRender){
 <text>
 import { @(nameTable)Component } from './WebAPIComponents/@(nameTable).component';
+
+import { @(nameTable)AddComponent } from './WebAPIComponents/@(nameTable)add.component';
+
 import { @(nameTable)EditComponent } from './WebAPIComponents/@(nameTable)edit.component';
 
 </text>
@@ -50,7 +53,8 @@ import { @(nameTable)EditComponent } from './WebAPIComponents/@(nameTable)edit.c
   declarations: [
   @foreach(var nameTable in nameTablesToRender){
 		<text>
-		@(nameTable)Component,
+    @(nameTable)Component,
+    @(nameTable)AddComponent,
 		@(nameTable)EditComponent,
 		</text>
 	}

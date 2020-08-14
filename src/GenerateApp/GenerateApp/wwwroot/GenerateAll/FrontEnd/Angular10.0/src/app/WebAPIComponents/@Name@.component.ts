@@ -5,6 +5,8 @@
 	var nameTable =dt.TableName;
 }
 import { Component, OnInit } from '@(angular)/core';
+import { tap } from 'rxjs/operators';
+import { Router } from '@angular/router';
 import{ @nameTable } from './../WebAPIClasses/@nameTable';
 import {@(nameTable)Service} from './../services/@(nameTable).service';
 
@@ -16,7 +18,7 @@ import {@(nameTable)Service} from './../services/@(nameTable).service';
 export class @Name@Component implements OnInit {
 
   public rows:@(nameTable)[]=[];
-  constructor(private mainService: @(nameTable)Service ) { }
+  constructor(private mainService: @(nameTable)Service, private router: Router ) { }
 
   ngOnInit(): void {
 	  this.mainService.GetAll().subscribe(it=>{
@@ -36,6 +38,10 @@ export class @Name@Component implements OnInit {
     })
     )
     .subscribe();
+  }
+  public add(): void{
+    this.router.navigate(["/sheet1/add"]);
+    return;
   }
 
 }

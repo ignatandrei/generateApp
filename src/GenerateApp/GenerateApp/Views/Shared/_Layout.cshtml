@@ -45,10 +45,24 @@
         InsideIIS: @GenerateApp.Controllers.InfoData.InsideIIS
         @{
             string data = "waiting :" + GenerateApp.Controllers.HomeController.NumberItemsInProgress(DateTime.Now);
-            
+
         }
         ;
+
         @data
+
+
+        <br />
+        @GenerateApp.Controllers.HomeController.data.Count
+        @{
+
+
+            @foreach (var item in GenerateApp.Controllers.HomeController.data)
+            {
+                <br />
+                @item.Key
+            }
+        }
 
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
