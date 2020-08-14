@@ -259,7 +259,7 @@ namespace GenerateApp.Controllers
             var i = new InfoData(SourceData.Excel)
             {
                 logs = new List<string>(),
-                name = name,
+                name = name,    
                 folderGenerator = Path.Combine(environment.WebRootPath, "GenerateAll"),
                 pathFile = path
 
