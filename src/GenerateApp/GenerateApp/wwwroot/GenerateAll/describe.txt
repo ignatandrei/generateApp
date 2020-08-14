@@ -33,6 +33,9 @@
              'src/app/WebAPIComponents/@Name@edit.component.ts',
             'src/app/WebAPIComponents/@Name@edit.component.css',
             'src/app/WebAPIComponents/@Name@edit.component.html',
+             'src/app/WebAPIComponents/@Name@add.component.ts',
+            'src/app/WebAPIComponents/@Name@add.component.css',
+            'src/app/WebAPIComponents/@Name@add.component.html',
             'src/app/WebAPIClasses/@Name@.ts',
             'src/app/services/@Name@.service.ts',
 

@@ -28,14 +28,7 @@ export class @(nameTable)EditComponent implements OnInit {
    }
 
   ngOnInit(): void {
-    this.route.paramMap.pipe(
-      tap(params => this.id = +params.get('id')),
-      switchMap(it => this.mainService.Get(this.id) ),
-      delay(1000),
-      tap(it => this.dataToEdit = it)
-      )
-  .subscribe();
-
+    
   }
   public save(): void{
     this.mainService.Update(this.dataToEdit).subscribe(
