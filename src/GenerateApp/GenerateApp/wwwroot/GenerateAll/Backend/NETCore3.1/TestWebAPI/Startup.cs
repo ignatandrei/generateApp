@@ -29,6 +29,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using NetCore2Blockly;
 using TestWebAPI_BL;
 using TestWEBAPI_DAL;
 
@@ -49,6 +50,7 @@ namespace TestWebAPI
 
             // add swagger
             // add blockly 
+			services.AddBlockly();
             // add logging
             services.AddCors();
             services.AddControllers();
@@ -68,6 +70,10 @@ namespace TestWebAPI
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+			
+			app.UseBlockly();
+            app.UseBlocklyUI();
+            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -90,7 +96,13 @@ namespace TestWebAPI
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapFallbackToFile("/index.html");
+                
+       @foreach(var nameTable in nameTablesToRender){
+            
+            <text>
+			endpoints.MapFallbackToFile("@(nameTable.ToLower())/{**slug}","/index.html");
+            </text>
+        }
              
                 endpoints.MapControllers();
             });

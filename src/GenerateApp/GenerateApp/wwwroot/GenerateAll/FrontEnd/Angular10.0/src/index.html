@@ -9,7 +9,9 @@
   var hrefApp=".";
   if(!isCordovaApp){
     var baseHref = window.location.href.split('/');
-    baseHref.pop();
+	while(baseHref.length>3)
+		baseHref.pop();
+		
     hrefApp=baseHref.join('/') +'/';
   }
     document.write('<base href="' + hrefApp+ '" />');
