@@ -44,7 +44,7 @@ const routes: Routes = [
 <text>
 { path: '@(nameTable.ToLower())', component: @(nameTable)Component },
 
-{ path: '@(nameTable.ToLower())/add', component: @(nameTable)Component },
+{ path: '@(nameTable.ToLower())/add', component: @(nameTable)AddComponent },
 
 { path: '@(nameTable.ToLower())/edit/:id', component: @(nameTable)EditComponent },
 

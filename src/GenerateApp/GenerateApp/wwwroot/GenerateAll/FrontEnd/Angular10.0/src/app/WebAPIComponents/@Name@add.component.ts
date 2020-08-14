@@ -21,13 +21,13 @@ export class @(nameTable)AddComponent implements OnInit {
   public dataToAdd: @(nameTable);
   constructor( private router: Router, private mainService: @(nameTable)Service ) {
 
-
+      this.dataToAdd = new @(nameTable)();
    }
 
   ngOnInit(): void {
     
   }
-  public save(): void{
+  public add(): void{
     this.mainService.Insert(this.dataToAdd).subscribe(
       it => {
         window.alert('saved !');
