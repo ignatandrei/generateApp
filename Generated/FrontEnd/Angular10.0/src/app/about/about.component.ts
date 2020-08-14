@@ -1,0 +1,23 @@
+import { Component, OnInit } from '@angular/core';
+import {VersionService} from './../services/version.service';
+@Component({
+  selector: 'app-about',
+  templateUrl: './about.component.html',
+  styleUrls: ['./about.component.css']
+})
+export class AboutComponent implements OnInit {
+
+  versionGenerator: string;
+  versionBackend: string;
+  constructor(private version:VersionService) { }
+
+  ngOnInit(): void {
+    this.version.VersionGenerator().subscribe(it=>{
+      this.versionGenerator=it;
+    });
+    this.version.VersionBackend().subscribe(it=>{
+      this.versionBackend=it;
+    })
+  }
+
+}
