@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TestWebAPI_BL\TestWebAPI_BL.csproj" />
+    <ProjectReference Include="..\TestWEBAPI_DAL\TestWEBAPI_DAL.csproj" />
+  </ItemGroup>
+
+</Project>
