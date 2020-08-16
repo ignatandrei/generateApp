@@ -50,7 +50,7 @@ jobs:
           &"docker" cp ${nameDockerContainer}:/app/out  $currentDir/out/$nameDockerImage
           &"docker" container kill ${nameDockerContainer}
           dir $currentDir/out
-          gci $currentDir/out -recurse -name
+          # gci $currentDir/out -recurse -name
           Pop-Location
 
         }
@@ -65,7 +65,15 @@ jobs:
           Foreach($file in $backend){    
               Copy-Item -Path $spa\*.* -Destination $file -Force -Recurse	
           }
-         }	
+         }
+         Copy-Item -Path $spa\*.* -Destination $currentDir/Generated/FrontEnd/Angular10.0/Cordova/wwwroot/ 
+         Push-Location $currentDir/Generated/FrontEnd/Angular10.0/Cordova/
+         &"docker" build  -f cordova.txt -t  cordovaimage .
+         &"docker" run -d  --name cordovacontainer --rm cordovaimage
+         &"docker" cp cordovacontainer:/app/out  $currentDir/out/cordovaimage
+         &"docker" container kill cordovacontainer
+         
+         Pop-Location
         }
     
     - name: Inject slug/short variables

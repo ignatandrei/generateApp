@@ -11,7 +11,7 @@ RUN cd MyApplication && cordova platform add android
 
 RUN cd MyApplication && cordova requirements
 
-COPY /app/out/angular10.0/*.* MyApplication/www/ 
+COPY wwwroot/*.* MyApplication/www/ 
 RUN cd MyApplication &&   cordova build android
 
 RUN mkdir /app/out
