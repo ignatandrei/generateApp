@@ -3,8 +3,6 @@
 FROM walterwhites/docker-cordova:latest
 WORKDIR /app
 
-# RUN npm install -g @angular/cli@10.0.4
-
 # RUN npm install -g cordova
 
 RUN cordova create MyApplication com.demo.adces.MyApplication MyApplication
