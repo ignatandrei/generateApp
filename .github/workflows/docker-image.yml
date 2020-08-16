@@ -66,7 +66,8 @@ jobs:
               Copy-Item -Path $spa\*.* -Destination $file -Force -Recurse	
           }
          }
-         Copy-Item -Path $spa\*.* -Destination $currentDir/Generated/FrontEnd/Angular10.0/Cordova/wwwroot/ 
+         # Copy-Item -Path $spa\*.* -Destination $currentDir/Generated/FrontEnd/Angular10.0/Cordova/wwwroot/ 
+         # find if cordova exists
          Push-Location $currentDir/Generated/FrontEnd/Angular10.0/Cordova/
          &"docker" build  -f cordova.txt -t  cordovaimage .
          &"docker" run -d  --name cordovacontainer --rm cordovaimage
@@ -96,6 +97,7 @@ jobs:
           ls -lh 
           zip -r  Generated.zip Generated
           zip -r  out.zip out
+          zip -r  android.zip out/cordovaimage
               
     - name: Create a Release
       uses: actions/create-release@v1
@@ -126,7 +128,7 @@ jobs:
         
         
 
-    - name: Upload exeet
+    - name: Upload exe
       uses: actions/upload-release-asset@v1.0.2
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -137,6 +139,22 @@ jobs:
         # The path to the asset you want to upload
         asset_path: out.zip
         asset_name: Exe ${{ env.GITHUB_REF_SLUG  }} 
+        # The content-type of the asset you want to upload. See the supported Media Types here: https://www.iana.org/assignments/media-types/media-types.xhtml for more information
+        asset_content_type: application/octet-stream 
+        
+
+
+    - name: Upload android
+      uses: actions/upload-release-asset@v1.0.2
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      with:
+        # The URL for uploading assets to the release
+        upload_url:  ${{ steps.create_release.outputs.upload_url }}
+        # The path to the asset you want to upload
+        asset_path: android.zip
+        asset_name: android ${{ env.GITHUB_REF_SLUG  }} 
         # The content-type of the asset you want to upload. See the supported Media Types here: https://www.iana.org/assignments/media-types/media-types.xhtml for more information
         asset_content_type: application/octet-stream 
         
