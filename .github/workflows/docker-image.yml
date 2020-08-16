@@ -45,11 +45,12 @@ jobs:
 
           Write-Host "!!!"
           Write-Host "docker" cp ${nameDockerContainer}:/app/out/ $currentDir/out/$nameDockerImage
-          dir $currentDir/out
+          dir $currentDir/out          
           Write-Host "!!!"
           &"docker" cp ${nameDockerContainer}:/app/out  $currentDir/out/$nameDockerImage
           &"docker" container kill ${nameDockerContainer}
           dir $currentDir/out
+          gci $currentDir/out -recurse -name
           Pop-Location
 
         }
