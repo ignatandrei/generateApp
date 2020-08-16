@@ -4,16 +4,32 @@
   <meta charset="utf-8">
   <title>My application </title>
   <!-- <base href="/"> -->
-  <script>
   var isCordovaApp = !!window.cordova;
-  var hrefApp=".";
-  if(!isCordovaApp){
-    var baseHref = window.location.href.split('/');
-	while(baseHref.length>3)
-		baseHref.pop();
-		
-    hrefApp=baseHref.join('/') +'/';
-  }
+      var isWindowApp = !!window.MSApp;
+      if (isCordovaApp) {
+        hrefApp = ".";
+      }
+      if (isWindowApp) {
+        hrefApp = "./";
+      }
+
+      if (!(isCordovaApp || isWindowApp)) {
+        var baseHref = window.location.href.split("/");
+        while (true) {
+          baseHref.pop();
+          hrefApp = baseHref.join("/") + "/";
+          // window.alert(hrefApp);
+          var request = new XMLHttpRequest();
+          request.open("GET", hrefApp + "assets/favicon.svg", false);           request.send(null);
+
+          if (request.status === 200) {
+            if(request.responseText.indexOf("meta name=")<1){
+              console.log(`found ${hrefApp} `);
+              break;
+            }
+          }
+        }
+      }
     document.write('<base href="' + hrefApp+ '" />');
     </script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
