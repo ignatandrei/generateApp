@@ -17,10 +17,14 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-              
+    
+    - name: Inject slug/short variables
+      uses: rlespinasse/github-slug-action@v2.x
+
     - name: Build the Docker image
       shell: pwsh
       run: |
+        dir env:
         #docker build . --file dockercompose --tag my-image-name:$(date +%s)
         $currentDir = (Get-Item .).FullName
         Write-Host $currentDir
@@ -66,8 +70,18 @@ jobs:
               Copy-Item -Path $spa\*.* -Destination $file -Force -Recurse	
           }
          }
-         # Copy-Item -Path $spa\*.* -Destination $currentDir/Generated/FrontEnd/Angular10.0/Cordova/wwwroot/ 
+
          # find if cordova exists
+         Copy-Item -Path $spa\*.* -Destination $currentDir/Generated/FrontEnd/Angular10.0/Cordova/wwwroot/          
+         $fileJS = @(Get-ChildItem -Path $currentDir/Generated/FrontEnd/Angular10.0/Cordova/wwwroot/ -Filter main* -Recurse | %{$_.FullName})
+         Write-Host $fileJS
+         $pathDemo = "http://demo.adces.ro:8080/" + $Env:GITHUB_REF_SLUG + "/"
+
+         $replaceBaseUrl = "('" + $pathDemo +"'+";
+         $find =  '(this.baseUrl+';
+         Foreach($file in $fileJS){    
+           ((Get-Content -path $file -Raw) -replace  [regex]::escape($find),$replaceBaseUrl) | Set-Content -Path $file
+         }
          Push-Location $currentDir/Generated/FrontEnd/Angular10.0/Cordova/
          &"docker" build  -f cordova.txt -t  cordovaimage .
          &"docker" run -d  --name cordovacontainer --rm cordovaimage
@@ -76,9 +90,6 @@ jobs:
          
          Pop-Location
         }
-    
-    - name: Inject slug/short variables
-      uses: rlespinasse/github-slug-action@v2.x
 
     - name: artifacts      
       uses: actions/upload-artifact@v2
