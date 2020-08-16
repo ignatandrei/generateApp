@@ -20,7 +20,7 @@
           hrefApp = baseHref.join("/") + "/";
           // window.alert(hrefApp);
           var request = new XMLHttpRequest();
-          request.open("GET", hrefApp + "assets/favicon.svg", false);           request.send(null);
+          request.open("GET", hrefApp + "favicon.svg", false);           request.send(null);
 
           if (request.status === 200) {
             if(request.responseText.indexOf("meta name=")<1){
