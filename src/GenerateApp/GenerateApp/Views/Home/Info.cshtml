@@ -33,7 +33,7 @@
         {
             if (GenerateApp.Controllers.InfoData.InsideIIS)
             {
-                <h2><a href="/@Model.name">Click to go to your application</a> </h2>
+                <h2><a href="/@Model.name" target="_blank">Click to go to your application</a> </h2>
             }
             <br />
             <p>For programmers </p>
@@ -49,9 +49,9 @@
         }
 
     }
-    @if (progress || !Model.result.Value)
+    @if (progress )
     {
-        <h4>Generating your application will take max 10 minutes - please wait </h4>
+        <h4>Generating your application will take max 15 minutes - please wait </h4>
         <h4>Logs  - internal use</h4>
         <hr />
         <dl class="row">
