@@ -1,0 +1,357 @@
+
+<div *ngIf="dataToEdit == null">Loading data for {{id}} ...</div>
+<div *ngIf="dataToEdit != null">
+	Edit 
+
+
+<table>
+	<thead>
+		<tr>
+			<th>Name</th>
+			<th>Value</th>
+		</tr>
+	</thead>
+	
+
+	<tr>
+	<td>iso_code</td>
+	<td>
+		<input type="text"  [(ngModel)]="dataToEdit.iso_code" />
+	</td>
+	</tr>
+
+	
+	
+	<tr>
+	<td>continent</td>
+	<td>
+		<input type="text"  [(ngModel)]="dataToEdit.continent" />
+	</td>
+	</tr>
+
+	
+	
+	<tr>
+	<td>location</td>
+	<td>
+		<input type="text"  [(ngModel)]="dataToEdit.location" />
+	</td>
+	</tr>
+
+	
+	
+	<tr>
+	<td>date</td>
+	<td>
+		<input type="text"  [(ngModel)]="dataToEdit.date" />
+	</td>
+	</tr>
+
+	
+	
+	<tr>
+	<td>total_cases</td>
+	<td>
+		<input type="text"  [(ngModel)]="dataToEdit.total_cases" />
+	</td>
+	</tr>
+
+	
+	
+	<tr>
+	<td>new_cases</td>
+	<td>
+		<input type="text"  [(ngModel)]="dataToEdit.new_cases" />
+	</td>
+	</tr>
+
+	
+	
+	<tr>
+	<td>total_deaths</td>
+	<td>
+		<input type="text"  [(ngModel)]="dataToEdit.total_deaths" />
+	</td>
+	</tr>
+
+	
+	
+	<tr>
+	<td>new_deaths</td>
+	<td>
+		<input type="text"  [(ngModel)]="dataToEdit.new_deaths" />
+	</td>
+	</tr>
+
+	
+	
+	<tr>
+	<td>total_cases_per_million</td>
+	<td>
+		<input type="text"  [(ngModel)]="dataToEdit.total_cases_per_million" />
+	</td>
+	</tr>
+
+	
+	
+	<tr>
+	<td>new_cases_per_million</td>
+	<td>
+		<input type="text"  [(ngModel)]="dataToEdit.new_cases_per_million" />
+	</td>
+	</tr>
+
+	
+	
+	<tr>
+	<td>total_deaths_per_million</td>
+	<td>
+		<input type="text"  [(ngModel)]="dataToEdit.total_deaths_per_million" />
+	</td>
+	</tr>
+
+	
+	
+	<tr>
+	<td>new_deaths_per_million</td>
+	<td>
+		<input type="text"  [(ngModel)]="dataToEdit.new_deaths_per_million" />
+	</td>
+	</tr>
+
+	
+	
+	<tr>
+	<td>new_tests</td>
+	<td>
+		<input type="text"  [(ngModel)]="dataToEdit.new_tests" />
+	</td>
+	</tr>
+
+	
+	
+	<tr>
+	<td>total_tests</td>
+	<td>
+		<input type="text"  [(ngModel)]="dataToEdit.total_tests" />
+	</td>
+	</tr>
+
+	
+	
+	<tr>
+	<td>total_tests_per_thousand</td>
+	<td>
+		<input type="text"  [(ngModel)]="dataToEdit.total_tests_per_thousand" />
+	</td>
+	</tr>
+
+	
+	
+	<tr>
+	<td>new_tests_per_thousand</td>
+	<td>
+		<input type="text"  [(ngModel)]="dataToEdit.new_tests_per_thousand" />
+	</td>
+	</tr>
+
+	
+	
+	<tr>
+	<td>new_tests_smoothed</td>
+	<td>
+		<input type="text"  [(ngModel)]="dataToEdit.new_tests_smoothed" />
+	</td>
+	</tr>
+
+	
+	
+	<tr>
+	<td>new_tests_smoothed_per_thousand</td>
+	<td>
+		<input type="text"  [(ngModel)]="dataToEdit.new_tests_smoothed_per_thousand" />
+	</td>
+	</tr>
+
+	
+	
+	<tr>
+	<td>tests_per_case</td>
+	<td>
+		<input type="text"  [(ngModel)]="dataToEdit.tests_per_case" />
+	</td>
+	</tr>
+
+	
+	
+	<tr>
+	<td>positive_rate</td>
+	<td>
+		<input type="text"  [(ngModel)]="dataToEdit.positive_rate" />
+	</td>
+	</tr>
+
+	
+	
+	<tr>
+	<td>tests_units</td>
+	<td>
+		<input type="text"  [(ngModel)]="dataToEdit.tests_units" />
+	</td>
+	</tr>
+
+	
+	
+	<tr>
+	<td>stringency_index</td>
+	<td>
+		<input type="text"  [(ngModel)]="dataToEdit.stringency_index" />
+	</td>
+	</tr>
+
+	
+	
+	<tr>
+	<td>population</td>
+	<td>
+		<input type="text"  [(ngModel)]="dataToEdit.population" />
+	</td>
+	</tr>
+
+	
+	
+	<tr>
+	<td>population_density</td>
+	<td>
+		<input type="text"  [(ngModel)]="dataToEdit.population_density" />
+	</td>
+	</tr>
+
+	
+	
+	<tr>
+	<td>median_age</td>
+	<td>
+		<input type="text"  [(ngModel)]="dataToEdit.median_age" />
+	</td>
+	</tr>
+
+	
+	
+	<tr>
+	<td>aged_65_older</td>
+	<td>
+		<input type="text"  [(ngModel)]="dataToEdit.aged_65_older" />
+	</td>
+	</tr>
+
+	
+	
+	<tr>
+	<td>aged_70_older</td>
+	<td>
+		<input type="text"  [(ngModel)]="dataToEdit.aged_70_older" />
+	</td>
+	</tr>
+
+	
+	
+	<tr>
+	<td>gdp_per_capita</td>
+	<td>
+		<input type="text"  [(ngModel)]="dataToEdit.gdp_per_capita" />
+	</td>
+	</tr>
+
+	
+	
+	<tr>
+	<td>extreme_poverty</td>
+	<td>
+		<input type="text"  [(ngModel)]="dataToEdit.extreme_poverty" />
+	</td>
+	</tr>
+
+	
+	
+	<tr>
+	<td>cardiovasc_death_rate</td>
+	<td>
+		<input type="text"  [(ngModel)]="dataToEdit.cardiovasc_death_rate" />
+	</td>
+	</tr>
+
+	
+	
+	<tr>
+	<td>diabetes_prevalence</td>
+	<td>
+		<input type="text"  [(ngModel)]="dataToEdit.diabetes_prevalence" />
+	</td>
+	</tr>
+
+	
+	
+	<tr>
+	<td>female_smokers</td>
+	<td>
+		<input type="text"  [(ngModel)]="dataToEdit.female_smokers" />
+	</td>
+	</tr>
+
+	
+	
+	<tr>
+	<td>male_smokers</td>
+	<td>
+		<input type="text"  [(ngModel)]="dataToEdit.male_smokers" />
+	</td>
+	</tr>
+
+	
+	
+	<tr>
+	<td>handwashing_facilities</td>
+	<td>
+		<input type="text"  [(ngModel)]="dataToEdit.handwashing_facilities" />
+	</td>
+	</tr>
+
+	
+	
+	<tr>
+	<td>hospital_beds_per_thousand</td>
+	<td>
+		<input type="text"  [(ngModel)]="dataToEdit.hospital_beds_per_thousand" />
+	</td>
+	</tr>
+
+	
+	
+	<tr>
+	<td>life_expectancy</td>
+	<td>
+		<input type="text"  [(ngModel)]="dataToEdit.life_expectancy" />
+	</td>
+	</tr>
+
+	
+				
+			<tr>
+				<td>&nbsp;</td>
+				<td>
+				  &nbsp;
+				</td>
+			  </tr>
+			
+			  <tr>
+				<td align="left">
+				  <button (click)="save()">Save</button>
+				</td>
+				<td align="left">
+				  <button (click)="cancel()">Back to list of Sheet1</button>
+				</td>
+			  </tr>
+			
+</table>
+</div>
