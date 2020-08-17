@@ -114,7 +114,7 @@ namespace GenerateApp.Controllers
             {
                 var res = new TablesFromDataSource();
                 res.Success = false;
-                res.error = ex.Message + "!!" + ex.StackTrace;
+                res.error = connection+"!!!"+ ex.Message + "!!" + ex.StackTrace;
                 return res;
             }
         }
