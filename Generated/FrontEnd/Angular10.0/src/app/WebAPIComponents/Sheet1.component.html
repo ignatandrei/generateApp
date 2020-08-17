@@ -1,0 +1,255 @@
+
+
+<br />
+<h1>
+List of Sheet1
+</h1>
+
+<mat-form-field>
+	<mat-label>Filter</mat-label>
+	<input matInput (keyup)="applyFilter($event)" placeholder="filter text" #input>
+  </mat-form-field>
+  
+  <div class="mat-elevation-z8">
+	<table mat-table [dataSource]="dataSource" matSort>
+
+
+	
+	  <ng-container matColumnDef="iso_code">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> iso_code </th>
+		<td mat-cell *matCellDef="let row"> {{row.iso_code}} </td>
+	  </ng-container>
+		  
+	
+	  <ng-container matColumnDef="continent">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> continent </th>
+		<td mat-cell *matCellDef="let row"> {{row.continent}} </td>
+	  </ng-container>
+		  
+	
+	  <ng-container matColumnDef="location">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> location </th>
+		<td mat-cell *matCellDef="let row"> {{row.location}} </td>
+	  </ng-container>
+		  
+	
+	  <ng-container matColumnDef="date">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> date </th>
+		<td mat-cell *matCellDef="let row"> {{row.date}} </td>
+	  </ng-container>
+		  
+	
+	  <ng-container matColumnDef="total_cases">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> total_cases </th>
+		<td mat-cell *matCellDef="let row"> {{row.total_cases}} </td>
+	  </ng-container>
+		  
+	
+	  <ng-container matColumnDef="new_cases">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> new_cases </th>
+		<td mat-cell *matCellDef="let row"> {{row.new_cases}} </td>
+	  </ng-container>
+		  
+	
+	  <ng-container matColumnDef="total_deaths">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> total_deaths </th>
+		<td mat-cell *matCellDef="let row"> {{row.total_deaths}} </td>
+	  </ng-container>
+		  
+	
+	  <ng-container matColumnDef="new_deaths">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> new_deaths </th>
+		<td mat-cell *matCellDef="let row"> {{row.new_deaths}} </td>
+	  </ng-container>
+		  
+	
+	  <ng-container matColumnDef="total_cases_per_million">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> total_cases_per_million </th>
+		<td mat-cell *matCellDef="let row"> {{row.total_cases_per_million}} </td>
+	  </ng-container>
+		  
+	
+	  <ng-container matColumnDef="new_cases_per_million">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> new_cases_per_million </th>
+		<td mat-cell *matCellDef="let row"> {{row.new_cases_per_million}} </td>
+	  </ng-container>
+		  
+	
+	  <ng-container matColumnDef="total_deaths_per_million">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> total_deaths_per_million </th>
+		<td mat-cell *matCellDef="let row"> {{row.total_deaths_per_million}} </td>
+	  </ng-container>
+		  
+	
+	  <ng-container matColumnDef="new_deaths_per_million">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> new_deaths_per_million </th>
+		<td mat-cell *matCellDef="let row"> {{row.new_deaths_per_million}} </td>
+	  </ng-container>
+		  
+	
+	  <ng-container matColumnDef="new_tests">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> new_tests </th>
+		<td mat-cell *matCellDef="let row"> {{row.new_tests}} </td>
+	  </ng-container>
+		  
+	
+	  <ng-container matColumnDef="total_tests">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> total_tests </th>
+		<td mat-cell *matCellDef="let row"> {{row.total_tests}} </td>
+	  </ng-container>
+		  
+	
+	  <ng-container matColumnDef="total_tests_per_thousand">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> total_tests_per_thousand </th>
+		<td mat-cell *matCellDef="let row"> {{row.total_tests_per_thousand}} </td>
+	  </ng-container>
+		  
+	
+	  <ng-container matColumnDef="new_tests_per_thousand">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> new_tests_per_thousand </th>
+		<td mat-cell *matCellDef="let row"> {{row.new_tests_per_thousand}} </td>
+	  </ng-container>
+		  
+	
+	  <ng-container matColumnDef="new_tests_smoothed">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> new_tests_smoothed </th>
+		<td mat-cell *matCellDef="let row"> {{row.new_tests_smoothed}} </td>
+	  </ng-container>
+		  
+	
+	  <ng-container matColumnDef="new_tests_smoothed_per_thousand">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> new_tests_smoothed_per_thousand </th>
+		<td mat-cell *matCellDef="let row"> {{row.new_tests_smoothed_per_thousand}} </td>
+	  </ng-container>
+		  
+	
+	  <ng-container matColumnDef="tests_per_case">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> tests_per_case </th>
+		<td mat-cell *matCellDef="let row"> {{row.tests_per_case}} </td>
+	  </ng-container>
+		  
+	
+	  <ng-container matColumnDef="positive_rate">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> positive_rate </th>
+		<td mat-cell *matCellDef="let row"> {{row.positive_rate}} </td>
+	  </ng-container>
+		  
+	
+	  <ng-container matColumnDef="tests_units">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> tests_units </th>
+		<td mat-cell *matCellDef="let row"> {{row.tests_units}} </td>
+	  </ng-container>
+		  
+	
+	  <ng-container matColumnDef="stringency_index">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> stringency_index </th>
+		<td mat-cell *matCellDef="let row"> {{row.stringency_index}} </td>
+	  </ng-container>
+		  
+	
+	  <ng-container matColumnDef="population">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> population </th>
+		<td mat-cell *matCellDef="let row"> {{row.population}} </td>
+	  </ng-container>
+		  
+	
+	  <ng-container matColumnDef="population_density">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> population_density </th>
+		<td mat-cell *matCellDef="let row"> {{row.population_density}} </td>
+	  </ng-container>
+		  
+	
+	  <ng-container matColumnDef="median_age">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> median_age </th>
+		<td mat-cell *matCellDef="let row"> {{row.median_age}} </td>
+	  </ng-container>
+		  
+	
+	  <ng-container matColumnDef="aged_65_older">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> aged_65_older </th>
+		<td mat-cell *matCellDef="let row"> {{row.aged_65_older}} </td>
+	  </ng-container>
+		  
+	
+	  <ng-container matColumnDef="aged_70_older">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> aged_70_older </th>
+		<td mat-cell *matCellDef="let row"> {{row.aged_70_older}} </td>
+	  </ng-container>
+		  
+	
+	  <ng-container matColumnDef="gdp_per_capita">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> gdp_per_capita </th>
+		<td mat-cell *matCellDef="let row"> {{row.gdp_per_capita}} </td>
+	  </ng-container>
+		  
+	
+	  <ng-container matColumnDef="extreme_poverty">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> extreme_poverty </th>
+		<td mat-cell *matCellDef="let row"> {{row.extreme_poverty}} </td>
+	  </ng-container>
+		  
+	
+	  <ng-container matColumnDef="cardiovasc_death_rate">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> cardiovasc_death_rate </th>
+		<td mat-cell *matCellDef="let row"> {{row.cardiovasc_death_rate}} </td>
+	  </ng-container>
+		  
+	
+	  <ng-container matColumnDef="diabetes_prevalence">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> diabetes_prevalence </th>
+		<td mat-cell *matCellDef="let row"> {{row.diabetes_prevalence}} </td>
+	  </ng-container>
+		  
+	
+	  <ng-container matColumnDef="female_smokers">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> female_smokers </th>
+		<td mat-cell *matCellDef="let row"> {{row.female_smokers}} </td>
+	  </ng-container>
+		  
+	
+	  <ng-container matColumnDef="male_smokers">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> male_smokers </th>
+		<td mat-cell *matCellDef="let row"> {{row.male_smokers}} </td>
+	  </ng-container>
+		  
+	
+	  <ng-container matColumnDef="handwashing_facilities">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> handwashing_facilities </th>
+		<td mat-cell *matCellDef="let row"> {{row.handwashing_facilities}} </td>
+	  </ng-container>
+		  
+	
+	  <ng-container matColumnDef="hospital_beds_per_thousand">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> hospital_beds_per_thousand </th>
+		<td mat-cell *matCellDef="let row"> {{row.hospital_beds_per_thousand}} </td>
+	  </ng-container>
+		  
+	
+	  <ng-container matColumnDef="life_expectancy">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> life_expectancy </th>
+		<td mat-cell *matCellDef="let row"> {{row.life_expectancy}} </td>
+	  </ng-container>
+		    
+	  <ng-container matColumnDef="operations">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> Operations </th>
+		<td mat-cell *matCellDef="let row" > <a routerLink="/sheet1/edit/{{row.id}}" >Edit</a>
+		
+			&nbsp;
+			<button (click)="deleteData(row.id)">Delete</button>
+			
+		</td>
+	  </ng-container>
+  
+	  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+	  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  
+	  <!-- Row shown when there is no matching data. -->
+	  <tr class="mat-row" *matNoDataRow>
+		<td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+	  </tr>
+	</table>
+  
+	<mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+  </div>
+
+  <button (click)="add()">Add new Sheet1</button>
