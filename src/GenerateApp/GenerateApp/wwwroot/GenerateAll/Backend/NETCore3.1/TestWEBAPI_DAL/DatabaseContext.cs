@@ -61,6 +61,9 @@ namespace TestWEBAPI_DAL
 
             @foreach(var dt in tables){
                 var nrRows =dt.Rows.Count; 
+                if(nrRows > 200)
+                    nrRows=200;
+                    
                 var nrColumns = dt.Columns.Count;
                 for(var iRow=0;iRow<nrRows;iRow++){
                     string text="";
