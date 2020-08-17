@@ -36,7 +36,7 @@
                 <h2><a href="/@Model.name" target="_blank">Click to go to your application</a> </h2>
             }
             <br />
-            <p>For programmers </p>
+            <p>Other media : </p>
             @foreach (var download in Model.Releases)
             {
                 <a href="@download.Value" target="_blank">@download.Key.Replace(Model.name, "", StringComparison.InvariantCultureIgnoreCase)</a>

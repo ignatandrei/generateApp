@@ -121,6 +121,7 @@ namespace GenerateApp.Controllers
         [HttpPost]
         public async Task<TablesFromDataSource> FindTables([FromBody] PayLoadConn payLoadConn)
         {
+            string connection = null;
             var ret = new TablesFromDataSource();
             ret.Success = false;
             var val = payLoadConn.connType;
@@ -148,7 +149,8 @@ namespace GenerateApp.Controllers
                         {
                             b.Port = (uint)port;
                         }
-                        return await MariaDBConnectionToObtainFields(b.ConnectionString);
+                        connection = b.ConnectionString;
+                        return await MariaDBConnectionToObtainFields(connection);
                     case connTypes.XLS:
                         var bytes = Convert.FromBase64String(payLoadConn.connFileContent);
                         var path = Path.Combine(
@@ -167,7 +169,8 @@ namespace GenerateApp.Controllers
             }
             catch(Exception ex)
             {
-                ret.error = ex.Message + "!!!" + ex.StackTrace;
+                ret.error = connection;
+                ret.error += "!!!" + ex.Message + "!!!" + ex.StackTrace;
                 return ret;
             }
 
