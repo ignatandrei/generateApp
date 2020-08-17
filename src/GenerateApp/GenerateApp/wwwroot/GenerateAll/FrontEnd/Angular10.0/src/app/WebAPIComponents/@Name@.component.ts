@@ -65,13 +65,21 @@ export class @Name@Component implements OnInit {
 
   public deleteData(id: number): void{
 
+    if(!window.confirm("do you want to delete row "+ id)){
+      return;
+    }
+
     this.mainService
     .Delete(id)
     .pipe(
       
       tap(idDeleted=>{
-      const ndx = this.rows.findIndex(it=>it.id == idDeleted);
-      this.rows.splice(ndx,1);
+    // const ndx = this.rows.findIndex(it=>it.id == idDeleted);
+      // this.rows.splice(ndx,1);
+      // this.dataSource = new MatTableDataSource(this.rows);
+      const ndx = this.rows.findIndex(it => it.id === idDeleted);
+      this.dataSource.data.splice(ndx, 1);
+      this.dataSource._updateChangeSubscription();
     })
     )
     .subscribe();
