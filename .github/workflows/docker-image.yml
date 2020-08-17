@@ -17,10 +17,14 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-              
+    
+    - name: Inject slug/short variables
+      uses: rlespinasse/github-slug-action@v2.x
+
     - name: Build the Docker image
       shell: pwsh
       run: |
+        dir env:
         #docker build . --file dockercompose --tag my-image-name:$(date +%s)
         $currentDir = (Get-Item .).FullName
         Write-Host $currentDir
@@ -45,9 +49,12 @@ jobs:
 
           Write-Host "!!!"
           Write-Host "docker" cp ${nameDockerContainer}:/app/out/ $currentDir/out/$nameDockerImage
+          dir $currentDir/out          
           Write-Host "!!!"
           &"docker" cp ${nameDockerContainer}:/app/out  $currentDir/out/$nameDockerImage
           &"docker" container kill ${nameDockerContainer}
+          dir $currentDir/out
+          # gci $currentDir/out -recurse -name
           Pop-Location
 
         }
@@ -62,11 +69,27 @@ jobs:
           Foreach($file in $backend){    
               Copy-Item -Path $spa\*.* -Destination $file -Force -Recurse	
           }
-         }	
+         }
+
+         # find if cordova exists
+         Copy-Item -Path $spa\*.* -Destination $currentDir/Generated/FrontEnd/Angular10.0/Cordova/wwwroot/          
+         $fileJS = @(Get-ChildItem -Path $currentDir/Generated/FrontEnd/Angular10.0/Cordova/wwwroot/ -Filter main* -Recurse | %{$_.FullName})
+         Write-Host $fileJS
+         $pathDemo = "http://demo.adces.ro:8080/" + $Env:GITHUB_REF_SLUG + "/"
+
+         $replaceBaseUrl = "('" + $pathDemo +"'+";
+         $find =  '(this.baseUrl+';
+         Foreach($file in $fileJS){    
+           ((Get-Content -path $file -Raw) -replace  [regex]::escape($find),$replaceBaseUrl) | Set-Content -Path $file
+         }
+         Push-Location $currentDir/Generated/FrontEnd/Angular10.0/Cordova/
+         &"docker" build  -f cordova.txt -t  cordovaimage .
+         &"docker" run -d  --name cordovacontainer --rm cordovaimage
+         &"docker" cp cordovacontainer:/app/out  $currentDir/out/cordovaimage
+         &"docker" container kill cordovacontainer
+         
+         Pop-Location
         }
-    
-    - name: Inject slug/short variables
-      uses: rlespinasse/github-slug-action@v2.x
 
     - name: artifacts      
       uses: actions/upload-artifact@v2
@@ -85,6 +108,7 @@ jobs:
           ls -lh 
           zip -r  Generated.zip Generated
           zip -r  out.zip out
+          zip -r  android.zip out/cordovaimage
               
     - name: Create a Release
       uses: actions/create-release@v1
@@ -115,7 +139,7 @@ jobs:
         
         
 
-    - name: Upload exeet
+    - name: Upload exe
       uses: actions/upload-release-asset@v1.0.2
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -126,6 +150,22 @@ jobs:
         # The path to the asset you want to upload
         asset_path: out.zip
         asset_name: Exe ${{ env.GITHUB_REF_SLUG  }} 
+        # The content-type of the asset you want to upload. See the supported Media Types here: https://www.iana.org/assignments/media-types/media-types.xhtml for more information
+        asset_content_type: application/octet-stream 
+        
+
+
+    - name: Upload android
+      uses: actions/upload-release-asset@v1.0.2
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      with:
+        # The URL for uploading assets to the release
+        upload_url:  ${{ steps.create_release.outputs.upload_url }}
+        # The path to the asset you want to upload
+        asset_path: android.zip
+        asset_name: android ${{ env.GITHUB_REF_SLUG  }} 
         # The content-type of the asset you want to upload. See the supported Media Types here: https://www.iana.org/assignments/media-types/media-types.xhtml for more information
         asset_content_type: application/octet-stream 
         
