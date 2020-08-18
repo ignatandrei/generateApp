@@ -21,15 +21,28 @@ namespace GenerateApp.Controllers
     {
         public bool Success { get; set; }
         public string error { get; set; }
-        public string[] TableNames { get; set; }
+        public Table[] input { get; set; }
     }
+    public class Table
+    {
+        public string name { get; set; }
+        public List<string> fields { get; set; }
+    
+    }
+    
+    public class Field
+    {
+        public string name { get; set; }
+        public string type { get; set; }
+    }
+
     public class InfoData
     {
-        
+
         public static readonly bool InsideIIS;
         static InfoData()
         {
-            var str=Environment.GetEnvironmentVariable("APP_POOL_ID") ;
+            var str = Environment.GetEnvironmentVariable("APP_POOL_ID");
             InsideIIS = !string.IsNullOrWhiteSpace(str);
         }
         public readonly DateTime startedDate;
@@ -51,7 +64,7 @@ namespace GenerateApp.Controllers
         public List<string> logs { get; set; }
         public string folderGenerator { get; internal set; }
 
-        public Dictionary<string, string> Releases=new Dictionary<string, string>();
+        public Dictionary<string, string> Releases = new Dictionary<string, string>();
         public string RealExeLocation;
         private async Task<IDataToSent> ReadExcel()
         {
@@ -73,10 +86,10 @@ namespace GenerateApp.Controllers
             return data; ;
 
         }
-        public async  Task<bool> GenerateApp()
+        public async Task<bool> GenerateApp()
         {
             string folderGenerator = this.folderGenerator;
-            string generator =Path.Combine( folderGenerator ,"describe.txt");
+            string generator = Path.Combine(folderGenerator, "describe.txt");
             var stData = JsonConvert.DeserializeObject<StankinsGenerator>(File.ReadAllText(generator));
             var backendFolderName = @"NETCore3.1";
             var frontendFolderName = @"Angular10.0";
@@ -86,11 +99,11 @@ namespace GenerateApp.Controllers
             //wt  new-tab -d C:\test\backend\NETCore3.1\TestWebAPI ; split-pane -d C:\test\frontend\Angular10.0
             var g = this.name;
 
-            var outputFolder = Path.Combine(Path.GetDirectoryName(pathFile),g);
+            var outputFolder = Path.Combine(Path.GetDirectoryName(pathFile), g);
             if (!Directory.Exists(outputFolder))
                 Directory.CreateDirectory(outputFolder);
-            
-            
+
+
             logs.Add("gathering data");
 
             IDataToSent data = await ReadExcel();
@@ -210,7 +223,7 @@ namespace GenerateApp.Controllers
 
                 var save = new SenderOutputToFolder(outputFolder, false, "OutputString");
                 data = await save.TransformData(data);
-                
+
                 if (string.IsNullOrWhiteSpace(GitOps.CredentialsToken))
                     return true;
 
@@ -276,19 +289,19 @@ namespace GenerateApp.Controllers
             return true;
 
 
-            
+
         }
-        static void CreateVDir(string name,string folder)
+        static void CreateVDir(string name, string folder)
         {
-            
+
             ServerManager manager = new ServerManager();
             Site defaultSite = manager.Sites["AppGenerator"];
             var appCreated = defaultSite.Applications.Add($"/{name}", folder);
             appCreated.ApplicationPoolName = "NETCore";
             manager.CommitChanges();
         }
-            //https://docs.microsoft.com/en-us/dotnet/standard/io/how-to-copy-directories
-            private static void DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs)
+        //https://docs.microsoft.com/en-us/dotnet/standard/io/how-to-copy-directories
+        private static void DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs)
         {
             // Get the subdirectories for the specified directory.
             DirectoryInfo dir = new DirectoryInfo(sourceDirName);

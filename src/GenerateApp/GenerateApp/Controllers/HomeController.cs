@@ -99,14 +99,16 @@ namespace GenerateApp.Controllers
                 var data = await recData.TransformData(null);
 
                 var rows = data.FindAfterName("tables").Value.Rows;
-                var nameTables = new List<String>();
+                var nameTables = new List<Table>();
                 foreach(DataRow dr in rows)
                 {
-                    nameTables.Add(dr["name"].ToString());
+                    var t = new Table();
+                    t.name = dr["name"].ToString();
+                    nameTables.Add(t);
                 }
                 var res = new TablesFromDataSource();
                 res.Success = true;
-                res.TableNames = nameTables.ToArray();
+                res.input = nameTables.ToArray();
 
                 return res;
             }
@@ -192,17 +194,19 @@ namespace GenerateApp.Controllers
 
                 var ds = data.FindAfterName("DataSource").Value;
                 var nrRowsDS = ds.Rows.Count;
-                var nameTablesToRender = new string[nrRowsDS];
+                var nameTablesToRender = new Table[nrRowsDS];
 
                 for (int iRowDS = 0; iRowDS < nrRowsDS; iRowDS++)
                 {
                     var nameTable = ds.Rows[iRowDS]["TableName"].ToString();
                     var dt = data.FindAfterName(nameTable).Value;
-                    nameTablesToRender[iRowDS] = dt.TableName;
+                    var t = new Table();
+                    t.name = dt.TableName;
+                    nameTablesToRender[iRowDS] = t;
                 }
                 var res = new TablesFromDataSource();
                 res.Success = true;
-                res.TableNames = nameTablesToRender;
+                res.input = nameTablesToRender;
                 return res;
 
 
