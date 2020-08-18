@@ -18,6 +18,7 @@ using Stankins.Excel;
 using Stankins.MariaDB;
 using System.Data;
 using MySqlConnector;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace GenerateApp.Controllers
 {
@@ -98,13 +99,27 @@ namespace GenerateApp.Controllers
 
                 var data = await recData.TransformData(null);
 
-                var rows = data.FindAfterName("tables").Value.Rows;
+                var tables = data.FindAfterName("tables").Value.Rows;
+                var columns = data.FindAfterName("columns").Value.Rows;
                 var nameTables = new List<Table>();
-                foreach(DataRow dr in rows)
+                foreach(DataRow dr in tables)
                 {
                     var t = new Table();
                     t.name = dr["name"].ToString();
+                    var id = dr["id"].ToString();
                     nameTables.Add(t);
+                    foreach (DataRow item in columns)
+                    {
+                        if(item["tableId"].ToString() == id)
+                        {
+                            var f = new Field();
+                            f.name = item["name"].ToString();
+                            f.type = "string";
+                            t.fields.Add(f);
+                        }
+                    }
+
+
                 }
                 var res = new TablesFromDataSource();
                 res.Success = true;
