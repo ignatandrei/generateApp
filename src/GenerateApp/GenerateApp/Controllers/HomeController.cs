@@ -114,12 +114,10 @@ namespace GenerateApp.Controllers
                         {
                             var f = new Field();
                             f.name = item["name"].ToString();
-                            f.type = "string";
+                            f.originalType = item["type"].ToString();
                             t.fields.Add(f);
                         }
                     }
-
-
                 }
                 var res = new TablesFromDataSource();
                 res.Success = true;
