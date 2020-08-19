@@ -10,6 +10,7 @@
 		return original.Replace(" ","").ToLower();
 	}
 	string nameTypeForJS(string colTypeName){
+		string nameType = "";
 		switch(colTypeName.ToLower()){
 				case "string":
 					nameType="string";
@@ -18,9 +19,10 @@
 					nameType="number";
 					break;
 				default:
-					nameType="!!!!"+@colType.Name;
+					nameType="!!!!"+colTypeName;
 					break;
 			}
+		return nameType;
 	}
 }
 
@@ -43,12 +45,12 @@ export class @dt.TableName
             @for(int iCol = 0;iCol < nrCols; iCol++){
                 var col = dt.Columns[iCol];
                 var colName= nameProperty(col.ColumnName) ;
-                var nameType = nameTypeForJS(colType.Name);
+                var nameType = nameTypeForJS(col.DataType.Name);
 				string appender ="";
 				if(nameType == "number")
 					appender = "+";
                 <text>
-            this.@lowerCaseFirst(colName) = {appender}other.@lowerCaseFirst(colName);
+            this.@lowerCaseFirst(colName) = @(Raw(appender))other.@lowerCaseFirst(colName);
                 </text>
 
             }

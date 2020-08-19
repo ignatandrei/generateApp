@@ -38,7 +38,8 @@ export class @(nameTable)EditComponent implements OnInit {
 
   }
   public save(): void{
-    this.mainService.Update(this.dataToEdit).subscribe(
+	const data=new @(nameTable)(this.dataToEdit);
+    this.mainService.Update(data).subscribe(
       it => {
         window.alert('saved !');
       }
