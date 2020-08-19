@@ -30,6 +30,7 @@ List of @(nameTable)
 		@for(int iCol = 0;iCol < nrCols; iCol++){
 			var col = dt.Columns[iCol];
 			var colName= col.ColumnName ;
+			var routeName = lowerCaseFirst(nameProperty(colName));
 			string display="{{row." + lowerCaseFirst(nameProperty(colName))+"}}";
 			<text>
 	
@@ -42,7 +43,7 @@ List of @(nameTable)
   
 	  <ng-container matColumnDef="operations">
 		<th mat-header-cell *matHeaderCellDef mat-sort-header> Operations </th>
-		<td mat-cell *matCellDef="let row" > <a routerLink="/sheet1/edit/{{row.id}}" >Edit</a>
+		<td mat-cell *matCellDef="let row" > <a routerLink="/@(routeName)/edit/{{row.id}}" >Edit</a>
 		
 			&nbsp;
 			<button (click)="deleteData(row.id)">Delete</button>

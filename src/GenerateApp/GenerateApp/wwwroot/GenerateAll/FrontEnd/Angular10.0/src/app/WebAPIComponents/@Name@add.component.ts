@@ -3,6 +3,14 @@
 	var Component = "@Component";
 	var dt= Model.FindAfterName("@Name@").Value;
 	var nameTable =dt.TableName;
+	string lowerCaseFirst(string s){
+		return char.ToLower(s[0]) + s.Substring(1);
+  }
+  string nameProperty(string original){
+		return original.Replace(" ","").ToLower();
+	}
+	
+	
 }
 
 import { Component, OnInit } from '@angular/core';
@@ -28,7 +36,8 @@ export class @(nameTable)AddComponent implements OnInit {
     
   }
   public add(): void{
-    this.mainService.Insert(this.dataToAdd).subscribe(
+	const data=new @(nameTable)(this.dataToAdd);
+    this.mainService.Insert(data).subscribe(
       it => {
         window.alert('saved !');
       }
