@@ -3,7 +3,7 @@ name: Remove old artifacts
 on:
   schedule:
   # https://github.com/marketplace/actions/remove-artifacts
-    - cron: '50 * * * *'
+    - cron: '0 2 * * *'
 
 jobs:
   remove-old-artifacts:
