@@ -5,16 +5,20 @@
 	var dt= Model.FindAfterName("@Name@").Value;
   var nameTable =dt.TableName;
   var nrCols= dt.Columns.Count;
-  string colNames= "";
-	for(int iCol = 0;iCol < nrCols; iCol++){
-    var col = dt.Columns[iCol];
-    colNames += "'"+ col.ColumnName +"',";
-  }
+  
 
   string lowerCaseFirst(string s){
 		return char.ToLower(s[0]) + s.Substring(1);
   }
-  
+  string nameProperty(string original){
+		return original.Replace(" ","").ToLower();
+	}
+	
+	string colNames= "";
+	for(int iCol = 0;iCol < nrCols; iCol++){
+    var col = dt.Columns[iCol];
+    colNames += "'"+ lowerCaseFirst(nameProperty(col.ColumnName)) +"',";
+  }
 }
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {MatPaginator} from '@angular/material/paginator';
@@ -85,7 +89,7 @@ export class @Name@Component implements OnInit {
     .subscribe();
   }
   public add(): void{
-    this.router.navigate(["/sheet1/add"]);
+    this.router.navigate(["/@(lowerCaseFirst(nameProperty(nameTable)))/add"]);
     return;
   }
 

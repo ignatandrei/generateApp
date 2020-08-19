@@ -15,6 +15,12 @@
         nameTablesToRender[iRowDS] = nameTable;
         tables[iRowDS]=renderTable;
     }
+	string lowerCaseFirst(string s){
+		return char.ToLower(s[0]) + s.Substring(1);
+  }
+  string nameProperty(string original){
+		return original.Replace(" ","").ToLower();
+	}
 
 }
 
@@ -42,11 +48,11 @@ const routes: Routes = [
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
 @foreach(var nameTable in nameTablesToRender){
 <text>
-{ path: '@(nameTable.ToLower())', component: @(nameTable)Component },
+{ path: '@(lowerCaseFirst(nameProperty(nameTable)))', component: @(nameTable)Component },
 
-{ path: '@(nameTable.ToLower())/add', component: @(nameTable)AddComponent },
+{ path: '@(lowerCaseFirst(nameProperty(nameTable)))/add', component: @(nameTable)AddComponent },
 
-{ path: '@(nameTable.ToLower())/edit/:id', component: @(nameTable)EditComponent },
+{ path: '@(lowerCaseFirst(nameProperty(nameTable)))/edit/:id', component: @(nameTable)EditComponent },
 
 </text>
 }

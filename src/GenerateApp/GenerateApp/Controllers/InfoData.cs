@@ -133,15 +133,22 @@ namespace GenerateApp.Controllers
             IDataToSent data = await ReadExcel();
             var ds = data.FindAfterName("DataSource").Value;
             var nrRowsDS = ds.Rows.Count;
-            var nameTablesToRender = new string[nrRowsDS];
-            for (int iRowDS = 0; iRowDS < nrRowsDS; iRowDS++)
+            var nameTablesToRender = new List<string>(nrRowsDS);
+            for (int iRowDS = nrRowsDS-1; iRowDS >-1; iRowDS--)
             {
                 var nameTable = ds.Rows[iRowDS]["TableName"].ToString();
                 var dt = data.FindAfterName(nameTable).Value;
-                Console.WriteLine(dt.TableName);
-                nameTablesToRender[iRowDS] = dt.TableName;
+                Console.WriteLine(dt.TableName +"=>" + dt.Rows.Count);
+                if (dt.Rows.Count == 0)
+                {
+                    ds.Rows.RemoveAt(iRowDS);
+                }
+                else
+                {
+                    nameTablesToRender.Add(dt.TableName);
+                }
             }
-
+            
             var f = Path.Combine(outputFolder, g);
             Directory.CreateDirectory(f);
             try
@@ -167,7 +174,8 @@ namespace GenerateApp.Controllers
                     {
                         var nameTable = item["TableName"].ToString();
                         var data1 = data.FindAfterName(nameTable).Value;
-
+                        if (data1.Rows.Count == 0)
+                            continue;
                         var newFileName = pathFile.Replace("@Name@", nameTable, StringComparison.InvariantCultureIgnoreCase);
                         var newContent = content.Replace("@Name@", nameTable, StringComparison.InvariantCultureIgnoreCase);
                         await File.WriteAllTextAsync(newFileName, newContent);
@@ -184,6 +192,8 @@ namespace GenerateApp.Controllers
                     {
                         var nameTable = item["TableName"].ToString();
                         var data1 = data.FindAfterName(nameTable).Value;
+                        if (data1.Rows.Count == 0)
+                            continue;
 
                         var newFileName = pathFile.Replace("@Name@", nameTable, StringComparison.InvariantCultureIgnoreCase);
                         var newContent = content.Replace("@Name@", nameTable, StringComparison.InvariantCultureIgnoreCase);
