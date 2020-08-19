@@ -19,6 +19,9 @@ using Stankins.MariaDB;
 using System.Data;
 using MySqlConnector;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Stankins.FileOps;
+using NPOI.SS.UserModel;
+using NPOI.XSSF.UserModel;
 
 namespace GenerateApp.Controllers
 {
@@ -263,23 +266,75 @@ namespace GenerateApp.Controllers
         {
             return View();
         }
-        
-
         [HttpPost]
-        public async Task<IActionResult> UploadFile(IFormFile file)
+        public async Task<IActionResult> UploadFileCSV([FromForm]string myCSV)
+        {
+            string nameFile ="csv"+ DateTime.Now.Ticks+".csv";
+            nameFile = Path.Combine(
+                      environment.WebRootPath,
+                      nameFile);
+            await System.IO.File.WriteAllTextAsync(nameFile, myCSV);
+            var recCSV = new ReceiverCSVFile(nameFile);
+            var data = await recCSV.TransformData(null);
+            var table = data.DataToBeSentFurther.First().Value;
+            nameFile = nameFile.Replace(".csv", ".xlsx");
+            var res= await WriteExcelFromDataTable(table, nameFile);
+            if (res)
+            {
+                var name = GenerateExcelFromPathFile(nameFile);
+                return RedirectToAction("Info", new { id = name });
+            }
+            else
+            {
+                return Content($"error happened. Please send email to ignatandrei@yahoo.com with {Path.GetFileNameWithoutExtension(nameFile)} ");
+            }
+            
+        }
+        private async Task<bool> WriteExcelFromDataTable(DataTable dt,string excelFileName)
         {
             
-            if (file == null || file.Length == 0)
-                return Content("file not selected");
-            string name = Path.GetFileNameWithoutExtension(file.FileName);
-            var path = Path.Combine(
-                      environment.WebRootPath,
-                      Path.GetFileName(file.FileName));
+            IWorkbook workbook = new XSSFWorkbook();
+            ISheet worksheet = workbook.CreateSheet(Path.GetFileNameWithoutExtension(excelFileName));
+            var nrCols = dt.Columns.Count;
+            var nrRows = dt.Rows.Count;
+            var row = worksheet.CreateRow(0);
+            for (int i = 0; i < nrCols; i++)
+            {
+
+                row.CreateCell(i).SetCellValue(dt.Columns[i].ColumnName);
+            }
+
+            for (int iRow = 0; iRow < nrRows; iRow++)
+            {
+                DataRow dRow = dt.Rows[iRow];
+                row = worksheet.CreateRow(iRow+1);
+
+                for (int i = 0; i < nrCols; i++)
+                {
+
+                    row.CreateCell(i).SetCellValue((dRow[i]?.ToString()??""));
+                }
+            }
+
+            using (FileStream fileWriter = System.IO.File.Create(excelFileName))
+            {
+                workbook.Write(fileWriter);
+                fileWriter.Close();
+            }
+            //workbook.Close();
+            worksheet = null;
+            workbook = null;
+            return true;
+        }
+
+        public string GenerateExcelFromPathFile(string path)
+        {
+            string name = Path.GetFileName(path);
 
             var i = new InfoData(SourceData.Excel)
             {
                 logs = new List<string>(),
-                name = name,    
+                name = name,
                 folderGenerator = Path.Combine(environment.WebRootPath, "GenerateAll"),
                 pathFile = path
 
@@ -291,13 +346,8 @@ namespace GenerateApp.Controllers
             } while (!data.TryAdd(name, i));
 
             i.name = name;
-            Console.WriteLine($"added {name} to {data} ");
-            using (var stream = new FileStream(path, FileMode.Create))
-            {
-                await file.CopyToAsync(stream);
-            }
-           
-            
+            Console.WriteLine($"added {name} to generatoes");
+
             Task t = new Task(async i =>
             {
                 var info = i as InfoData;
@@ -305,6 +355,26 @@ namespace GenerateApp.Controllers
             }
             , i);
             t.Start();
+            return i.name;
+        }
+        
+         [HttpPost]
+        public async Task<IActionResult> UploadFileExcel (IFormFile file)
+        {
+            
+            if (file == null || file.Length == 0)
+                return Content("file not selected");
+            string name = Path.GetFileNameWithoutExtension(file.FileName);
+            var path = Path.Combine(
+                      environment.WebRootPath,
+                      Path.GetFileName(file.FileName));
+            using (var stream = new FileStream(path, FileMode.Create))
+            {
+                await file.CopyToAsync(stream);
+            }
+
+            name = GenerateExcelFromPathFile(path);
+            
             return RedirectToAction("Info",new { id = name });
         }
         public async Task<bool> GenerateApp(InfoData i)

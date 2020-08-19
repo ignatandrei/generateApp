@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Server.IIS.Core;
 using Microsoft.Web.Administration;
 using Newtonsoft.Json;
 using Stankins.Excel;
@@ -90,6 +91,15 @@ namespace GenerateApp.Controllers
 
         public Dictionary<string, string> Releases = new Dictionary<string, string>();
         public string RealExeLocation;
+        public async Task<IDataToSent> ReadCSV()
+        {
+            logs.Add("start reading csv");
+            var recCSV = new ReceiverCSVFile(this.pathFile);
+            var data= await recCSV.TransformData(null);
+            logs.Add("start adding data source");
+
+            return data;
+        }
         private async Task<IDataToSent> ReadExcel()
         {
             string excel = pathFile;
