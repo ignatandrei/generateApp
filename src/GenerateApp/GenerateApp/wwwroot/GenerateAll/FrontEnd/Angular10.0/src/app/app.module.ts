@@ -159,7 +159,7 @@ import { @(nameTable)EditComponent } from './WebAPIComponents/@(nameTable)edit.c
     provide: APP_BASE_HREF,
     useFactory: (s: PlatformLocation) => s.getBaseHrefFromDOM(),
     deps: [PlatformLocation]
-  }
+  },
   ...httpInterceptorProviders
   ],
   bootstrap: [AppComponent]
