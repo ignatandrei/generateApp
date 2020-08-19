@@ -49,7 +49,7 @@ var ds= Model.FindAfterName("DataSource").Value;
       </button>
       <span>My application</span> 
     </mat-toolbar>
-    
+    <mat-spinner *ngIf="isLoading"></mat-spinner>    
     <router-outlet></router-outlet>
   </mat-sidenav-content>
 </mat-sidenav-container>

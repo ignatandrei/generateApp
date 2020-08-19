@@ -75,6 +75,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { APP_BASE_HREF, PlatformLocation } from '@angular/common';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { FormsModule } from '@angular/forms';
+import { httpInterceptorProviders } from './interceptors/barrelInterceptors';
 
 @foreach(var nameTable in nameTablesToRender){
 <text>
@@ -158,7 +159,9 @@ import { @(nameTable)EditComponent } from './WebAPIComponents/@(nameTable)edit.c
     provide: APP_BASE_HREF,
     useFactory: (s: PlatformLocation) => s.getBaseHrefFromDOM(),
     deps: [PlatformLocation]
-  }],
+  }
+  ...httpInterceptorProviders
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
