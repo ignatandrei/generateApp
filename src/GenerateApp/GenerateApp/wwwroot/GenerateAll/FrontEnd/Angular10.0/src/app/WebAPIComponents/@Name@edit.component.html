@@ -8,6 +8,9 @@
 	string lowerCaseFirst(string s){
 		return char.ToLower(s[0]) + s.Substring(1);
 	}
+	string nameProperty(string original){
+		return original.Replace(" ","").ToLower();
+	}
 }
 
 <div *ngIf="dataToEdit == null">Loading data for {{id}} ...</div>
@@ -31,7 +34,7 @@
 	<tr>
 	<td>@colName</td>
 	<td>
-		<input type="text"  [(ngModel)]="dataToEdit.@(lowerCaseFirst(colName))" />
+		<input type="text"  [(ngModel)]="dataToEdit.@(lowerCaseFirst(nameProperty(colName)))" />
 	</td>
 	</tr>
 

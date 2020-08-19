@@ -8,6 +8,9 @@
 	string lowerCaseFirst(string s){
 		return char.ToLower(s[0]) + s.Substring(1);
 	}
+	string nameProperty(string original){
+		return original.Replace(" ","").ToLower();
+	}
 }
 
 Add  new @(nameTable)
@@ -28,7 +31,7 @@ Add  new @(nameTable)
 	<tr>
 	<td>@colName</td>
 	<td>
-		<input type="text"  [(ngModel)]="dataToAdd.@(lowerCaseFirst(colName))" />
+		<input type="text"  [(ngModel)]="dataToAdd.@(lowerCaseFirst(nameProperty(colName)))" />
 	</td>
 	</tr>
 

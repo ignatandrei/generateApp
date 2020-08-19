@@ -3,6 +3,9 @@
 
     var dt= Model.FindAfterName("@Name@").Value;
     var nrCols =dt.Columns.Count;
+	string nameProperty(string original){
+		return original.Replace(" ","").ToLower();
+	}
 }
 using System;
 
@@ -31,7 +34,7 @@ namespace TestWebAPI_BL
             }
             @for(int iCol = 0;iCol < nrCols; iCol++){
                 var col = dt.Columns[iCol];
-                var colName= col.ColumnName ;
+                var colName= nameProperty(col.ColumnName) ;
                 
                 <text>
             this.@colName = other.@colName;
@@ -49,7 +52,7 @@ namespace TestWebAPI_BL
             
         @for(int iCol = 0;iCol < nrCols; iCol++){
             var col = dt.Columns[iCol];
-            var colName= col.ColumnName ;
+            var colName= nameProperty(col.ColumnName) ;
             var colType = col.DataType;
 
             <text>

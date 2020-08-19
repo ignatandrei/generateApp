@@ -14,6 +14,9 @@
         nameTablesToRender[iRowDS] = nameTable;
         tables[iRowDS]=renderTable;
     }
+	string nameProperty(string original){
+		return original.Replace(" ","").ToLower();
+	}
 
 }
 using Microsoft.EntityFrameworkCore;
@@ -69,7 +72,7 @@ namespace TestWEBAPI_DAL
                     string text="";
                     for(var iCol=0;iCol<nrColumns;iCol++){
                         var column=dt.Columns[iCol];
-                        string nameColumn = column.ColumnName;
+                        string nameColumn = nameProperty(column.ColumnName);
                         var val =dt.Rows[iRow][iCol];
                         if(val == System.DBNull.Value)
                             val=null;

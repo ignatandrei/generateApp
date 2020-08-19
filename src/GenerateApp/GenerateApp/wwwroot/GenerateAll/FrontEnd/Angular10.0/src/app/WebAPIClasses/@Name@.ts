@@ -6,6 +6,9 @@
 	string lowerCaseFirst(string s){
 		return char.ToLower(s[0]) + s.Substring(1);
 	}
+	string nameProperty(string original){
+		return original.Replace(" ","").ToLower();
+	}
 }
 
 
@@ -26,7 +29,7 @@ export class @dt.TableName
             }
             @for(int iCol = 0;iCol < nrCols; iCol++){
                 var col = dt.Columns[iCol];
-                var colName= col.ColumnName ;
+                var colName= nameProperty(col.ColumnName) ;
                 
                 <text>
             this.@lowerCaseFirst(colName) = other.@lowerCaseFirst(colName);
@@ -40,7 +43,7 @@ export class @dt.TableName
             
         @for(int iCol = 0;iCol < nrCols; iCol++){
             var col = dt.Columns[iCol];
-            var colName= col.ColumnName ;
+            var colName= nameProperty(col.ColumnName) ;
             var colType = col.DataType;
 			var nameType ="";
 			switch(colType.Name.ToLower()){
