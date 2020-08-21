@@ -4,7 +4,23 @@
     var dt= Model.FindAfterName("@Name@").Value;
     var nrCols =dt.Columns.Count;
 	string nameProperty(string original){
-		return original.Replace(" ","").ToLower();
+		var name = original.Replace(" ","").ToLower();
+		if(!IsIdentifier(name))
+			name = "generated_"+name;
+		
+		return name;
+	}
+	//https://docs.microsoft.com/en-us/dotnet/api/microsoft.codeanalysis.csharp.syntaxfacts?view=roslyn-dotnet
+	bool IsIdentifier(string text)
+	{
+     if (string.IsNullOrEmpty(text))
+        return false;
+     if (!char.IsLetter(text[0]) && text[0] != '_')
+        return false;
+     for (int ix = 1; ix < text.Length; ++ix)
+        if (!char.IsLetterOrDigit(text[ix]) && text[ix] != '_')
+           return false;
+     return true;
 	}
 }
 using System;

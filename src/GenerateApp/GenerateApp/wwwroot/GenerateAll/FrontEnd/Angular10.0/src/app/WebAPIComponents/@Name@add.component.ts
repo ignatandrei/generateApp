@@ -7,7 +7,22 @@
 		return char.ToLower(s[0]) + s.Substring(1);
   }
   string nameProperty(string original){
-		return original.Replace(" ","").ToLower();
+		var name = original.Replace(" ","").ToLower();
+		if(!IsIdentifier(name))
+			name = "generated_"+name;
+		
+		return name;
+	}
+	bool IsIdentifier(string text)
+	{
+     if (string.IsNullOrEmpty(text))
+        return false;
+     if (!char.IsLetter(text[0]) && text[0] != '_')
+        return false;
+     for (int ix = 1; ix < text.Length; ++ix)
+        if (!char.IsLetterOrDigit(text[ix]) && text[ix] != '_')
+           return false;
+     return true;
 	}
 	
 	
