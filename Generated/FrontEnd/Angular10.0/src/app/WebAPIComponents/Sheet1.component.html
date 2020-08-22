@@ -1,0 +1,237 @@
+
+
+<br />
+<h1>
+List of Sheet1
+</h1>
+
+<mat-form-field>
+	<mat-label>Filter</mat-label>
+	<input matInput (keyup)="applyFilter($event)" placeholder="filter text" #input>
+  </mat-form-field>
+  
+  <div class="mat-elevation-z8">
+	<table mat-table [dataSource]="dataSource" matSort>
+
+
+	
+	  <ng-container matColumnDef="nume">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> nume </th>
+		<td mat-cell *matCellDef="let row"> {{row.nume}} </td>
+	  </ng-container>
+		  
+	
+	  <ng-container matColumnDef="luna">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> luna </th>
+		<td mat-cell *matCellDef="let row"> {{row.luna}} </td>
+	  </ng-container>
+		  
+	
+	  <ng-container matColumnDef="generated_1">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> 1 </th>
+		<td mat-cell *matCellDef="let row"> {{row.generated_1}} </td>
+	  </ng-container>
+		  
+	
+	  <ng-container matColumnDef="generated_2">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> 2 </th>
+		<td mat-cell *matCellDef="let row"> {{row.generated_2}} </td>
+	  </ng-container>
+		  
+	
+	  <ng-container matColumnDef="generated_3">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> 3 </th>
+		<td mat-cell *matCellDef="let row"> {{row.generated_3}} </td>
+	  </ng-container>
+		  
+	
+	  <ng-container matColumnDef="generated_4">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> 4 </th>
+		<td mat-cell *matCellDef="let row"> {{row.generated_4}} </td>
+	  </ng-container>
+		  
+	
+	  <ng-container matColumnDef="generated_5">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> 5 </th>
+		<td mat-cell *matCellDef="let row"> {{row.generated_5}} </td>
+	  </ng-container>
+		  
+	
+	  <ng-container matColumnDef="generated_6">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> 6 </th>
+		<td mat-cell *matCellDef="let row"> {{row.generated_6}} </td>
+	  </ng-container>
+		  
+	
+	  <ng-container matColumnDef="generated_7">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> 7 </th>
+		<td mat-cell *matCellDef="let row"> {{row.generated_7}} </td>
+	  </ng-container>
+		  
+	
+	  <ng-container matColumnDef="generated_8">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> 8 </th>
+		<td mat-cell *matCellDef="let row"> {{row.generated_8}} </td>
+	  </ng-container>
+		  
+	
+	  <ng-container matColumnDef="generated_9">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> 9 </th>
+		<td mat-cell *matCellDef="let row"> {{row.generated_9}} </td>
+	  </ng-container>
+		  
+	
+	  <ng-container matColumnDef="generated_10">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> 10 </th>
+		<td mat-cell *matCellDef="let row"> {{row.generated_10}} </td>
+	  </ng-container>
+		  
+	
+	  <ng-container matColumnDef="generated_11">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> 11 </th>
+		<td mat-cell *matCellDef="let row"> {{row.generated_11}} </td>
+	  </ng-container>
+		  
+	
+	  <ng-container matColumnDef="generated_12">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> 12 </th>
+		<td mat-cell *matCellDef="let row"> {{row.generated_12}} </td>
+	  </ng-container>
+		  
+	
+	  <ng-container matColumnDef="generated_13">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> 13 </th>
+		<td mat-cell *matCellDef="let row"> {{row.generated_13}} </td>
+	  </ng-container>
+		  
+	
+	  <ng-container matColumnDef="generated_14">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> 14 </th>
+		<td mat-cell *matCellDef="let row"> {{row.generated_14}} </td>
+	  </ng-container>
+		  
+	
+	  <ng-container matColumnDef="generated_15">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> 15 </th>
+		<td mat-cell *matCellDef="let row"> {{row.generated_15}} </td>
+	  </ng-container>
+		  
+	
+	  <ng-container matColumnDef="generated_16">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> 16 </th>
+		<td mat-cell *matCellDef="let row"> {{row.generated_16}} </td>
+	  </ng-container>
+		  
+	
+	  <ng-container matColumnDef="generated_17">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> 17 </th>
+		<td mat-cell *matCellDef="let row"> {{row.generated_17}} </td>
+	  </ng-container>
+		  
+	
+	  <ng-container matColumnDef="generated_18">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> 18 </th>
+		<td mat-cell *matCellDef="let row"> {{row.generated_18}} </td>
+	  </ng-container>
+		  
+	
+	  <ng-container matColumnDef="generated_19">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> 19 </th>
+		<td mat-cell *matCellDef="let row"> {{row.generated_19}} </td>
+	  </ng-container>
+		  
+	
+	  <ng-container matColumnDef="generated_20">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> 20 </th>
+		<td mat-cell *matCellDef="let row"> {{row.generated_20}} </td>
+	  </ng-container>
+		  
+	
+	  <ng-container matColumnDef="generated_21">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> 21 </th>
+		<td mat-cell *matCellDef="let row"> {{row.generated_21}} </td>
+	  </ng-container>
+		  
+	
+	  <ng-container matColumnDef="generated_22">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> 22 </th>
+		<td mat-cell *matCellDef="let row"> {{row.generated_22}} </td>
+	  </ng-container>
+		  
+	
+	  <ng-container matColumnDef="generated_23">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> 23 </th>
+		<td mat-cell *matCellDef="let row"> {{row.generated_23}} </td>
+	  </ng-container>
+		  
+	
+	  <ng-container matColumnDef="generated_24">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> 24 </th>
+		<td mat-cell *matCellDef="let row"> {{row.generated_24}} </td>
+	  </ng-container>
+		  
+	
+	  <ng-container matColumnDef="generated_25">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> 25 </th>
+		<td mat-cell *matCellDef="let row"> {{row.generated_25}} </td>
+	  </ng-container>
+		  
+	
+	  <ng-container matColumnDef="generated_26">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> 26 </th>
+		<td mat-cell *matCellDef="let row"> {{row.generated_26}} </td>
+	  </ng-container>
+		  
+	
+	  <ng-container matColumnDef="generated_27">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> 27 </th>
+		<td mat-cell *matCellDef="let row"> {{row.generated_27}} </td>
+	  </ng-container>
+		  
+	
+	  <ng-container matColumnDef="generated_28">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> 28 </th>
+		<td mat-cell *matCellDef="let row"> {{row.generated_28}} </td>
+	  </ng-container>
+		  
+	
+	  <ng-container matColumnDef="generated_29">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> 29 </th>
+		<td mat-cell *matCellDef="let row"> {{row.generated_29}} </td>
+	  </ng-container>
+		  
+	
+	  <ng-container matColumnDef="generated_30">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> 30 </th>
+		<td mat-cell *matCellDef="let row"> {{row.generated_30}} </td>
+	  </ng-container>
+		  
+	
+	  <ng-container matColumnDef="generated_31">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> 31 </th>
+		<td mat-cell *matCellDef="let row"> {{row.generated_31}} </td>
+	  </ng-container>
+		    
+	  <ng-container matColumnDef="operations">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> Operations </th>
+		<td mat-cell *matCellDef="let row" > <a routerLink="/sheet1/edit/{{row.id}}" >Edit</a>
+		
+			&nbsp;
+			<button (click)="deleteData(row.id)">Delete</button>
+			
+		</td>
+	  </ng-container>
+  
+	  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+	  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  
+	  <!-- Row shown when there is no matching data. -->
+	  <tr class="mat-row" *matNoDataRow>
+		<td class="mat-cell" colspan="4">No data in Sheet1 matching the filter "{{input.value}}"</td>
+	  </tr>
+	</table>
+  
+	<mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+  </div>
+
+  <button (click)="add()">Add new Sheet1</button>
