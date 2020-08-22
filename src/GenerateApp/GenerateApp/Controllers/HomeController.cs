@@ -75,7 +75,7 @@ namespace GenerateApp.Controllers
 
             do
             {
-                name = name + DateTime.Now.Ticks;
+                name = name + DateTime.UtcNow.ToString("yyyyMMddHHmmss");
 
             } while (!data.TryAdd(name, i));
             i.name = name;
@@ -269,7 +269,7 @@ namespace GenerateApp.Controllers
         [HttpPost]
         public async Task<IActionResult> UploadFileCSV([FromForm]string myCSV)
         {
-            string nameFile ="csv"+ DateTime.Now.Ticks+".csv";
+            string nameFile ="csv"+ DateTime.UtcNow.ToString("yyyyMMddHHmmss") + ".csv";
             nameFile = Path.Combine(
                       environment.WebRootPath,
                       nameFile);
@@ -341,7 +341,7 @@ namespace GenerateApp.Controllers
             };
             do
             {
-                name = name + DateTime.Now.Ticks;
+                name = name + DateTime.UtcNow.ToString("yyyyMMddHHmmss");
 
             } while (!data.TryAdd(name, i));
 
