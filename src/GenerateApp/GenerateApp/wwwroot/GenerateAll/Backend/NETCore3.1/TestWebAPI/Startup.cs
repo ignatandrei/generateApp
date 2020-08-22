@@ -64,9 +64,9 @@ namespace TestWebAPI
                 .UseInMemoryDatabase(databaseName: "MyDB"));
 
        @foreach(var nameTable in nameTablesToRender){
-		   string nameClass= ClassNameFromTableName(dt.TableName);
+		   string nameClass= ClassNameFromTableName(nameTable);
     
-            string textToRender="services.AddTransient<IRepository<"+nameClass+">, "+nameTable+"_Repository>();";
+            string textToRender="services.AddTransient<IRepository<"+nameClass+">, "+nameClass+"_Repository>();";
             
             <text>
 			@Raw(textToRender);
@@ -106,7 +106,7 @@ namespace TestWebAPI
             {
                 
        @foreach(var nameTable in nameTablesToRender){
-           string nameClass= ClassNameFromTableName(dt.TableName);
+           string nameClass= ClassNameFromTableName(nameTable);
      
             <text>
 			endpoints.MapFallbackToFile("@(nameClass.ToLower())/{**slug}","/index.html");
