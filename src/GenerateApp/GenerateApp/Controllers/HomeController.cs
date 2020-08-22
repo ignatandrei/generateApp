@@ -330,7 +330,7 @@ namespace GenerateApp.Controllers
         public string GenerateExcelFromPathFile(string path)
         {
             string name = Path.GetFileName(path);
-
+            name = new String(name.Where(it=> it == '.' || Char.IsLetterOrDigit(it)).ToArray());
             var i = new InfoData(SourceData.Excel)
             {
                 logs = new Logs(),
@@ -344,7 +344,7 @@ namespace GenerateApp.Controllers
                 name = name + DateTime.UtcNow.ToString("yyyyMMddHHmmss");
 
             } while (!data.TryAdd(name, i));
-            name= new String(name.Where(Char.IsLetterOrDigit).ToArray());
+            
             i.name = name;
             Console.WriteLine($"added {name} to generatoes");
 
