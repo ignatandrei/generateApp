@@ -66,7 +66,7 @@ namespace GenerateApp.Controllers
             var name = "CSV";
             var i = new InfoData(SourceData.CSV)
             {
-                logs = new List<string>(),
+                logs = new Logs(),
                 name = name,
                 folderGenerator = Path.Combine(environment.WebRootPath, "GenerateAll"),
                 pathFile = ""
@@ -333,7 +333,7 @@ namespace GenerateApp.Controllers
 
             var i = new InfoData(SourceData.Excel)
             {
-                logs = new List<string>(),
+                logs = new Logs(),
                 name = name,
                 folderGenerator = Path.Combine(environment.WebRootPath, "GenerateAll"),
                 pathFile = path
@@ -383,14 +383,14 @@ namespace GenerateApp.Controllers
             {
                 while (NumberItemsInProgress(i.startedDate) >0)
                 {
-                    i.logs.Add("There is another application in progress. Please wait ");
+                    i.logs.AddLog(i.name,"There is another application in progress. Please wait ");
                     await Task.Delay(5*1000);
                 }
-                i.logs.Add("Start generating app");
+                i.logs.AddLog(i.name,"Start generating app");
 
                 var result = await i.GenerateApp();
 
-                i.logs.Add($"Done with result {result}");
+                i.logs.AddLog(i.name,$"Done with result {result}");
                 return result;
             }
             catch(Exception ex)
@@ -399,7 +399,7 @@ namespace GenerateApp.Controllers
                 try
                 {
                     i.result = false;
-                    i.logs.Add(ex.Message);
+                    i.logs.AddLog(i.name, ex.Message);
                 }
                 catch
                 {

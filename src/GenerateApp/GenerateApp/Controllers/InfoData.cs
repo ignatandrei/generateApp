@@ -60,7 +60,14 @@ namespace GenerateApp.Controllers
         public string originalType;
 
     }
-
+    public class Logs: List<string>
+    {
+        public void AddLog(string id, string s)
+        {
+            Console.WriteLine($"{id}=> {s}");
+            base.Add(s);
+        }
+    }
     public class InfoData
     {
 
@@ -86,34 +93,34 @@ namespace GenerateApp.Controllers
 
         public string name { get; set; }
         public string pathFile { get; set; }
-        public List<string> logs { get; set; }
+        public Logs logs { get; set; }
         public string folderGenerator { get; internal set; }
 
         public Dictionary<string, string> Releases = new Dictionary<string, string>();
         public string RealExeLocation;
         public async Task<IDataToSent> ReadCSV()
         {
-            logs.Add("start reading csv");
+            logs.AddLog(this.name,"start reading csv");
             var recCSV = new ReceiverCSVFile(this.pathFile);
             var data= await recCSV.TransformData(null);
-            logs.Add("start adding data source");
+            logs.AddLog(this.name, "start adding data source");
 
             return data;
         }
         private async Task<IDataToSent> ReadExcel()
         {
             string excel = pathFile;
-            logs.Add("start reading excel ");
+            logs.AddLog(this.name, "start reading excel ");
 
             var recExcel = new ReceiverExcel(excel);
 
             var data = await recExcel.TransformData(null);
-            logs.Add("start transforming renaming");
+            logs.AddLog(this.name,"start transforming renaming");
 
             var renameExcel = new TransformerRenameTable("it=>it.Contains(\".xls\")", "DataSource");
 
             data = await renameExcel.TransformData(data);
-            logs.Add("start change names from sheet");
+            logs.AddLog(this.name,"start change names from sheet");
 
             var renameCol = new ChangeColumnName("SheetName", "TableName");
             data = await renameCol.TransformData(data);
@@ -138,7 +145,7 @@ namespace GenerateApp.Controllers
                 Directory.CreateDirectory(outputFolder);
 
 
-            logs.Add("gathering data");
+            logs.AddLog(this.name,"gathering data");
 
             IDataToSent data = await ReadExcel();
             var ds = data.FindAfterName("DataSource").Value;
@@ -163,18 +170,18 @@ namespace GenerateApp.Controllers
             Directory.CreateDirectory(f);
             try
             {
-                logs.Add("copy generator");
+                logs.AddLog(this.name,"copy generator");
 
                 File.Copy(generator, Path.Combine(outputFolder, "describe.txt"), true);
                 var backendFolder = Path.Combine(f, "Backend", backendFolderName);
                 var frontendFolder = Path.Combine(f, "FrontEnd", frontendFolderName);
-                logs.Add("copy backend");
+                logs.AddLog(this.name,"copy backend");
 
                 DirectoryCopy(Path.Combine(folderGenerator, "Backend", backendFolderName), backendFolder, true);
-                logs.Add("copy frontend");
+                logs.AddLog(this.name,"copy frontend");
 
                 DirectoryCopy(Path.Combine(folderGenerator, "FrontEnd", frontendFolderName), frontendFolder, true);
-                logs.Add("generating files backend");
+                logs.AddLog(this.name,"generating files backend");
 
                 foreach (var fileToCopy in backend.copyTableFiles)
                 {
@@ -193,7 +200,7 @@ namespace GenerateApp.Controllers
                     }
                     File.Delete(pathFile);
                 }
-                logs.Add("generating files frontend");
+                logs.AddLog(this.name,"generating files frontend");
                 foreach (var fileToCopy in frontEnd.copyTableFiles)
                 {
                     var pathFile = Path.Combine(frontendFolder, fileToCopy);
@@ -217,26 +224,26 @@ namespace GenerateApp.Controllers
 
 
                 var tableData = data.Metadata.Tables.First();
-                logs.Add("reading files");
+                logs.AddLog(this.name,"reading files");
                 var rec = new ReceiverFilesInFolder(f, "*.*", SearchOption.AllDirectories);
                 data = await rec.TransformData(data);
                 Console.WriteLine("after files:" + data.DataToBeSentFurther.Count);
                 var razorTables = nameTablesToRender.Union(new[] { "DataSource" }).ToArray();
-                logs.Add("razoring files - it will take some time");
+                logs.AddLog(this.name,"razoring files - it will take some time");
                 var t = new TransformerOneTableToMulti<SenderToRazorFromFile>("InputTemplate", "FullFileName", razorTables, new CtorDictionary());
                 data = await t.TransformData(data);
                 Console.WriteLine("after razor:" + data.DataToBeSentFurther.Count);
-                logs.Add("consolidating output string");
+                logs.AddLog(this.name,"consolidating output string");
                 var one = new TransformerToOneTable("it=>it.StartsWith(\"OutputString\")");
                 data = await one.TransformData(data);
                 //Transformer
                 //var outFile = new SenderOutputToFolder(@"C:\test\", false);
                 Console.WriteLine("after one table string:" + data.DataToBeSentFurther.Count);
-                logs.Add("consolidating output byte");
+                logs.AddLog(this.name,"consolidating output byte");
                 one = new TransformerToOneTable("it=>it.StartsWith(\"OutputByte\")");
                 data = await one.TransformData(data);
                 Console.WriteLine("after one table byte:" + data.DataToBeSentFurther.Count);
-                logs.Add("renaming");
+                logs.AddLog(this.name,"renaming");
 
                 var ren = new TransformerRenameTable("it=>it.StartsWith(\"OutputString\")", "OutputString");
                 data = await ren.TransformData(data);
@@ -246,24 +253,24 @@ namespace GenerateApp.Controllers
                 Console.WriteLine(data.DataToBeSentFurther[3].TableName);
                 var lenTemplateFolder = f.Length;
                 var sep = Path.DirectorySeparatorChar;
-                logs.Add("getting file names");
+                logs.AddLog(this.name,"getting file names");
 
                 var up = new TransformerUpdateColumn("FullFileName_origin", "OutputString", "'Generated" + sep + $"'+SUBSTRING(FullFileName_origin,{lenTemplateFolder + 2},100)");
                 data = await up.TransformData(data);
                 var x = data.DataToBeSentFurther;
-                logs.Add("change column name=>key");
+                logs.AddLog(this.name,"change column name=>key");
 
                 var name = new ChangeColumnName("Name", "Key");
 
                 data = await name.TransformData(data);
-                logs.Add("change column origin=>name");
+                logs.AddLog(this.name,"change column origin=>name");
                 name = new ChangeColumnName("FullFileName_origin", "Name");
                 data = await name.TransformData(data);
-                logs.Add("remove byte");
+                logs.AddLog(this.name,"remove byte");
 
                 var remByte = new FilterRemoveTable("OutputByte");
                 data = await remByte.TransformData(data);
-                logs.Add($"saving to output {outputFolder}");
+                logs.AddLog(this.name,$"saving to output {outputFolder}");
 
                 var save = new SenderOutputToFolder(outputFolder, false, "OutputString");
                 data = await save.TransformData(data);
@@ -271,18 +278,18 @@ namespace GenerateApp.Controllers
                 if (string.IsNullOrWhiteSpace(GitOps.CredentialsToken))
                     return true;
 
-                logs.Add($"creating branch {g}");
+                logs.AddLog(this.name,$"creating branch {g}");
 
                 Console.WriteLine($"branch : {g} ");
                 var b = await GitOps.CreateBranch(g);
 
-                logs.Add($"sending data {g}");
+                logs.AddLog(this.name,$"sending data {g}");
 
                 var final = await GitOps.CommitDir(b, outputFolder);
-                logs.Add($"waiting {g} -it will take some time");
+                logs.AddLog(this.name,$"waiting {g} -it will take some time");
 
                 var ret = await GitOps.waitForRuns(g);
-                logs.Add($"success?  {ret}");
+                logs.AddLog(this.name,$"success?  {ret}");
                 await Task.Delay(10 * 1000);//some timeout for finding asserts
                 //Console.WriteLine(string.Join(Environment.NewLine, ret));
                 if (!ret)
@@ -292,22 +299,22 @@ namespace GenerateApp.Controllers
                 var assets = await GitOps.FindAssetsInRelease(g);
                 if (assets.Length != 1)
                 {
-                    logs.Add($" number of assets {assets.Length}");
+                    logs.AddLog(this.name,$" number of assets {assets.Length}");
                     return false;
                 }
 
                 var realAssets = assets.First().Assets.ToArray();
                 foreach (var item in realAssets)
                 {
-                    logs.Add($"Release {item.Name} {item.BrowserDownloadUrl}");
+                    logs.AddLog(this.name,$"Release {item.Name} {item.BrowserDownloadUrl}");
                     this.Releases.Add(item.Name, item.BrowserDownloadUrl);
                 }
-                logs.Add($"getting exes ");
+                logs.AddLog(this.name,$"getting exes ");
                 string output = Path.Combine(outputFolder, "output");
                 var zip = await GitOps.DownloadExe(realAssets, output);
-                logs.Add($"getting downloaded {Path.GetFileName(zip)}");
+                logs.AddLog(this.name,$"getting downloaded {Path.GetFileName(zip)}");
                 RealExeLocation = GitOps.UnzipAndFindWin64(zip);
-                logs.Add($"getting {Path.GetDirectoryName(RealExeLocation)}");
+                logs.AddLog(this.name,$"getting {Path.GetDirectoryName(RealExeLocation)}");
                 //add here to run file 
                 if (!InsideIIS)
                 {
@@ -315,7 +322,7 @@ namespace GenerateApp.Controllers
                 }
                 else
                 {
-                    logs.Add($"creating VDir {name}");
+                    logs.AddLog(this.name,$"creating VDir {name}");
                     CreateVDir(this.name, RealExeLocation);
                 }
 
@@ -324,8 +331,8 @@ namespace GenerateApp.Controllers
             catch (Exception ex)
             {
 
-                logs.Add("ERROR!" + ex.Message);
-                logs.Add("ERROR!" + ex.StackTrace);
+                logs.AddLog(this.name,"ERROR!" + ex.Message);
+                logs.AddLog(this.name,"ERROR!" + ex.StackTrace);
                 Console.WriteLine($"Deleting {outputFolder}");
                 //Directory.Delete(outputFolder, true);
                 return false;
