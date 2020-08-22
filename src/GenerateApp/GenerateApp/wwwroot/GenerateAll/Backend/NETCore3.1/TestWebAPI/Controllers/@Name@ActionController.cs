@@ -1,8 +1,15 @@
 ﻿@model Stankins.Interfaces.IDataToSent
 @{
 
+string ClassNameFromTableName(string tableName){
+		return tableName.Replace(" ","");
+	}
+	
     var dt= Model.FindAfterName("@Name@").Value;
-    string repo= @dt.TableName  + "_Repository";
+	
+	string nameClass= ClassNameFromTableName(dt.TableName);
+    
+    string repo= nameClass  + "_Repository";
 
 }
 
@@ -21,25 +28,25 @@ namespace TestWebAPI.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    public class @(dt.TableName)Controller : ControllerBase
+    public class @(nameClass)Controller : ControllerBase
     {
-        private readonly IRepository<@(dt.TableName)> _repository;
+        private readonly IRepository<@(nameClass)> _repository;
 
-        public @(dt.TableName)Controller(IRepository<@(dt.TableName)> repository)
+        public @(nameClass)Controller(IRepository<@(nameClass)> repository)
         {
             _repository = repository;
         }
 
-        // GET: api/@(dt.TableName)
+        // GET: api/@(nameClass)
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<@(dt.TableName)>>> GetAll()
+        public async Task<ActionResult<IEnumerable<@(nameClass)>>> GetAll()
         {
             return await _repository.GetAll();
         }
 
-        // GET: api/@(dt.TableName)/5
+        // GET: api/@(nameClass)/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<@(dt.TableName)>> Get(long id)
+        public async Task<ActionResult<@(nameClass)>> Get(long id)
         {
             var record = await _repository.FindAfterId(id);
 
@@ -51,11 +58,11 @@ namespace TestWebAPI.Controllers
             return record;
         }
 
-        // PUT: api/@(dt.TableName)/5
+        // PUT: api/@(nameClass)/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<ActionResult<@(dt.TableName)>> Put(long id, @(dt.TableName) record)
+        public async Task<ActionResult<@(nameClass)>> Put(long id, @(nameClass) record)
         {
             if (id != record.ID)
             {
@@ -67,23 +74,23 @@ namespace TestWebAPI.Controllers
             return record;
         }
 
-        // POST: api/@(dt.TableName)
+        // POST: api/@(nameClass)
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<@(dt.TableName)> Insert(@(dt.TableName) record)
+        public async Task<@(nameClass)> Insert(@(nameClass) record)
         {
             await _repository.Insert(record);
 
             return record;
         }
 
-        // DELETE: api/@(dt.TableName)/5
+        // DELETE: api/@(nameClass)/5
         [HttpDelete("{id}")]
         public async Task<long> Delete(long id)
         {
             
-            await _repository.Delete( new @(dt.TableName)(){
+            await _repository.Delete( new @(nameClass)(){
                 ID=id
             });
 

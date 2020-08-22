@@ -1,6 +1,10 @@
 ﻿@model Stankins.Interfaces.IDataToSent
 @{
 
+	string ClassNameFromTableName(string tableName){
+		return tableName.Replace(" ","");
+	}
+	
     var ds= Model.FindAfterName("DataSource").Value;
     
     var nrRowsDS=ds.Rows.Count;
@@ -54,8 +58,9 @@ namespace TestWEBAPI_DAL
         {
         }
         @foreach(var nameTable in nameTablesToRender){
+			string nameClass=ClassNameFromTableName(nameTable);
             <text>
-            public virtual DbSet<@nameTable> @nameTable { get; set; }
+            public virtual DbSet<@(nameClass)> @(nameClass){ get; set; }
             </text>
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -65,8 +70,9 @@ namespace TestWEBAPI_DAL
         {
 
         @foreach(var nameTable in nameTablesToRender){
+			string nameClass=ClassNameFromTableName(nameTable);
          <text>
-            modelBuilder.Entity<@nameTable>(entity =>
+            modelBuilder.Entity<@(nameClass)>(entity =>
             {
                 //entity.Property(e => e.Name).IsUnicode(false);
             });
@@ -79,6 +85,7 @@ namespace TestWEBAPI_DAL
         void Seed(ModelBuilder modelBuilder){
 
             @foreach(var dt in tables){
+				string nameClass= ClassNameFromTableName(dt.TableName);
                 var nrRows =dt.Rows.Count; 
                 if(nrRows > 200)
                     nrRows=200;
@@ -109,8 +116,8 @@ namespace TestWEBAPI_DAL
                         
                     }
                     <text>
-                    modelBuilder.Entity<@(dt.TableName)>().HasData(
-                        new @(dt.TableName)(){ ID = @(iRow+1) @Raw(text) });
+                    modelBuilder.Entity<@(nameClass)>().HasData(
+                        new @(nameClass)(){ ID = @(iRow+1) @Raw(text) });
                     </text>
                 }
             }

@@ -1,8 +1,11 @@
 ﻿@model Stankins.Interfaces.IDataToSent
 @{
-
+	string ClassNameFromTableName(string tableName){
+		return tableName.Replace(" ","");
+	}
     var dt= Model.FindAfterName("@Name@").Value;
-    string repo= @dt.TableName  + "_Repository";
+    string repo= ClassNameFromTableName(dt.TableName)  + "_Repository";
+	string nameClass= ClassNameFromTableName(dt.TableName);
 }
 using System;
 using System.Collections.Generic;
@@ -15,7 +18,7 @@ using TestWebAPI_BL;
 
 namespace TestWEBAPI_DAL
 {
-    public partial class @repo : IRepository<@(dt.TableName)>
+    public partial class @repo : IRepository<@(nameClass)>
     {
         private readonly DatabaseContext databaseContext;
 
@@ -23,46 +26,46 @@ namespace TestWEBAPI_DAL
         {
             this.databaseContext = databaseContext;
         }
-        public Task<@(dt.TableName)[]> GetAll()
+        public Task<@(nameClass)[]> GetAll()
         {
-            return databaseContext.@(dt.TableName).ToArrayAsync();
+            return databaseContext.@(nameClass).ToArrayAsync();
         }
-        public Task<@dt.TableName> FindAfterId(long id)
+        public Task<@(nameClass)> FindAfterId(long id)
         {
-            var data = databaseContext.@(dt.TableName).FirstOrDefaultAsync(it => it.ID == id);
+            var data = databaseContext.@(nameClass).FirstOrDefaultAsync(it => it.ID == id);
             return data;
         }
-        public Task<@dt.TableName> FindSingle(Func<@dt.TableName ,bool> f)
+        public Task<@(nameClass)> FindSingle(Func<@(nameClass) ,bool> f)
         {
-            var data = databaseContext.@(dt.TableName).FirstOrDefaultAsync(it=>f(it));
+            var data = databaseContext.@(nameClass).FirstOrDefaultAsync(it=>f(it));
             return data;
         }
-        public Task<@(dt.TableName)[]> FindMultiple(Func<@dt.TableName, bool> f)
+        public Task<@(nameClass)[]> FindMultiple(Func<@(nameClass), bool> f)
         {
-            var data = databaseContext.@(dt.TableName).Where(it=>f(it));
+            var data = databaseContext.@(nameClass).Where(it=>f(it));
             return data.ToArrayAsync();
         }
-        public async Task<@dt.TableName> Insert(@dt.TableName p)
+        public async Task<@(nameClass)> Insert(@(nameClass) p)
         {
-            databaseContext.@(dt.TableName).Add(p);
+            databaseContext.@(nameClass).Add(p);
             await databaseContext.SaveChangesAsync();
             return p;
         }
-        public async Task<@dt.TableName> Update(@dt.TableName p)
+        public async Task<@(nameClass)> Update(@(nameClass) p)
         {
             var original = await FindAfterId(p.ID);
             if(original == null)
             {
-                throw new ArgumentException("cannot found @dt.TableName  with id = {p.ID} ", nameof(p.ID));
+                throw new ArgumentException("cannot found @(nameClass)  with id = {p.ID} ", nameof(p.ID));
             }
             original.CopyPropertiesFrom(other: p, withID: true);                        
             await databaseContext.SaveChangesAsync();
             return p;
         }
-        public async Task<@dt.TableName> Delete(@dt.TableName p)
+        public async Task<@(nameClass)> Delete(@(nameClass) p)
         {
             var original = await FindAfterId(p.ID);
-            databaseContext.@(dt.TableName).Remove(original);
+            databaseContext.@(nameClass).Remove(original);
             await databaseContext.SaveChangesAsync();
             return p;
         }

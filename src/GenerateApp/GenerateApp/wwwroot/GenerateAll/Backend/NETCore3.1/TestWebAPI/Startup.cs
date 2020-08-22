@@ -1,6 +1,12 @@
 @model Stankins.Interfaces.IDataToSent
 @{
 
+
+string ClassNameFromTableName(string tableName){
+		return tableName.Replace(" ","");
+	}
+
+	
 var ds= Model.FindAfterName("DataSource").Value;
     
     var nrRowsDS=ds.Rows.Count;
@@ -58,7 +64,9 @@ namespace TestWebAPI
                 .UseInMemoryDatabase(databaseName: "MyDB"));
 
        @foreach(var nameTable in nameTablesToRender){
-            string textToRender="services.AddTransient<IRepository<"+nameTable+">, "+nameTable+"_Repository>();";
+		   string nameClass= ClassNameFromTableName(dt.TableName);
+    
+            string textToRender="services.AddTransient<IRepository<"+nameClass+">, "+nameTable+"_Repository>();";
             
             <text>
 			@Raw(textToRender);
@@ -98,9 +106,10 @@ namespace TestWebAPI
             {
                 
        @foreach(var nameTable in nameTablesToRender){
-            
+           string nameClass= ClassNameFromTableName(dt.TableName);
+     
             <text>
-			endpoints.MapFallbackToFile("@(nameTable.ToLower())/{**slug}","/index.html");
+			endpoints.MapFallbackToFile("@(nameClass.ToLower())/{**slug}","/index.html");
             </text>
         }
              

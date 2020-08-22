@@ -1,8 +1,15 @@
 ﻿@model Stankins.Interfaces.IDataToSent
 @{
 
+
+	string ClassNameFromTableName(string tableName){
+		return tableName.Replace(" ","");
+	}
+	
     var dt= Model.FindAfterName("@Name@").Value;
-    var nrCols =dt.Columns.Count;
+    string nameClass= ClassNameFromTableName(dt.TableName);
+                
+	var nrCols =dt.Columns.Count;
 	string nameProperty(string original){
 		var name = original.Replace(" ","").ToLower();
 		if(!IsIdentifier(name))
@@ -27,24 +34,24 @@ using System;
 
 namespace TestWebAPI_BL
 {
-    public partial class @(dt.TableName)
+    public partial class @(nameClass)
     {
         #region partial functions
         partial void OnConstructor();
-        partial void OnCopyConstructor(@dt.TableName other, bool withID);
+        partial void OnCopyConstructor(@(nameClass) other, bool withID);
         #endregion
 
         #region constructors
-        public @dt.TableName (){
+        public @(nameClass) (){
             OnConstructor();
         }
         
-        public @(dt.TableName)(@dt.TableName other):base(){ 
+        public @(nameClass)(@(nameClass) other):base(){ 
 
             OnCopyConstructor(other:other,withID: false);
                 
         }
-        public void CopyPropertiesFrom(@dt.TableName other, bool withID){
+        public void CopyPropertiesFrom(@(nameClass) other, bool withID){
             if(withID){
                 this.ID= other.ID;
             }
