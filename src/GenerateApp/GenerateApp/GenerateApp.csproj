@@ -6,7 +6,7 @@
     <PreserveCompilationReferences>true</PreserveCompilationReferences>
     <PreserveCompilationContext>true</PreserveCompilationContext>
     <MvcRazorExcludeRefAssembliesFromPublish>false</MvcRazorExcludeRefAssembliesFromPublish>
-    
+    <PublishTrimmed>true</PublishTrimmed>
   </PropertyGroup>
 
   <ItemGroup>
