@@ -136,7 +136,43 @@ namespace GenerateApp.Controllers
                 return res;
             }
         }
+        //to be deleted
+
+        [HttpGet]
+        public GenerateAppV1 GenerateApp()
+        {
+            var v = new GenerateAppV1();
+            v.payLoadConn = new PayLoadConn();
+            
+            v.input = new TableGenerator[1];
+            v.input[0] = new TableGenerator()
+            {
+                crudEndpoints =new CrudEndpoints(),
+                table=  new Table()
+                {
+                    fields = new List<Field>()
+                    {
+                        new Field()
+                        {
+                             name="testField",
+                             originalType= "nvarchar(30)"
+                        }
+                    },
+
+                    name = "testTable"
+                }
+
+            };
+            return v;
+        }
+
         [HttpPost]
+        public GenerateAppV1 GenerateApp([FromBody] GenerateAppV1 app)
+        {
+            return app;
+        }
+            //alex
+            [HttpPost]
         public async Task<TablesFromDataSource> FindTables([FromBody] PayLoadConn payLoadConn)
         {
             string connection = null;
