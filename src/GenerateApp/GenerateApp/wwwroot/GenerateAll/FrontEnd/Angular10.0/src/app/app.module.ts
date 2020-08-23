@@ -3,6 +3,9 @@
 @{
   var angular="@angular";
   var NgModule="@NgModule";
+  string ClassNameFromTableName(string tableName){
+		return tableName.Replace(" ","");
+	}
 
   var ds= Model.FindAfterName("DataSource").Value;
     
@@ -78,12 +81,13 @@ import { FormsModule } from '@angular/forms';
 import { httpInterceptorProviders } from './interceptors/barrelInterceptors';
 
 @foreach(var nameTable in nameTablesToRender){
+	string nameClass=ClassNameFromTableName(nameTable);
 <text>
-import { @(nameTable)Component } from './WebAPIComponents/@(nameTable).component';
+import { @(nameClass)Component } from './WebAPIComponents/@(nameClass).component';
 
-import { @(nameTable)AddComponent } from './WebAPIComponents/@(nameTable)add.component';
+import { @(nameClass)AddComponent } from './WebAPIComponents/@(nameClass)add.component';
 
-import { @(nameTable)EditComponent } from './WebAPIComponents/@(nameTable)edit.component';
+import { @(nameClass)EditComponent } from './WebAPIComponents/@(nameClass)edit.component';
 
 </text>
 }
@@ -92,10 +96,11 @@ import { @(nameTable)EditComponent } from './WebAPIComponents/@(nameTable)edit.c
 @(NgModule)({
   declarations: [
   @foreach(var nameTable in nameTablesToRender){
+	  string nameClass=ClassNameFromTableName(nameTable);
 		<text>
-    @(nameTable)Component,
-    @(nameTable)AddComponent,
-		@(nameTable)EditComponent,
+    @(nameClass)Component,
+    @(nameClass)AddComponent,
+		@(nameClass)EditComponent,
 		</text>
 	}
     AppComponent,

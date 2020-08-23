@@ -1,6 +1,8 @@
 ﻿@model Stankins.Interfaces.IDataToSent
 @{
-
+string ClassNameFromTableName(string tableName){
+		return tableName.Replace(" ","");
+	}
     var dt= Model.FindAfterName("@Name@").Value;
     var nrCols =dt.Columns.Count;
 	string lowerCaseFirst(string s){
@@ -39,21 +41,23 @@
 			}
 		return nameType;
 	}
+	
+	var nameClass= ClassNameFromTableName(dt.TableName);
 }
 
 
-export class @dt.TableName
+export class @(nameClass)
     {
         
         
-        public constructor(other:@dt.TableName = null){ 
+        public constructor(other:@(nameClass) = null){ 
 
             if(other != null){
 				this.CopyPropertiesFrom(other, true);
 			}
                 
         }
-        public CopyPropertiesFrom(other:@dt.TableName, withID: boolean):void{
+        public CopyPropertiesFrom(other:@(nameClass), withID: boolean):void{
             if(withID){
                 this.id= other.id;
             }
@@ -89,3 +93,4 @@ export class @dt.TableName
         
     }
 
+	

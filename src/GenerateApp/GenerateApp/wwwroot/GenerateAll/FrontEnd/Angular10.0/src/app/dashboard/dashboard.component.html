@@ -1,6 +1,10 @@
 @model Stankins.Interfaces.IDataToSent
 @{
 
+string ClassNameFromTableName(string tableName){
+		return tableName.Replace(" ","");
+	}
+
 var ds= Model.FindAfterName("DataSource").Value;
     
     var nrRowsDS=ds.Rows.Count;
@@ -20,8 +24,9 @@ var ds= Model.FindAfterName("DataSource").Value;
 <h1> Please choose data to vizualize</h1>
 
  @foreach(var nameTable in nameTablesToRender){
+string nameClass=ClassNameFromTableName(nameTable);
 
-      <a mat-list-item routerLink="/@(nameTable.ToLower())" routerLinkActive="active">@nameTable </a>
+      <a mat-list-item routerLink="/@(nameClass.ToLower())" routerLinkActive="active">@nameTable </a>
 	  <br />
       }
       

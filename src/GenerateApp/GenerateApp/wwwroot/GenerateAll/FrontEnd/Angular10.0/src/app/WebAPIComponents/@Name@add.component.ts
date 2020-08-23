@@ -1,8 +1,13 @@
 @{
 	var angular="@angular";
 	var Component = "@Component";
+	 string ClassNameFromTableName(string tableName){
+		return tableName.Replace(" ","");
+	}
+
 	var dt= Model.FindAfterName("@Name@").Value;
 	var nameTable =dt.TableName;
+	var nameClass = ClassNameFromTableName(nameTable);
 	string lowerCaseFirst(string s){
 		return char.ToLower(s[0]) + s.Substring(1);
   }
@@ -31,27 +36,27 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { tap, delay, switchMapTo, switchMap } from 'rxjs/operators';
-import { @(nameTable) } from '../WebAPIClasses/@(nameTable)';
-import { @(nameTable)Service } from '../services/@(nameTable).service';
+import { @(nameClass) } from '../WebAPIClasses/@(nameClass)';
+import { @(nameClass)Service } from '../services/@(nameClass).service';
 @(Component)({
-  selector: 'app-@(nameTable)add',
-  templateUrl: './@(nameTable)add.component.html',
-  styleUrls: ['./@(nameTable)add.component.css']
+  selector: 'app-@(nameClass)add',
+  templateUrl: './@(nameClass)add.component.html',
+  styleUrls: ['./@(nameClass)add.component.css']
 })
-export class @(nameTable)AddComponent implements OnInit {
+export class @(nameClass)AddComponent implements OnInit {
 
   public id: number;
-  public dataToAdd: @(nameTable);
-  constructor( private router: Router, private mainService: @(nameTable)Service ) {
+  public dataToAdd: @(nameClass);
+  constructor( private router: Router, private mainService: @(nameClass)Service ) {
 
-      this.dataToAdd = new @(nameTable)();
+      this.dataToAdd = new @(nameClass)();
    }
 
   ngOnInit(): void {
     
   }
   public add(): void{
-	const data=new @(nameTable)(this.dataToAdd);
+	const data=new @(nameClass)(this.dataToAdd);
     this.mainService.Insert(data).subscribe(
       it => {
         window.alert('saved !');
@@ -59,7 +64,7 @@ export class @(nameTable)AddComponent implements OnInit {
     );
   }
   public cancel(): void{
-    this.router.navigate(['/@(nameTable.ToLower())']);
+    this.router.navigate(['/@(nameClass.ToLower())']);
   }
 
 

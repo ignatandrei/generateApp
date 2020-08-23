@@ -29,7 +29,6 @@
             'src/app/WebAPIComponents/@Name@.component.ts',
             'src/app/WebAPIComponents/@Name@.component.css',
             'src/app/WebAPIComponents/@Name@.component.html',
-            'src/app/WebAPIComponents/@Name@.component.spec.ts',
              'src/app/WebAPIComponents/@Name@edit.component.ts',
             'src/app/WebAPIComponents/@Name@edit.component.css',
             'src/app/WebAPIComponents/@Name@edit.component.html',
@@ -56,7 +55,6 @@
             'src/app/WebAPIComponents/@Name@.component.ts',
             'src/app/WebAPIComponents/@Name@.component.css',
             'src/app/WebAPIComponents/@Name@.component.html',
-            'src/app/WebAPIComponents/@Name@.component.spec.ts',
             'src/app/WebAPIClasses/@Name@.ts',
             'src/app/services/@Name@.service.ts',
 

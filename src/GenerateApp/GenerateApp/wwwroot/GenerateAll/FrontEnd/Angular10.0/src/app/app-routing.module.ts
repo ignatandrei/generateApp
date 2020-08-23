@@ -1,7 +1,10 @@
 @{
   var angular="@angular";
   var NgModule="@NgModule";
-  
+  string ClassNameFromTableName(string tableName){
+		return tableName.Replace(" ","");
+	}
+
   var ds= Model.FindAfterName("DataSource").Value;
     
     var nrRowsDS=ds.Rows.Count;
@@ -31,12 +34,13 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 
 
 @foreach(var nameTable in nameTablesToRender){
+	string nameClass=ClassNameFromTableName(nameTable);
 <text>
-import { @(nameTable)Component } from './WebAPIComponents/@(nameTable).component';
+import { @(nameClass)Component } from './WebAPIComponents/@(nameClass).component';
 
-import { @(nameTable)AddComponent } from './WebAPIComponents/@(nameTable)add.component';
+import { @(nameClass)AddComponent } from './WebAPIComponents/@(nameClass)add.component';
 
-import { @(nameTable)EditComponent } from './WebAPIComponents/@(nameTable)edit.component';
+import { @(nameClass)EditComponent } from './WebAPIComponents/@(nameClass)edit.component';
 
 </text>
 }
@@ -47,12 +51,13 @@ const routes: Routes = [
   { path: 'dashboard', component: DashboardComponent },
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
 @foreach(var nameTable in nameTablesToRender){
+	string nameClass=ClassNameFromTableName(nameTable);
 <text>
-{ path: '@(lowerCaseFirst(nameProperty(nameTable)))', component: @(nameTable)Component },
+{ path: '@(nameClass.ToLower())', component: @(nameClass)Component },
 
-{ path: '@(lowerCaseFirst(nameProperty(nameTable)))/add', component: @(nameTable)AddComponent },
+{ path: '@(nameClass.ToLower())/add', component: @(nameClass)AddComponent },
 
-{ path: '@(lowerCaseFirst(nameProperty(nameTable)))/edit/:id', component: @(nameTable)EditComponent },
+{ path: '@(nameClass.ToLower())/edit/:id', component: @(nameClass)EditComponent },
 
 </text>
 }

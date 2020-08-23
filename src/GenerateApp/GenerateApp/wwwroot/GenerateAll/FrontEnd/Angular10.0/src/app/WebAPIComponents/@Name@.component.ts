@@ -2,8 +2,12 @@
 	var angular="@angular";
   var Component = "@Component";
   var ViewChild="@ViewChild";
+  string ClassNameFromTableName(string tableName){
+		return tableName.Replace(" ","");
+	}
 	var dt= Model.FindAfterName("@Name@").Value;
   var nameTable =dt.TableName;
+  var nameClass = ClassNameFromTableName(nameTable);
   var nrCols= dt.Columns.Count;
   
 
@@ -42,26 +46,26 @@ import {MatTableDataSource} from '@angular/material/table';
 
 import { tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import{ @nameTable } from './../WebAPIClasses/@nameTable';
-import {@(nameTable)Service} from './../services/@(nameTable).service';
+import{ @(nameClass) } from './../WebAPIClasses/@(nameClass)';
+import {@(nameClass)Service} from './../services/@(nameClass).service';
 
 @(Component)({
-  selector: 'app-@Name@-component',
-  templateUrl: './@Name@.component.html',
-  styleUrls: ['./@Name@.component.css']
+  selector: 'app-@(nameClass)-component',
+  templateUrl: './@(nameClass).component.html',
+  styleUrls: ['./@(nameClass).component.css']
 })
-export class @Name@Component implements OnInit {
+export class @(nameClass)Component implements OnInit {
 
   displayedColumns: string[] = [@Raw(colNames) 'operations'];
-  dataSource: MatTableDataSource<@(nameTable)>;
+  dataSource: MatTableDataSource<@(nameClass)>;
 
   @(ViewChild)(MatPaginator, {static: true}) paginator: MatPaginator;
   @(ViewChild)(MatSort, {static: true}) sort: MatSort;
 
   
 
-  public rows:@(nameTable)[]=[];
-  constructor(private mainService: @(nameTable)Service, private router: Router ) { }
+  public rows:@(nameClass)[]=[];
+  constructor(private mainService: @(nameClass)Service, private router: Router ) { }
 
   ngOnInit(): void {
 	  this.mainService.GetAll().subscribe(it=>{
@@ -104,7 +108,7 @@ export class @Name@Component implements OnInit {
     .subscribe();
   }
   public add(): void{
-    this.router.navigate(["/@(lowerCaseFirst(nameProperty(nameTable)))/add"]);
+    this.router.navigate(["/@(nameClass.ToLower())/add"]);
     return;
   }
 

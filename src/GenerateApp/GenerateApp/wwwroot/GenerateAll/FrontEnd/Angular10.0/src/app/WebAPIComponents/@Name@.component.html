@@ -2,8 +2,13 @@
 @{
 	var angular="@angular";
 	var Injectable = "@Injectable";
+	string ClassNameFromTableName(string tableName){
+		return tableName.Replace(" ","");
+	}
+
 	var dt= Model.FindAfterName("@Name@").Value;
 	var nameTable =dt.TableName;
+	var nameClass = ClassNameFromTableName(nameTable);
 	var routeName = lowerCaseFirst(nameProperty(nameTable));
 	var nrCols= dt.Columns.Count;
 	string lowerCaseFirst(string s){
