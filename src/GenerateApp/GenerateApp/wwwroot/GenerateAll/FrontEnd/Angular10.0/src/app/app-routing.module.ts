@@ -2,7 +2,7 @@
   var angular="@angular";
   var NgModule="@NgModule";
   string ClassNameFromTableName(string tableName){
-		return tableName.Replace(" ","");
+		return tableName.Replace(" ","").Replace("(","").Replace(")","");
 	}
 
   var ds= Model.FindAfterName("DataSource").Value;
@@ -22,7 +22,7 @@
 		return char.ToLower(s[0]) + s.Substring(1);
   }
   string nameProperty(string original){
-		return original.Replace(" ","").ToLower();
+		return original.Replace(" ","").Replace("<","").Replace(">","").Replace("(","").Replace(")","").ToLower();
 	}
 
 }

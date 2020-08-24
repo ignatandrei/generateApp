@@ -1,7 +1,7 @@
 ﻿@model Stankins.Interfaces.IDataToSent
 @{
 string ClassNameFromTableName(string tableName){
-		return tableName.Replace(" ","");
+		return tableName.Replace(" ","").Replace("(","").Replace(")","");
 	}
     var dt= Model.FindAfterName("@Name@").Value;
     var nrCols =dt.Columns.Count;
@@ -9,7 +9,7 @@ string ClassNameFromTableName(string tableName){
 		return char.ToLower(s[0]) + s.Substring(1);
 	}
 	string nameProperty(string original){
-		var name = original.Replace(" ","").ToLower();
+		var name = original.Replace(" ","").Replace("<","").Replace(">","").Replace("(","").Replace(")","").ToLower();
 		if(!IsIdentifier(name))
 			name = "generated_"+name;
 		
