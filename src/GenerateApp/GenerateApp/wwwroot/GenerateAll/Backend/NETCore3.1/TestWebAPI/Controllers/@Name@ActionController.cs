@@ -2,7 +2,7 @@
 @{
 
 string ClassNameFromTableName(string tableName){
-		return tableName.Replace(" ","");
+		return tableName.Replace(" ","").Replace("(","").Replace(")","");
 	}
 	
     var dt= Model.FindAfterName("@Name@").Value;
