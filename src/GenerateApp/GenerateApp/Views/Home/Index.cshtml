@@ -5,8 +5,22 @@
 
 <div class="text-center">
 
-    <h1 class="display-4">DataSource</h1>
-
+    <h1 class="display-4">Generate WebSite and Android application from Excel</h1>
+    <h2>
+        What you will obtain
+    </h2>
+    <p>
+        <ol>
+            <li style="text-align: left"><h3>Fully functional web site</h3> with CRUD (Create ,Read, Update, Delete), pagination and filter records  for all your sheets in your Excel file</li>
+            <li style="text-align: left"><h3>Fully functional Android</h3> application with CRUD (Create ,Read, Update, Delete) , pagination and filter records  for all your sheets in your Excel file</li>
+            
+            <li style="text-align: left">Technical: Source code(.NET Core, Angular, Cordova) and detailed documentation if you want to modify the application </li>
+            <li style="text-align: left">Technical:  WebAPI , Swagger , EFCore , Blockly , and SqlServer integration</li>
+<li style="text-align: left">If you want , I can provide help on customizing and deploying the project to a new host  </li>
+        </ol>
+    </p>
+    <p style="text-align: left">Enough words, show me the </p>
+    <h1 class="display-4">Online demo  </h1>
     <select onchange="showData(this.value)" id="datasource">
         <option value="0">Choose source of data </option>
         <option value="1">Excel</option>
@@ -17,7 +31,7 @@
           enctype="multipart/form-data">
 
         <div id="excel" style="display:none">
-            <h2>
+            <h2 style="text-align: left">
                 Add Excel tabular file ( every sheet must have a first row with column names)
 
                 <input type="file" name="file" id="fileToSubmit" />
@@ -25,7 +39,7 @@
             </h2>
             <button type="button" onclick="return hideShow();">Options</button>
             <button type="button" onclick="return submitData();">Generate Application</button>
-            (max 200 rows)
+            (demo has maximum 200 rows, full application will have all)
         </div>
     </form>
 
