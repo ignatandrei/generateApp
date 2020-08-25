@@ -2,12 +2,11 @@
     ViewData["Title"] = "Home Page";
 }
 
-
 <div class="text-center">
 
     <h1 class="display-4">Generate WebSite and Android application from Excel</h1>
     <h2>
-        What you will obtain
+        You will obtain
     </h2>
     <p>
         <ol>
@@ -19,7 +18,6 @@
 <li style="text-align: left">If you want , I can provide help on customizing and deploying the project to a new host  </li>
         </ol>
     </p>
-    <p style="text-align: left">Enough words, show me the </p>
     <h1 class="display-4">Online demo  </h1>
     <select onchange="showData(this.value)" id="datasource">
         <option value="0">Choose source of data </option>
@@ -33,13 +31,14 @@
         <div id="excel" style="display:none">
             <h2 style="text-align: left">
                 Add Excel tabular file ( every sheet must have a first row with column names)
-
+                <p>&nbsp;</p>
                 <input type="file" name="file" id="fileToSubmit" />
 
             </h2>
-            <button type="button" onclick="return hideShow();">Options</button>
+            <p>&nbsp;</p>
+            <button type="button" onclick="return hideShow();" style="display:none">Options</button>
             <button type="button" onclick="return submitData();">Generate Application</button>
-            (demo has maximum 200 rows, full application will have all)
+            (demo has maximum 200 rows, full application will have all rows)
         </div>
     </form>
 
