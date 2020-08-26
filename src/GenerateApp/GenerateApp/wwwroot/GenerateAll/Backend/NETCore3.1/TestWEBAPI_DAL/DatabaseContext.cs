@@ -6,6 +6,7 @@
 	}
 	
     var ds= Model.FindAfterName("DataSource").Value;
+    var dtOptions= Model.FindAfterName("@@Options@@").Value;
     
     var nrRowsDS=ds.Rows.Count;
     
@@ -59,6 +60,7 @@ namespace TestWEBAPI_DAL
         }
         @foreach(var nameTable in nameTablesToRender){
 			string nameClass=ClassNameFromTableName(nameTable);
+            
             <text>
             public virtual DbSet<@(nameClass)> @(nameClass){ get; set; }
             </text>
@@ -71,11 +73,10 @@ namespace TestWEBAPI_DAL
 
         @foreach(var nameTable in nameTablesToRender){
 			string nameClass=ClassNameFromTableName(nameTable);
+            var idTable = dtOptions.Rows.Find(nameTable +"_PK")[1].ToString();
          <text>
-            modelBuilder.Entity<@(nameClass)>(entity =>
-            {
-                //entity.Property(e => e.Name).IsUnicode(false);
-            });
+            modelBuilder.Entity<@(nameClass)>()
+                .HasKey(it=>it.@(idTable));
          </text>
         }            
 
@@ -86,6 +87,7 @@ namespace TestWEBAPI_DAL
 
             @foreach(var dt in tables){
 				string nameClass= ClassNameFromTableName(dt.TableName);
+                var idTable = dtOptions.Rows.Find(dt.TableName +"_PK")[1].ToString();
                 var nrRows =dt.Rows.Count; 
                 if(nrRows > 200)
                     nrRows=200;
@@ -117,7 +119,7 @@ namespace TestWEBAPI_DAL
                     }
                     <text>
                     modelBuilder.Entity<@(nameClass)>().HasData(
-                        new @(nameClass)(){ ID = @(iRow+1) @Raw(text) });
+                        new @(nameClass)(){ @(idTable) = @(iRow+1) @Raw(text) });
                     </text>
                 }
             }

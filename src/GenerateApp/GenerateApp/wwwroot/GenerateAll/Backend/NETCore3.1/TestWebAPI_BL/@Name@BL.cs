@@ -8,7 +8,8 @@
 	
     var dt= Model.FindAfterName("@Name@").Value;
     string nameClass= ClassNameFromTableName(dt.TableName);
-                
+    var dtOptions= Model.FindAfterName("@@Options@@").Value;
+    var idTable = dtOptions.Rows.Find(dt.TableName +"_PK")[1].ToString();
 	var nrCols =dt.Columns.Count;
 	string nameProperty(string original){
 		var name = original.Replace(" ","").Replace("<","").Replace(">","").Replace("(","").Replace(")","").ToLower();
@@ -53,7 +54,7 @@ namespace TestWebAPI_BL
         }
         public void CopyPropertiesFrom(@(nameClass) other, bool withID){
             if(withID){
-                this.ID= other.ID;
+                this.@(idTable)= other.@(idTable);
             }
             @for(int iCol = 0;iCol < nrCols; iCol++){
                 var col = dt.Columns[iCol];
@@ -71,7 +72,7 @@ namespace TestWebAPI_BL
         #endregion
         
         #region Properties
-        public long ID{get;set;}
+        public long @(idTable){get;set;}
             
         @for(int iCol = 0;iCol < nrCols; iCol++){
             var col = dt.Columns[iCol];

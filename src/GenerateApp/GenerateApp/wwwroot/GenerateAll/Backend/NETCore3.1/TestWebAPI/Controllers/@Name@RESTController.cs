@@ -6,6 +6,10 @@ string ClassNameFromTableName(string tableName){
 	}
 
     var dt= Model.FindAfterName("@Name@").Value;
+
+    var dtOptions= Model.FindAfterName("@@Options@@").Value;
+    var idTable = dtOptions.Rows.Find(dt.TableName +"_PK")[1].ToString();
+
 	string nameClass= ClassNameFromTableName(dt.TableName);
     
     string repo= nameClass  + "_Repository";
@@ -62,7 +66,7 @@ namespace TestWebAPI.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult<@(nameClass)>> Update(long id, @(nameClass) record)
         {
-            if (id != record.ID)
+            if (id != record.@(idTable))
             {
                 return BadRequest();
             }
@@ -89,7 +93,7 @@ namespace TestWebAPI.Controllers
         {
             
             await _repository.Delete( new @(nameClass)(){
-                ID=id
+                @(idTable)=id
             });
 
 
