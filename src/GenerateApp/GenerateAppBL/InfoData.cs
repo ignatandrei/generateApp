@@ -106,6 +106,7 @@ namespace GenerateApp.Controllers
                     break;
                 case SourceData.Custom:
                     data = await ReadCustom();
+                    break;
                 default:
                     throw new ArgumentException($"not supported {nameof(sourceData)} {sourceData} ");
             }
@@ -340,11 +341,12 @@ namespace GenerateApp.Controllers
         {
             var dt = new DataTable();
             dt.TableName = "DataSource";
+            
             foreach(var item in GenerateAppV1.input)
             {
-
+                
             }
-
+            return null;
         }
 
         static void CreateVDir(string name, string folder)

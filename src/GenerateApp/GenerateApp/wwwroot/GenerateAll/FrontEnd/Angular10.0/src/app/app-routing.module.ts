@@ -2,7 +2,7 @@
   var angular="@angular";
   var NgModule="@NgModule";
   string ClassNameFromTableName(string tableName){
-		return tableName.Replace(" ","").Replace("(","").Replace(")","");
+		return tableName.Replace(" ","").Replace(".","").Replace("(","").Replace(")","");
 	}
 
   var ds= Model.FindAfterName("DataSource").Value;

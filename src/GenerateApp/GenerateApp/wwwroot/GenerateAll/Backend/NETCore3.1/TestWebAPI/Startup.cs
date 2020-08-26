@@ -3,7 +3,7 @@
 
 
 string ClassNameFromTableName(string tableName){
-		return tableName.Replace(" ","").Replace("(","").Replace(")","");
+		return tableName.Replace(" ","").Replace(".","").Replace("(","").Replace(")","");
 	}
 
 	

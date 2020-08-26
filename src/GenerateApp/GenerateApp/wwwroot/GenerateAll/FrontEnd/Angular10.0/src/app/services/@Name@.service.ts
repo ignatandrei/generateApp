@@ -3,7 +3,7 @@
 	var angular="@angular";
 	var Injectable = "@Injectable";
 	string ClassNameFromTableName(string tableName){
-		return tableName.Replace(" ","").Replace("(","").Replace(")","");
+		return tableName.Replace(" ","").Replace(".","").Replace("(","").Replace(")","");
 	}
   string lowerCaseFirst(string s){
 		return char.ToLower(s[0]) + s.Substring(1);

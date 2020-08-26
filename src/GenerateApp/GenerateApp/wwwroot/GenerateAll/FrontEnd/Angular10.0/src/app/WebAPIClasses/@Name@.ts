@@ -1,7 +1,7 @@
 ﻿@model Stankins.Interfaces.IDataToSent
 @{
 string ClassNameFromTableName(string tableName){
-		return tableName.Replace(" ","").Replace("(","").Replace(")","");
+		return tableName.Replace(" ","").Replace(".","").Replace("(","").Replace(")","");
 	}
     var dt= Model.FindAfterName("@Name@").Value;
     var dtOptions= Model.FindAfterName("@@Options@@").Value;
