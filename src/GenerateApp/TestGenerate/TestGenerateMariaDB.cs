@@ -63,7 +63,7 @@ namespace TestGenerate
         {
             var g = gen();
             int errors = 0;
-            await foreach(var item in g.Validate(null))
+            await foreach(var item in g.Validate())
             {
                 errors++;
                 output.WriteLine(item.ErrorMessage);

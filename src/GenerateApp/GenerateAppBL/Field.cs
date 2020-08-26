@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace GenerateApp.Controllers
 {
-    public class Field
+    public class Field:IValidatableObject
     {
         public string name { get; set; }
         public string type
@@ -23,6 +25,13 @@ namespace GenerateApp.Controllers
 
                 _ => $"not found {originalType}"
             };
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+                yield return new ValidationResult($"{nameof(name)} is empty for field");
+
+        }
 
         public string originalType;
 

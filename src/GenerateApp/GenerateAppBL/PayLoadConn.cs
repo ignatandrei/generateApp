@@ -5,13 +5,22 @@ using System.Linq;
 
 namespace GenerateApp.Controllers
 {
-    public class GenerateAppV1
+    public class GenerateAppV1 : IValidatableObject
     {
+
         public PayLoadConn payLoadConn { get; set; }
         public TableGenerator[] input { get; set; }
 
-        public async IAsyncEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        public async IAsyncEnumerable<ValidationResult> Validate()
         {
+            var validOrig = Validate(null);
+            foreach (var item in validOrig)
+            {
+                yield return item;
+            }   
+            
+                
+
             var all = await payLoadConn.FromPayloadConn();
             foreach(var item in input)
             {
@@ -35,11 +44,51 @@ namespace GenerateApp.Controllers
                 }
             }
         }
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            if (this.payLoadConn == null)
+            {
+                yield return new ValidationResult("payload is null");
+                yield break;
+            }
+            if((this.input?.Length??0) == 0)
+            {
+                yield return new ValidationResult("do not have tables in input");
+                yield break;
+            }
+
+            foreach(var item in this.input)
+            {
+                
+            }
+        }
     }
-    public class TableGenerator
+    public class TableGenerator: IValidatableObject
     {
         public Table table { get; set; }
         public CrudEndpoints crudEndpoints { get; set; }
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            if (table == null)
+                yield return new ValidationResult("table name does not exists");
+            else
+                foreach (var item in table.Validate(validationContext))
+                {
+                    yield return item;
+                }
+
+
+            if (crudEndpoints == null)
+                yield return new ValidationResult("not crud endpoints");
+            else
+            foreach (var item in crudEndpoints.Validate(validationContext))
+            {
+                yield return item;
+            }
+
+        }
     }
     public class CrudEndpoints: IValidatableObject
     {
