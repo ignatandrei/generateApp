@@ -111,7 +111,7 @@ namespace GenerateApp.Controllers
             }
             catch
             {
-                ret.error = $" cannot parse {val} ";
+                ret.error = $" cannot parse conn type {val} ";
                 return ret;
             }
             try

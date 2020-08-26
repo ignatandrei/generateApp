@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 
 namespace GenerateApp.Controllers
 {
@@ -7,6 +9,32 @@ namespace GenerateApp.Controllers
     {
         public PayLoadConn payLoadConn { get; set; }
         public TableGenerator[] input { get; set; }
+
+        public async IAsyncEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            var all = await payLoadConn.FromPayloadConn();
+            foreach(var item in input)
+            {
+                var name = item.table.name;
+                var tableFromDb = all.input.FirstOrDefault(it => it.name == name);
+                if (tableFromDb == null)
+                {
+                    yield return new ValidationResult($"cannot find table {name}");
+                    continue;
+                }
+                foreach(var sent in item.table.fields)
+                {
+                    var fieldFromDb = tableFromDb.fields.FirstOrDefault(it => it.name == sent.name);
+                    if (fieldFromDb == null)
+                    {
+                        yield return new ValidationResult($"cannot find field {sent.name}");
+                        continue;
+                    }
+                    sent.originalType = fieldFromDb.originalType;
+
+                }
+            }
+        }
     }
     public class TableGenerator
     {
