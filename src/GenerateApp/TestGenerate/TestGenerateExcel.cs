@@ -13,15 +13,16 @@ namespace TestGenerate
         {
             this.output = output;
         }
-        [Fact]
-        public async void TestData()
+        [Theory]
+        [InlineData("eu.xlsx")]
+        public async void TestData(string file)
         {
             var i = new InfoData(SourceData.Excel)
             {
                 logs = new Logs(),
                 name = "testAndrei",
-                folderGenerator = @"E:\ignatandrei\generateApp\src\GenerateApp\GenerateApp\wwwroot\GenerateAll",
-                pathFile = @"E:\ignatandrei\generateApp\src\GenerateApp\GenerateApp\wwwroot\GenerateAll\ExcelTests\eu.xlsx"
+                folderGenerator = @"E:\generateApp\src\GenerateApp\GenerateApp\wwwroot\GenerateAll",
+                pathFile = @"E:\generateApp\src\GenerateApp\GenerateApp\wwwroot\GenerateAll\ExcelTests\"+ file
             };
 
             var res = await i.GenerateApp();
