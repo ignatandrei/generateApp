@@ -18,56 +18,6 @@ using System.Threading.Tasks;
 
 namespace GenerateApp.Controllers
 {
-    public class TablesFromDataSource
-    {
-        public bool Success { get; set; }
-        public string error { get; set; }
-        public Table[] input { get; set; }
-    }
-    public class Table
-    {
-        public Table()
-        {
-            this.fields = new List<Field>();
-        }
-        public string name { get; set; }
-        public List<Field> fields { get; set; }
-    
-    }
-    
-    public class Field
-    {
-        public string name { get; set; }
-        public string type
-        {
-            get
-            {
-                return generateType();
-            }
-        }
-        private string generateType() =>
-            originalType switch
-            {
-                null => "does not exist ",
-                string s when s.Contains("int",StringComparison.InvariantCultureIgnoreCase) => "number",
-                string s when s.Contains("varchar", StringComparison.InvariantCultureIgnoreCase) => "string",
-                string s when s.Contains("bool", StringComparison.InvariantCultureIgnoreCase) => "boolean",
-                string s when s.Contains("date", StringComparison.InvariantCultureIgnoreCase) => "date",
-
-                _ => $"not found {originalType}"
-            };
-
-        public string originalType;
-
-    }
-    public class Logs: List<string>
-    {
-        public void AddLog(string id, string s)
-        {
-            Console.WriteLine($"{id}=> {s}");
-            base.Add(s);
-        }
-    }
     public class InfoData
     {
 
@@ -94,7 +44,7 @@ namespace GenerateApp.Controllers
         public string name { get; set; }
         public string pathFile { get; set; }
         public Logs logs { get; set; }
-        public string folderGenerator { get; internal set; }
+        public string folderGenerator { get;  set; }
 
         public Dictionary<string, string> Releases = new Dictionary<string, string>();
         public string RealExeLocation;

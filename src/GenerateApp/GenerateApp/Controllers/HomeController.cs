@@ -9,19 +9,11 @@ using GenerateApp.Models;
 using Microsoft.AspNetCore.Http;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
-using System.Runtime.CompilerServices;
-using NPOI.SS.Formula.Functions;
-using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using System.Collections.Concurrent;
-using StankinsObjects;
-using Stankins.Excel;
-using Stankins.MariaDB;
-using System.Data;
-using MySqlConnector;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Stankins.FileOps;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
+using System.Data;
 
 namespace GenerateApp.Controllers
 {
@@ -96,45 +88,7 @@ namespace GenerateApp.Controllers
         [HttpPost]
         public async Task<TablesFromDataSource> MariaDBConnectionToObtainFields(string connection)
         {
-            try
-            {
-                var recData = new ReceiveMetadataFromDatabaseMariaDB (connection);
-
-                var data = await recData.TransformData(null);
-
-                var tables = data.FindAfterName("tables").Value.Rows;
-                var columns = data.FindAfterName("columns").Value.Rows;
-                var nameTables = new List<Table>();
-                foreach(DataRow dr in tables)
-                {
-                    var t = new Table();
-                    t.name = dr["name"].ToString();
-                    var id = dr["id"].ToString();
-                    nameTables.Add(t);
-                    foreach (DataRow item in columns)
-                    {
-                        if(item["tableId"].ToString() == id)
-                        {
-                            var f = new Field();
-                            f.name = item["name"].ToString();
-                            f.originalType = item["type"].ToString();
-                            t.fields.Add(f);
-                        }
-                    }
-                }
-                var res = new TablesFromDataSource();
-                res.Success = true;
-                res.input = nameTables.ToArray();
-
-                return res;
-            }
-            catch (Exception ex)
-            {
-                var res = new TablesFromDataSource();
-                res.Success = false;
-                res.error = connection+"!!!"+ ex.Message + "!!" + ex.StackTrace;
-                return res;
-            }
+            return await connection.FromMariaDB();
         }
         //to be deleted
 
@@ -175,102 +129,10 @@ namespace GenerateApp.Controllers
             [HttpPost]
         public async Task<TablesFromDataSource> FindTables([FromBody] PayLoadConn payLoadConn)
         {
-            string connection = null;
-            var ret = new TablesFromDataSource();
-            ret.Success = false;
-            var val = payLoadConn.connType;
-            connTypes typeToLoad;
-            try
-            {
-                typeToLoad=  Enum.Parse<connTypes>(val, true);
-            }
-            catch
-            {
-                ret.error = $" cannot parse {val} ";
-                return ret;
-            }
-            try
-            {
-                switch (typeToLoad)
-                {
-                    case connTypes.MARIADB:
-                        var b = new MySqlConnectionStringBuilder();
-                        b.Database = payLoadConn.connDatabase;
-                        b.Server = payLoadConn.connHost;
-                        b.UserID = payLoadConn.connUser;
-                        b.Password = payLoadConn.connPassword;
-                        if(int.TryParse(payLoadConn.connPort, out var port))
-                        {
-                            b.Port = (uint)port;
-                        }
-                        connection = b.ConnectionString;
-                        return await MariaDBConnectionToObtainFields(connection);
-                    case connTypes.XLS:
-                        var bytes = Convert.FromBase64String(payLoadConn.connFileContent);
-                        var path = Path.Combine(
-                                  environment.WebRootPath,
-                                  payLoadConn.connFileName);
-                        if (System.IO.File.Exists(path))
-                            System.IO.File.Delete(path);
-
-
-
-                        return await UploadExcelToObtainFields(path);
-                    default:
-                        ret.error = $"{val} is not implemented yet";
-                        return ret;
-                }
-            }
-            catch(Exception ex)
-            {
-                ret.error = connection;
-                ret.error += "!!!" + ex.Message + "!!!" + ex.StackTrace;
-                return ret;
-            }
+            return await payLoadConn.FromPayloadConn();
 
         }
-        async Task<TablesFromDataSource> UploadExcelToObtainFields(string filePath)
-        {
-            try
-            {
-                var recExcel = new ReceiverExcel(filePath);
-
-                var data = await recExcel.TransformData(null);
-
-                var renameExcel = new TransformerRenameTable("it=>it.Contains(\".xls\")", "DataSource");
-
-                data = await renameExcel.TransformData(data);
-
-                var renameCol = new ChangeColumnName("SheetName", "TableName");
-                data = await renameCol.TransformData(data);
-
-                var ds = data.FindAfterName("DataSource").Value;
-                var nrRowsDS = ds.Rows.Count;
-                var nameTablesToRender = new Table[nrRowsDS];
-
-                for (int iRowDS = 0; iRowDS < nrRowsDS; iRowDS++)
-                {
-                    var nameTable = ds.Rows[iRowDS]["TableName"].ToString();
-                    var dt = data.FindAfterName(nameTable).Value;
-                    var t = new Table();
-                    t.name = dt.TableName;
-                    nameTablesToRender[iRowDS] = t;
-                }
-                var res = new TablesFromDataSource();
-                res.Success = true;
-                res.input = nameTablesToRender;
-                return res;
-
-
-            }
-            catch (Exception ex)
-            {
-                var res = new TablesFromDataSource();
-                res.Success = false;
-                res.error = ex.Message + "!!" + ex.StackTrace;
-                return res;
-            }
-        }
+       
         public async Task<TablesFromDataSource> UploadExcelToObtainFields(IFormFile file)
         {
             try
@@ -286,7 +148,7 @@ namespace GenerateApp.Controllers
                 {
                     await file.CopyToAsync(stream);
                 }
-                return await UploadExcelToObtainFields(path);
+                return await path.FromExcel();
 
             }
             catch (Exception ex)
