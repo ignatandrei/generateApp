@@ -115,7 +115,22 @@ namespace GenerateApp.Controllers
                     nameTablesToRender.Add(dt.TableName);
                 }
             }
+            var dtOptions = new DataTable("Options");
+            dtOptions.Columns.Add("name", typeof(string));
+            dtOptions.Columns.Add("value", typeof(string));
+
+            dtOptions.Rows.Add("DataSource", "SqlServerInMemory");
+            dtOptions.Rows.Add("ConnectionString", "excel");
+            for (int iRowDS = nrRowsDS - 1; iRowDS > -1; iRowDS--)
+            {
+                var nameTable = ds.Rows[iRowDS]["TableName"].ToString();
+                dtOptions.Rows.Add($"{nameTable}_PK", $"ID_{nameTable}");
+            }
             
+            
+            int id=  data.AddNewTable(dtOptions);
+            data.Metadata.AddTable(dtOptions, id);
+
             var f = Path.Combine(outputFolder, g);
             Directory.CreateDirectory(f);
             try
