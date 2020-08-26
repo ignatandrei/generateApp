@@ -7,7 +7,10 @@ namespace GenerateApp.Controllers
 {
     public class GenerateAppV1 : IValidatableObject
     {
-
+        public InfoData GenerateInfoData()
+        {
+            return null;
+        }
         public PayLoadConn payLoadConn { get; set; }
         public TableGenerator[] input { get; set; }
 
