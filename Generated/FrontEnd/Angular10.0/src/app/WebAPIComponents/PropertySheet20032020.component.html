@@ -1,0 +1,81 @@
+
+
+<br />
+<h1>
+List of Property Sheet 20.03.2020
+</h1>
+
+<mat-form-field>
+	<mat-label>Filter</mat-label>
+	<input matInput (keyup)="applyFilter($event)" placeholder="filter text" #input>
+  </mat-form-field>
+  
+  <div class="mat-elevation-z8">
+	<table mat-table [dataSource]="dataSource" matSort>
+
+
+	
+	  <ng-container matColumnDef="address">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> Address </th>
+		<td mat-cell *matCellDef="let row"> {{row.address}} </td>
+	  </ng-container>
+		  
+	
+	  <ng-container matColumnDef="column1">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> Column1 </th>
+		<td mat-cell *matCellDef="let row"> {{row.column1}} </td>
+	  </ng-container>
+		  
+	
+	  <ng-container matColumnDef="date">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> Date </th>
+		<td mat-cell *matCellDef="let row"> {{row.date}} </td>
+	  </ng-container>
+		  
+	
+	  <ng-container matColumnDef="worktobeundertaken">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> Work To Be Undertaken </th>
+		<td mat-cell *matCellDef="let row"> {{row.worktobeundertaken}} </td>
+	  </ng-container>
+		  
+	
+	  <ng-container matColumnDef="column2">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> Column2 </th>
+		<td mat-cell *matCellDef="let row"> {{row.column2}} </td>
+	  </ng-container>
+		  
+	
+	  <ng-container matColumnDef="column3">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> Column3 </th>
+		<td mat-cell *matCellDef="let row"> {{row.column3}} </td>
+	  </ng-container>
+		  
+	
+	  <ng-container matColumnDef="column4">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> Column4 </th>
+		<td mat-cell *matCellDef="let row"> {{row.column4}} </td>
+	  </ng-container>
+		    
+	  <ng-container matColumnDef="operations">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> Operations </th>
+		<td mat-cell *matCellDef="let row" > <a routerLink="/propertysheet20032020/edit/{{row.id}}" >Edit</a>
+		
+			&nbsp;
+			<button (click)="deleteData(row.id)">Delete</button>
+			
+		</td>
+	  </ng-container>
+  
+	  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+	  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  
+	  <!-- Row shown when there is no matching data. -->
+	  <tr class="mat-row" *matNoDataRow>
+		<td class="mat-cell" colspan="4">No data in Property Sheet 20.03.2020 matching the filter "{{input.value}}"</td>
+	  </tr>
+	</table>
+  
+	<mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+  </div>
+
+  <button (click)="add()">Add new Property Sheet 20.03.2020</button>
