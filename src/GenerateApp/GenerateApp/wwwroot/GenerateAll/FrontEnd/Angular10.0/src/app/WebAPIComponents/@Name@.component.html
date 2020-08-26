@@ -8,6 +8,9 @@
 
 	var dt= Model.FindAfterName("@Name@").Value;
 	var nameTable =dt.TableName;
+	var dtOptions= Model.FindAfterName("@@Options@@").Value;
+	var idTable = dtOptions.Rows.Find(dt.TableName +"_PK")[1].ToString();
+	idTable = lowerCaseFirst(idTable);
 	var nameClass = ClassNameFromTableName(nameTable);
 	var routeName = lowerCaseFirst(nameProperty(nameTable));
 	var nrCols= dt.Columns.Count;
@@ -64,10 +67,10 @@ List of @(nameTable)
   
 	  <ng-container matColumnDef="operations">
 		<th mat-header-cell *matHeaderCellDef mat-sort-header> Operations </th>
-		<td mat-cell *matCellDef="let row" > <a routerLink="/@(routeName)/edit/{{row.id}}" >Edit</a>
+		<td mat-cell *matCellDef="let row" > <a routerLink="/@(routeName)/edit/{{row.@(idTable)}}" >Edit</a>
 		
 			&nbsp;
-			<button (click)="deleteData(row.id)">Delete</button>
+			<button (click)="deleteData(row.@(idTable))">Delete</button>
 			
 		</td>
 	  </ng-container>

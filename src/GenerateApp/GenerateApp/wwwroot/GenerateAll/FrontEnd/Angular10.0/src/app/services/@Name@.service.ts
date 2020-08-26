@@ -5,9 +5,15 @@
 	string ClassNameFromTableName(string tableName){
 		return tableName.Replace(" ","").Replace("(","").Replace(")","");
 	}
-
+  string lowerCaseFirst(string s){
+		return char.ToLower(s[0]) + s.Substring(1);
+  }
 		var dt= Model.FindAfterName("@Name@").Value;
     var nameTable =dt.TableName;
+    var dtOptions= Model.FindAfterName("@@Options@@").Value;
+    var idTable = dtOptions.Rows.Find(dt.TableName +"_PK")[1].ToString();
+    idTable  =lowerCaseFirst(idTable);
+
 	var nameClass= ClassNameFromTableName(nameTable);
     var Inject=@"@Inject";
 }
@@ -43,7 +49,7 @@ export class @(nameClass)Service {
     return this.client.get<@(nameClass)>(url);
   }
   public Update(data:@(nameClass)):Observable<@(nameClass)>{
-    const url = this.baseUrl+'api/@(nameClass)/Put/'+data.id;
+    const url = this.baseUrl+'api/@(nameClass)/Put/'+data.@(idTable);
     
     return this.client.put<@(nameClass)>(url,data);
   }

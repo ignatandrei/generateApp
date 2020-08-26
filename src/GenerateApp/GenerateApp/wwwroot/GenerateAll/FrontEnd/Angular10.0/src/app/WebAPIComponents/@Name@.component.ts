@@ -7,6 +7,9 @@
 	}
 	var dt= Model.FindAfterName("@Name@").Value;
   var nameTable =dt.TableName;
+  var dtOptions= Model.FindAfterName("@@Options@@").Value;
+  var idTable = dtOptions.Rows.Find(dt.TableName +"_PK")[1].ToString();
+  idTable = lowerCaseFirst(idTable);
   var nameClass = ClassNameFromTableName(nameTable);
   var nrCols= dt.Columns.Count;
   
@@ -100,7 +103,7 @@ export class @(nameClass)Component implements OnInit {
     // const ndx = this.rows.findIndex(it=>it.id == idDeleted);
       // this.rows.splice(ndx,1);
       // this.dataSource = new MatTableDataSource(this.rows);
-      const ndx = this.rows.findIndex(it => it.id === idDeleted);
+      const ndx = this.rows.findIndex(it => it.@(idTable) === idDeleted);
       this.dataSource.data.splice(ndx, 1);
       this.dataSource._updateChangeSubscription();
     })

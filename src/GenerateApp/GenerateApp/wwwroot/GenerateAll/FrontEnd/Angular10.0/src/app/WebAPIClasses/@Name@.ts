@@ -4,6 +4,9 @@ string ClassNameFromTableName(string tableName){
 		return tableName.Replace(" ","").Replace("(","").Replace(")","");
 	}
     var dt= Model.FindAfterName("@Name@").Value;
+    var dtOptions= Model.FindAfterName("@@Options@@").Value;
+    var idTable = dtOptions.Rows.Find(dt.TableName +"_PK")[1].ToString();
+	idTable = lowerCaseFirst(idTable);
     var nrCols =dt.Columns.Count;
 	string lowerCaseFirst(string s){
 		return char.ToLower(s[0]) + s.Substring(1);
@@ -59,7 +62,7 @@ export class @(nameClass)
         }
         public CopyPropertiesFrom(other:@(nameClass), withID: boolean):void{
             if(withID){
-                this.id= other.id;
+                this.@(idTable)= other.@(idTable);
             }
             @for(int iCol = 0;iCol < nrCols; iCol++){
                 var col = dt.Columns[iCol];
@@ -76,7 +79,7 @@ export class @(nameClass)
 
             
         }
-        public  id: number;
+        public  @(idTable): number;
             
         @for(int iCol = 0;iCol < nrCols; iCol++){
             var col = dt.Columns[iCol];
