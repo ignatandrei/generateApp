@@ -34,7 +34,8 @@ namespace GenerateFromDB
         {
             app.UseBlocklyUI(new BlocklyUIOptions()
             {
-                HeaderName = "Database Generator"
+                HeaderName = "Database Generator",
+                StartBlocks=start
             });
             
             if (env.IsDevelopment())
@@ -52,5 +53,162 @@ namespace GenerateFromDB
             });
             app.UseBlockly();
         }
+
+        public  string start
+        {
+            get
+            {
+                return @"
+<xml xmlns='https://developers.google.com/blockly/xml'>
+  <variables>
+    <variable id='c,JdBgG#Xq%pPn,)nN;{'>var_PayLoadConn</variable>
+    <variable id='KMd@G+h:qKzF*WYeOCW^'>input</variable>
+    <variable id='5hAhv(];x*|^j#h{4t:F'>tablesCrud</variable>
+    <variable id='TodWS_`B/tFWU68q-ag-'>var_GenerateAppV1</variable>
+  </variables>
+  <block type='variables_set' x='-778' y='24'>
+    <field name='VAR' id='c,JdBgG#Xq%pPn,)nN;{'>var_PayLoadConn</field>
+    <value name='VALUE'>
+      <block type='GenerateApp_Controllers_PayLoadConn'>
+        <value name='val_connType'>
+          <shadow type='text'>
+            <field name='TEXT'>MARIADB</field>
+          </shadow>
+        </value>
+        <value name='val_connFileName'>
+          <shadow type='text'>
+            <field name='TEXT'></field>
+          </shadow>
+        </value>
+        <value name='val_connFileContent'>
+          <shadow type='text'>
+            <field name='TEXT'></field>
+          </shadow>
+        </value>
+        <value name='val_connHost'>
+          <shadow type='text'>
+            <field name='TEXT'>alex360.go.ro</field>
+          </shadow>
+        </value>
+        <value name='val_connUser'>
+          <shadow type='text'>
+            <field name='TEXT'>root</field>
+          </shadow>
+        </value>
+        <value name='val_connPassword'>
+          <shadow type='text'>
+            <field name='TEXT'>datatocode</field>
+          </shadow>
+        </value>
+        <value name='val_connDatabase'>
+          <shadow type='text'>
+            <field name='TEXT'>test_schema</field>
+          </shadow>
+        </value>
+        <value name='val_connPort'>
+          <shadow type='text'>
+            <field name='TEXT'>85</field>
+          </shadow>
+        </value>
+      </block>
+    </value>
+    <next>
+      <block type='variables_set'>
+        <field name='VAR' id='KMd@G+h:qKzF*WYeOCW^'>input</field>
+        <value name='VALUE'>
+          <block type='api_Home_FindTables_POST'>
+            <value name='val_payLoadConn'>
+              <shadow type='GenerateApp_Controllers_PayLoadConn'></shadow>
+              <block type='variables_get'>
+                <field name='VAR' id='c,JdBgG#Xq%pPn,)nN;{'>var_PayLoadConn</field>
+              </block>
+            </value>
+          </block>
+        </value>
+        <next>
+          <block type='variables_set'>
+            <field name='VAR' id='KMd@G+h:qKzF*WYeOCW^'>input</field>
+            <value name='VALUE'>
+              <block type='getproperty'>
+                <field name='objectName'>object</field>
+                <field name='prop'>property</field>
+                <value name='ObjectToChange'>
+                  <block type='variables_get'>
+                    <field name='VAR' id='KMd@G+h:qKzF*WYeOCW^'>input</field>
+                  </block>
+                </value>
+                <value name='PropertyName'>
+                  <shadow type='text'>
+                    <field name='TEXT'>input</field>
+                  </shadow>
+                </value>
+              </block>
+            </value>
+            <next>
+              <block type='variables_set'>
+                <field name='VAR' id='5hAhv(];x*|^j#h{4t:F'>tablesCrud</field>
+                <value name='VALUE'>
+                  <block type='api_Home_tableGenerator_POST'>
+                    <value name='val_tables'>
+                      <shadow type='lists_create_with'>
+                        <mutation items='3'></mutation>
+                      </shadow>
+                      <block type='variables_get'>
+                        <field name='VAR' id='KMd@G+h:qKzF*WYeOCW^'>input</field>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+                <next>
+                  <block type='variables_set'>
+                    <field name='VAR' id='TodWS_`B/tFWU68q-ag-'>var_GenerateAppV1</field>
+                    <value name='VALUE'>
+                      <block type='GenerateApp_Controllers_GenerateAppV1'>
+                        <value name='val_payLoadConn'>
+                          <block type='variables_get'>
+                            <field name='VAR' id='c,JdBgG#Xq%pPn,)nN;{'>var_PayLoadConn</field>
+                          </block>
+                        </value>
+                        <value name='val_input'>
+                          <shadow type='lists_create_with'>
+                            <mutation items='3'></mutation>
+                          </shadow>
+                          <block type='converttojson'>
+                            <value name='ValueToConvert'>
+                              <block type='variables_get'>
+                                <field name='VAR' id='5hAhv(];x*|^j#h{4t:F'>tablesCrud</field>
+                              </block>
+                            </value>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
+                    <next>
+                      <block type='text_print'>
+                        <value name='TEXT'>
+                          <block type='api_Home_GenerateApp_POST'>
+                            <value name='val_app'>
+                              <shadow type='GenerateApp_Controllers_GenerateAppV1'></shadow>
+                              <block type='variables_get'>
+                                <field name='VAR' id='TodWS_`B/tFWU68q-ag-'>var_GenerateAppV1</field>
+                              </block>
+                            </value>
+                          </block>
+                        </value>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>
+";
+            }
+        } 
     }
 }

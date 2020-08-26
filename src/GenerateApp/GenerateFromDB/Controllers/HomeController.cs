@@ -27,5 +27,25 @@ namespace GenerateFromDB.Controllers
             }
             return app;
         }
+        [HttpPost]
+        public TableGenerator[] tableGenerator([FromBody] Table[] tables)
+        {
+            var ret = new TableGenerator[tables.Length];
+            for (int i = 0; i < tables.Length; i++)
+            {
+                
+                var t = new TableGenerator();
+                t.table = tables[i];
+                t.crudEndpoints = new CrudEndpoints()
+                {
+                    Create = true,
+                    Delete = true,
+                    List = true,
+                    Update = true
+                };
+                ret[i] = t;
+            }
+            return ret;
+        }
     }
 }
