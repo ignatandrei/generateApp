@@ -36,34 +36,33 @@
     </div>
 
     <footer class="border-top footer text-muted">
-        @*<div class="container">
+        <div class="container">
             &copy; 2020 - GenerateApp - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>*@
-
-        Ready: @(!(string.IsNullOrWhiteSpace(GenerateApp.Controllers.GitOps.CredentialsToken)))
-        ;
-        InsideIIS: @GenerateApp.Controllers.InfoData.InsideIIS
-        @{
-            string data = "waiting :" + GenerateApp.Controllers.HomeController.NumberItemsInProgress(DateTime.Now);
-
-        }
-        ;
-
-        @data
 
 
-        <br />
-        @GenerateApp.Controllers.HomeController.data.Count
-        @{
+            Ready: @(!(string.IsNullOrWhiteSpace(GenerateApp.Controllers.GitOps.CredentialsToken)))
+            ;
+            InsideIIS: @GenerateApp.Controllers.InfoData.InsideIIS
+            @{
+                string data = "waiting :" + GenerateApp.Controllers.HomeController.NumberItemsInProgress(DateTime.Now);
 
-
-            @foreach (var item in GenerateApp.Controllers.HomeController.data)
-            {
-                <br />
-                @item.Key
             }
-        }
+            ;
 
+            @data
+
+
+            
+            @GenerateApp.Controllers.HomeController.data.Count
+            @{
+
+
+                @foreach (var item in GenerateApp.Controllers.HomeController.data)
+                {
+                    @item.Key
+                }
+            }
+        </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
