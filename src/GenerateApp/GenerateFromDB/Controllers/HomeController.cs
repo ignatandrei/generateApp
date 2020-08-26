@@ -19,14 +19,14 @@ namespace GenerateFromDB.Controllers
         }
         
         [HttpPost]
-        public async Task<GenerateAppV1> GenerateApp([FromBody] GenerateAppV1 app)
+        public async Task<string> GenerateApp([FromBody] GenerateAppV1 app)
         {
             await foreach (var item in app.Validate())
             {
                 throw new ArgumentException("validation error:" + item.ErrorMessage,string.Join("m", item.MemberNames));
             }
 
-            return app;
+            return app.GenerateInfoData().name;
         }
         [HttpPost]
         public TableGenerator[] tableGenerator([FromBody] Table[] tables)

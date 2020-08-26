@@ -4,6 +4,7 @@
     {
         None = 0,
         Excel=1,
-        CSV=2
+        CSV=2,
+        Custom =3
     }
 }

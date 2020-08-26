@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.IO;
 using System.Linq;
 
 namespace GenerateApp.Controllers
@@ -9,7 +10,14 @@ namespace GenerateApp.Controllers
     {
         public InfoData GenerateInfoData()
         {
-            return null;
+            var i = new InfoData(SourceData.Custom) {
+                logs = new Logs(),
+                name = "custom"+ DateTime.UtcNow.ToString("yyyyMMddHHmmss") ,               
+                folderGenerator = "GenerateAll",
+                GenerateAppV1 = this
+            };
+            
+            return i;
         }
         public PayLoadConn payLoadConn { get; set; }
         public TableGenerator[] input { get; set; }
