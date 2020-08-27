@@ -13,8 +13,10 @@ using NetCore2Blockly;
 
 namespace GenerateFromDB
 {
+    
     public class Startup
     {
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -25,20 +27,23 @@ namespace GenerateFromDB
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var Site = Configuration["BlocklySite:Site"];
             services.AddCors();
             services.AddControllers();
-            services.AddBlockly("http://alex360.go.ro:86/data/");
+            services.AddBlockly(Site); 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            var PrefixBlocks = Configuration["BlocklySite:PrefixBlocks"];
+
             app.UseCors(it => it.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             app.UseBlocklyUI(new BlocklyUIOptions()
             {
                 HeaderName = "Database Generator",
-                StartBlocks=start
-            });
+                StartBlocks = start(PrefixBlocks)
+            }); ;
             
             if (env.IsDevelopment())
             {
@@ -56,9 +61,9 @@ namespace GenerateFromDB
             app.UseBlockly();
         }
 
-        public  string start
+        public  string start(string prefix)
         {
-            get
+            
             {
                 //return "";
                 return @"<xml xmlns='https://developers.google.com/blockly/xml'>
@@ -118,7 +123,7 @@ namespace GenerateFromDB
       <block type='variables_set'>
         <field name='VAR' id='KMd@G+h:qKzF*WYeOCW^'>input</field>
         <value name='VALUE'>
-          <block type='alex360_go_ro_86_data__api_Home_FindTables_POST'>
+          <block type='"+prefix+ @"api_Home_FindTables_POST'>
             <value name='val_payLoadConn'>
               <shadow type='GenerateApp_Controllers_PayLoadConn'></shadow>
               <block type='variables_get'>
@@ -161,7 +166,7 @@ namespace GenerateFromDB
                   <block type='variables_set'>
                     <field name='VAR' id='5hAhv(];x*|^j#h{4t:F'>tablesCrud</field>
                     <value name='VALUE'>
-                      <block type='alex360_go_ro_86_data__api_Home_tableGenerator_POST'>
+                      <block type='" + prefix + @"api_Home_tableGenerator_POST'>
                         <value name='val_tables'>
                           <shadow type='lists_create_with'>
                             <mutation items='3'></mutation>
@@ -199,7 +204,7 @@ namespace GenerateFromDB
                         <next>
                           <block type='text_print'>
                             <value name='TEXT'>
-                              <block type='alex360_go_ro_86_data__api_Home_GenerateApp_POST'>
+                              <block type='" + prefix + @"api_Home_GenerateApp_POST'>
                                 <value name='val_app'>
                                   <shadow type='GenerateApp_Controllers_GenerateAppV1'></shadow>
                                   <block type='variables_get'>
