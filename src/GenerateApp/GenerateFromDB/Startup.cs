@@ -25,13 +25,15 @@ namespace GenerateFromDB
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors();
             services.AddControllers();
-            services.AddBlockly();
+            services.AddBlockly("http://alex360.go.ro:86/data/");
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseCors(it => it.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             app.UseBlocklyUI(new BlocklyUIOptions()
             {
                 HeaderName = "Database Generator",
@@ -58,15 +60,15 @@ namespace GenerateFromDB
         {
             get
             {
-                return @"
-<xml xmlns='https://developers.google.com/blockly/xml'>
+                //return "";
+                return @"<xml xmlns='https://developers.google.com/blockly/xml'>
   <variables>
     <variable id='c,JdBgG#Xq%pPn,)nN;{'>var_PayLoadConn</variable>
     <variable id='KMd@G+h:qKzF*WYeOCW^'>input</variable>
     <variable id='5hAhv(];x*|^j#h{4t:F'>tablesCrud</variable>
     <variable id='TodWS_`B/tFWU68q-ag-'>var_GenerateAppV1</variable>
   </variables>
-  <block type='variables_set' x='-778' y='24'>
+  <block type='variables_set' x='-1149' y='-186'>
     <field name='VAR' id='c,JdBgG#Xq%pPn,)nN;{'>var_PayLoadConn</field>
     <value name='VALUE'>
       <block type='GenerateApp_Controllers_PayLoadConn'>
@@ -116,7 +118,7 @@ namespace GenerateFromDB
       <block type='variables_set'>
         <field name='VAR' id='KMd@G+h:qKzF*WYeOCW^'>input</field>
         <value name='VALUE'>
-          <block type='api_Home_FindTables_POST'>
+          <block type='alex360_go_ro_86_data__api_Home_FindTables_POST'>
             <value name='val_payLoadConn'>
               <shadow type='GenerateApp_Controllers_PayLoadConn'></shadow>
               <block type='variables_get'>
@@ -145,14 +147,10 @@ namespace GenerateFromDB
               </block>
             </value>
             <next>
-              <block type='variables_set'>
-                <field name='VAR' id='5hAhv(];x*|^j#h{4t:F'>tablesCrud</field>
-                <value name='VALUE'>
-                  <block type='api_Home_tableGenerator_POST'>
-                    <value name='val_tables'>
-                      <shadow type='lists_create_with'>
-                        <mutation items='3'></mutation>
-                      </shadow>
+              <block type='text_print'>
+                <value name='TEXT'>
+                  <block type='converttostring'>
+                    <value name='ValueToConvert'>
                       <block type='variables_get'>
                         <field name='VAR' id='KMd@G+h:qKzF*WYeOCW^'>input</field>
                       </block>
@@ -161,40 +159,57 @@ namespace GenerateFromDB
                 </value>
                 <next>
                   <block type='variables_set'>
-                    <field name='VAR' id='TodWS_`B/tFWU68q-ag-'>var_GenerateAppV1</field>
+                    <field name='VAR' id='5hAhv(];x*|^j#h{4t:F'>tablesCrud</field>
                     <value name='VALUE'>
-                      <block type='GenerateApp_Controllers_GenerateAppV1'>
-                        <value name='val_payLoadConn'>
-                          <block type='variables_get'>
-                            <field name='VAR' id='c,JdBgG#Xq%pPn,)nN;{'>var_PayLoadConn</field>
-                          </block>
-                        </value>
-                        <value name='val_input'>
+                      <block type='alex360_go_ro_86_data__api_Home_tableGenerator_POST'>
+                        <value name='val_tables'>
                           <shadow type='lists_create_with'>
                             <mutation items='3'></mutation>
                           </shadow>
-                          <block type='converttojson'>
-                            <value name='ValueToConvert'>
-                              <block type='variables_get'>
-                                <field name='VAR' id='5hAhv(];x*|^j#h{4t:F'>tablesCrud</field>
-                              </block>
-                            </value>
+                          <block type='variables_get'>
+                            <field name='VAR' id='KMd@G+h:qKzF*WYeOCW^'>input</field>
                           </block>
                         </value>
                       </block>
                     </value>
                     <next>
-                      <block type='text_print'>
-                        <value name='TEXT'>
-                          <block type='api_Home_GenerateApp_POST'>
-                            <value name='val_app'>
-                              <shadow type='GenerateApp_Controllers_GenerateAppV1'></shadow>
+                      <block type='variables_set'>
+                        <field name='VAR' id='TodWS_`B/tFWU68q-ag-'>var_GenerateAppV1</field>
+                        <value name='VALUE'>
+                          <block type='GenerateApp_Controllers_GenerateAppV1'>
+                            <value name='val_payLoadConn'>
                               <block type='variables_get'>
-                                <field name='VAR' id='TodWS_`B/tFWU68q-ag-'>var_GenerateAppV1</field>
+                                <field name='VAR' id='c,JdBgG#Xq%pPn,)nN;{'>var_PayLoadConn</field>
+                              </block>
+                            </value>
+                            <value name='val_input'>
+                              <shadow type='lists_create_with'>
+                                <mutation items='3'></mutation>
+                              </shadow>
+                              <block type='converttojson'>
+                                <value name='ValueToConvert'>
+                                  <block type='variables_get'>
+                                    <field name='VAR' id='5hAhv(];x*|^j#h{4t:F'>tablesCrud</field>
+                                  </block>
+                                </value>
                               </block>
                             </value>
                           </block>
                         </value>
+                        <next>
+                          <block type='text_print'>
+                            <value name='TEXT'>
+                              <block type='alex360_go_ro_86_data__api_Home_GenerateApp_POST'>
+                                <value name='val_app'>
+                                  <shadow type='GenerateApp_Controllers_GenerateAppV1'></shadow>
+                                  <block type='variables_get'>
+                                    <field name='VAR' id='TodWS_`B/tFWU68q-ag-'>var_GenerateAppV1</field>
+                                  </block>
+                                </value>
+                              </block>
+                            </value>
+                          </block>
+                        </next>
                       </block>
                     </next>
                   </block>
