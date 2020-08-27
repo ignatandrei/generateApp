@@ -182,7 +182,7 @@ namespace GenerateApp.Controllers
                         var data1 = data.FindAfterName(nameTable).Value;
                         if (data1.Rows.Count == 0)
                             continue;
-                        string correctNameFile = nameTable.Replace(" ", "").Replace("(", "").Replace(")", "");
+                        string correctNameFile = nameTable.Replace(" ", "").Replace(".", "").Replace("(", "").Replace(")", "");
                         var newFileName = pathFile.Replace("@Name@", correctNameFile, StringComparison.InvariantCultureIgnoreCase);
                         var newContent = content.Replace("@Name@", nameTable, StringComparison.InvariantCultureIgnoreCase);
                         await File.WriteAllTextAsync(newFileName, newContent);
@@ -201,7 +201,7 @@ namespace GenerateApp.Controllers
                         var data1 = data.FindAfterName(nameTable).Value;
                         if (data1.Rows.Count == 0)
                             continue;
-                        string correctNameFile = nameTable.Replace(" ", "").Replace("(", "").Replace(")", "");
+                        string correctNameFile = nameTable.Replace(" ", "").Replace(".", "").Replace("(", "").Replace(")", "");
 
                         var newFileName = pathFile.Replace("@Name@", correctNameFile, StringComparison.InvariantCultureIgnoreCase);
                         var newContent = content.Replace("@Name@", nameTable, StringComparison.InvariantCultureIgnoreCase);
