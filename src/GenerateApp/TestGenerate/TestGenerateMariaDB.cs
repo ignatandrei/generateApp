@@ -1,6 +1,8 @@
 ﻿using GenerateApp.Controllers;
+using NPOI.SS.Formula.Functions;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Text;
 using Xunit;
 using Xunit.Abstractions;
@@ -35,11 +37,11 @@ namespace TestGenerate
         {
             var p = new PayLoadConn();
             p.connType = connTypes.MARIADB.ToString();
-            p.connDatabase = "";
-            p.connHost = "";
-            p.connPort = "";
-            p.connUser = "";
-            p.connPassword = "";
+            p.connDatabase = "test_schema";
+            p.connHost = "alex360.go.ro";
+            p.connPort = "85";
+            p.connUser = "root";
+            p.connPassword = "datatocode";
             return p;
         }
         public TestGenerateMariaDB(ITestOutputHelper output)
@@ -58,17 +60,29 @@ namespace TestGenerate
             Assert.True(ass.Success);
 
         }
-        [Fact]
-        public async void TestGenerate()
+        [Theory]
+        [InlineData(@"E:\generateApp\src\GenerateApp\GenerateApp\wwwroot\GenerateAll")]
+        public async void TestGenerate(string pathGenerate)
         {
-            var g = gen();
+            var app = gen();
             int errors = 0;
-            await foreach(var item in g.Validate())
+            await foreach(var item in app.Validate())
             {
                 errors++;
                 output.WriteLine(item.ErrorMessage);
             }
-            Assert.True(errors == 0);
+
+            Assert.Equal(0,errors );
+            var info = app.GenerateInfoData();
+            info.folderGenerator = pathGenerate;
+            info.pathFile = @"E:\test\a.txt";
+            var data = await info.GenerateApp();
+            if (!data)
+            {
+                output.WriteLine(info.logs[info.logs.Count - 2]);
+                output.WriteLine(info.logs[info.logs.Count - 1]);
+            }
+            Assert.True(data);
         }
 
 

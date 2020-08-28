@@ -25,7 +25,7 @@ namespace GenerateFromDB.Controllers
             {
                 throw new ArgumentException("validation error:" + item.ErrorMessage,string.Join("m", item.MemberNames));
             }
-
+            
             return app.GenerateInfoData().name;
         }
         [HttpPost]

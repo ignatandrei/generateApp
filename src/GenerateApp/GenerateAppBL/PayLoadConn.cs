@@ -1,6 +1,9 @@
-﻿using System;
+﻿using NPOI.SS.Formula.Functions;
+using StankinsObjects;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Data;
 using System.IO;
 using System.Linq;
 
@@ -8,15 +11,42 @@ namespace GenerateApp.Controllers
 {
     public class GenerateAppV1 : IValidatableObject
     {
+        public DataToSentTable receiveData;
         public InfoData GenerateInfoData()
         {
-            var i = new InfoData(SourceData.Custom) {
+            receiveData = new DataToSentTable();
+            var dt = new DataTable("DataSource");
+            dt.Columns.Add("Number", typeof(int));
+            dt.Columns.Add("TableName", typeof(string));
+
+            int id = receiveData.AddNewTable(dt);
+            receiveData.Metadata.AddTable(dt, id);
+
+
+            for (int iTable = 0; iTable < input.Length; iTable++)
+            {
+                var table = input[iTable];
+                dt.Rows.Add(new object[2] { iTable, table.table.name });
+                var dtSheet = new DataTable();
+                dtSheet.TableName = table.table.name;
+                foreach (var field in table.table.fields)
+                {
+                    //make the real field type
+                    dtSheet.Columns.Add(field.name, typeof(string));
+                }
+                int idSheet = receiveData.AddNewTable(dtSheet);
+                receiveData.Metadata.AddTable(dtSheet, idSheet);
+
+
+            }
+            var i = new InfoData(SourceData.MariaDB)
+            {
                 logs = new Logs(),
-                name = "custom"+ DateTime.UtcNow.ToString("yyyyMMddHHmmss") ,               
+                name = "custom" + DateTime.UtcNow.ToString("yyyyMMddHHmmss"),
                 folderGenerator = "GenerateAll",
                 GenerateAppV1 = this
             };
-            
+
             return i;
         }
         public PayLoadConn payLoadConn { get; set; }
@@ -50,6 +80,7 @@ namespace GenerateApp.Controllers
                         yield return new ValidationResult($"cannot find field {sent.name}");
                         continue;
                     }
+                    //TODO: put in another part than validate
                     sent.originalType = fieldFromDb.originalType;
 
                 }
