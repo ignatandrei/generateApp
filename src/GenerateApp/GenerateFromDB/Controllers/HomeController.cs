@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using GenerateApp.Controllers;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace GenerateFromDB.Controllers
 {
@@ -12,6 +15,14 @@ namespace GenerateFromDB.Controllers
     [ApiController]
     public class HomeController : ControllerBase
     {
+        private readonly ILogger<HomeController> logger;
+        private readonly IWebHostEnvironment environment;
+
+        public HomeController(ILogger<HomeController> logger, IWebHostEnvironment environment)
+        {
+            this.logger = logger;
+            this.environment = environment;
+        }
         [HttpPost]
         public async Task<TablesFromDataSource> FindTables([FromBody] PayLoadConn payLoadConn)
         {
@@ -25,8 +36,18 @@ namespace GenerateFromDB.Controllers
             {
                 throw new ArgumentException("validation error:" + item.ErrorMessage,string.Join("m", item.MemberNames));
             }
-            
-            return app.GenerateInfoData().name;
+            var info = app.GenerateInfoData();
+            info.folderGenerator = Path.Combine(environment.WebRootPath, "GenerateAll");
+            info.pathFile = Path.Combine(environment.WebRootPath,app.payLoadConn.connDatabase,"a.txt");
+            var data = await info.GenerateApp();
+            if (!data)
+            {
+                Console.WriteLine(info.logs[info.logs.Count - 2]);
+                Console.WriteLine(info.logs[info.logs.Count - 1]);
+                throw new Exception(info.logs[info.logs.Count - 1]);
+            }
+            string pathDir =Path.GetDirectoryName (info.folderGenerator);
+            return pathDir;
         }
         [HttpPost]
         public TableGenerator[] tableGenerator([FromBody] Table[] tables)
