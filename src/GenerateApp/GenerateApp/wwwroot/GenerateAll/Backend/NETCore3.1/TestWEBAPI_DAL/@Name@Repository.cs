@@ -6,7 +6,7 @@
     var dt= Model.FindAfterName("@Name@").Value;
     var dtOptions= Model.FindAfterName("@@Options@@").Value;
     var idTable = dtOptions.Rows.Find(dt.TableName +"_PK")[1].ToString();
-
+    var idType = dtOptions.Rows.Find(dt.TableName +"_PK_Type")[1].ToString();  
     string repo= ClassNameFromTableName(dt.TableName)  + "_Repository";
 	string nameClass= ClassNameFromTableName(dt.TableName);
 }
@@ -21,7 +21,7 @@ using TestWebAPI_BL;
 
 namespace TestWEBAPI_DAL
 {
-    public partial class @repo : IRepository<@(nameClass)>
+    public partial class @repo : IRepository<@(nameClass),@(idType)>
     {
         private readonly DatabaseContext databaseContext;
 
@@ -33,7 +33,7 @@ namespace TestWEBAPI_DAL
         {
             return databaseContext.@(nameClass).ToArrayAsync();
         }
-        public Task<@(nameClass)> FindAfterId(long id)
+        public Task<@(nameClass)> FindAfterId(@(idType) id)
         {
             var data = databaseContext.@(nameClass).FirstOrDefaultAsync(it => it.@(idTable) == id);
             return data;

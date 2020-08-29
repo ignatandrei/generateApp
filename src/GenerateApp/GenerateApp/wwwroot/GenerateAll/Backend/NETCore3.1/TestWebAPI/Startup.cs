@@ -10,7 +10,7 @@ string ClassNameFromTableName(string tableName){
 var ds= Model.FindAfterName("DataSource").Value;
     
     var nrRowsDS=ds.Rows.Count;
-    
+    var dtOptions= Model.FindAfterName("@@Options@@").Value;
     var nameTablesToRender = new string[nrRowsDS];
     var tables=new System.Data.DataTable[nrRowsDS];
     for (int iRowDS = 0; iRowDS < nrRowsDS; iRowDS++)
@@ -65,8 +65,9 @@ namespace TestWebAPI
 
        @foreach(var nameTable in nameTablesToRender){
 		   string nameClass= ClassNameFromTableName(nameTable);
+            var idType = dtOptions.Rows.Find(nameTable +"_PK_Type")[1].ToString();      
     
-            string textToRender="services.AddTransient<IRepository<"+nameClass+">, "+nameClass+"_Repository>();";
+            string textToRender="services.AddTransient<IRepository<"+nameClass+","+ idType +">, "+nameClass+"_Repository>();";
             
             <text>
 			@Raw(textToRender);

@@ -176,7 +176,7 @@ namespace GenerateApp.Controllers
                             var nameColumnPK = dtTable.PrimaryKey.First().ColumnName;
                             var typeColumnPK = dtTable.Columns[nameColumnPK].DataType;
                             dtOptions.Rows.Add($"{nameTable}_PK", nameColumnPK);
-                            dtOptions.Rows.Add($"{nameTable}_PK_Type", typeColumnPK);
+                            dtOptions.Rows.Add($"{nameTable}_PK_Type", typeColumnPK.FullName);
                         }
                     }
                     break;

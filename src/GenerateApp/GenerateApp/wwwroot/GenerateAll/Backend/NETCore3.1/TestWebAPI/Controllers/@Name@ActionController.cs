@@ -8,7 +8,7 @@ string ClassNameFromTableName(string tableName){
     var dt= Model.FindAfterName("@Name@").Value;
     var dtOptions= Model.FindAfterName("@@Options@@").Value;
     var idTable = dtOptions.Rows.Find(dt.TableName +"_PK")[1].ToString();
-	
+    var idType = dtOptions.Rows.Find(dt.TableName +"_PK_Type")[1].ToString();  	
 	string nameClass= ClassNameFromTableName(dt.TableName);
     
     string repo= nameClass  + "_Repository";
@@ -32,9 +32,9 @@ namespace TestWebAPI.Controllers
     [ApiController]
     public class @(nameClass)Controller : ControllerBase
     {
-        private readonly IRepository<@(nameClass)> _repository;
+        private readonly IRepository<@(nameClass),@(idType)> _repository;
 
-        public @(nameClass)Controller(IRepository<@(nameClass)> repository)
+        public @(nameClass)Controller(IRepository<@(nameClass),@(idType)> repository)
         {
             _repository = repository;
         }
@@ -48,7 +48,7 @@ namespace TestWebAPI.Controllers
 
         // GET: api/@(nameClass)/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<@(nameClass)>> Get(long id)
+        public async Task<ActionResult<@(nameClass)>> Get(@(idType) id)
         {
             var record = await _repository.FindAfterId(id);
 
@@ -64,7 +64,7 @@ namespace TestWebAPI.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<ActionResult<@(nameClass)>> Put(long id, @(nameClass) record)
+        public async Task<ActionResult<@(nameClass)>> Put(@(idType) id, @(nameClass) record)
         {
             if (id != record.@(idTable))
             {
@@ -89,7 +89,7 @@ namespace TestWebAPI.Controllers
 
         // DELETE: api/@(nameClass)/5
         [HttpDelete("{id}")]
-        public async Task<long> Delete(long id)
+        public async Task<@(idType)> Delete(@(idType) id)
         {
             
             await _repository.Delete( new @(nameClass)(){

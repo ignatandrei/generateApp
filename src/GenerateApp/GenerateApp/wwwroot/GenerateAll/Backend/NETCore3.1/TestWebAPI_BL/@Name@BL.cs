@@ -9,7 +9,8 @@
     var dt= Model.FindAfterName("@Name@").Value;
     string nameClass= ClassNameFromTableName(dt.TableName);
     var dtOptions= Model.FindAfterName("@@Options@@").Value;
-    var idTable = dtOptions.Rows.Find(dt.TableName +"_PK")[1].ToString();
+    var idTable = dtOptions.Rows.Find(dt.TableName +"_PK")[1].ToString();  
+    var idType = dtOptions.Rows.Find(dt.TableName +"_PK_Type")[1].ToString();  
 	var nrCols =dt.Columns.Count;
 	string nameProperty(string original){
 		var name = original.Replace(" ","").Replace("<","").Replace(">","").Replace("(","").Replace(")","").ToLower();
@@ -72,13 +73,14 @@ namespace TestWebAPI_BL
         #endregion
         
         #region Properties
-        public long @(idTable){get;set;}
+        public @(idType) @(idTable){get;set;}
             
         @for(int iCol = 0;iCol < nrCols; iCol++){
             var col = dt.Columns[iCol];
             var colName= nameProperty(col.ColumnName) ;
             var colType = col.DataType;
-
+            if(colName == idTable)
+                continue;
             <text>
             public @(colType.Name) @(colName) { get; set; }
             </text>

@@ -3,10 +3,10 @@ using System.Threading.Tasks;
 
 namespace TestWEBAPI_DAL
 {
-    public interface IRepository<T>
+    public interface IRepository<T, TypePK>
     {
         Task<T> Delete(T p);
-        Task<T> FindAfterId(long id);
+        Task<T> FindAfterId(TypePK id);
         Task<T[]> FindMultiple(Func<T, bool> f);
         Task<T> FindSingle(Func<T, bool> f);
         Task<T[]> GetAll();
