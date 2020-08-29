@@ -150,6 +150,7 @@ namespace GenerateApp.Controllers
                         dtOptions.Columns.Add("value", typeof(string));
                         dtOptions.PrimaryKey = new[] { dcName };
                         dtOptions.Rows.Add("DataSource", "SqlServerInMemory");
+                        dtOptions.Rows.Add("DataSourceConnectionString", "MyDB");
                         dtOptions.Rows.Add("ConnectionString", "excel");
                         for (int iRowDS = nrRowsDS - 1; iRowDS > -1; iRowDS--)
                         {
@@ -166,7 +167,7 @@ namespace GenerateApp.Controllers
                         dtOptions.Columns.Add("value", typeof(string));
                         dtOptions.PrimaryKey = new[] { dcName };
                         dtOptions.Rows.Add("DataSource", "MariaDB");
-                        dtOptions.Rows.Add("ConnectionString", this.GenerateAppV1.payLoadConn.ToString());
+                        dtOptions.Rows.Add("DataSourceConnectionString", this.GenerateAppV1.payLoadConn.ConnectionString());
                         
                         // make here the generated id
                         for (int iRowDS = nrRowsDS - 1; iRowDS > -1; iRowDS--)

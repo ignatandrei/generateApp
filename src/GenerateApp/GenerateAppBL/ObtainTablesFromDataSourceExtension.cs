@@ -110,13 +110,34 @@ namespace GenerateApp.Controllers
                 return res;
             }
         }
-
-
-        public async static Task<TablesFromDataSource> FromPayloadConn(this PayLoadConn payLoadConn)
+        public static string ConnectionString(this PayLoadConn payLoadConn)
         {
-            string connection = null;
+            
+            var typeToLoad = Enum.Parse<connTypes>(payLoadConn.connType, true);
+            switch (typeToLoad)
+            {
+                case connTypes.MARIADB:
+                    var b = new MySqlConnectionStringBuilder();
+                    b.Database = payLoadConn.connDatabase;
+                    b.Server = payLoadConn.connHost;
+                    b.UserID = payLoadConn.connUser;
+                    b.Password = payLoadConn.connPassword;
+                    if (int.TryParse(payLoadConn.connPort, out var port))
+                    {
+                        b.Port = (uint)port;
+                    }
+                    return b.ConnectionString;
+                default:
+                    throw new ArgumentException($"no connection for {typeToLoad}");
+
+            }
+        }
+
+            public async static Task<TablesFromDataSource> FromPayloadConn(this PayLoadConn payLoadConn)
+        {
             var ret = new TablesFromDataSource();
             ret.Success = false;
+            string connection = null;
             var val = payLoadConn.connType;
             connTypes typeToLoad;
             try
@@ -130,20 +151,8 @@ namespace GenerateApp.Controllers
             }
             try
             {
-                switch (typeToLoad)
-                {
-                    case connTypes.MARIADB:
-                        var b = new MySqlConnectionStringBuilder();
-                        b.Database = payLoadConn.connDatabase;
-                        b.Server = payLoadConn.connHost;
-                        b.UserID = payLoadConn.connUser;
-                        b.Password = payLoadConn.connPassword;
-                        if (int.TryParse(payLoadConn.connPort, out var port))
-                        {
-                            b.Port = (uint)port;
-                        }
-                        connection = b.ConnectionString;
-                        return await connection.FromMariaDB() ;
+                    connection = payLoadConn.ConnectionString();
+                    return await connection.FromMariaDB() ;
                     //case connTypes.XLS:
                     //    var bytes = Convert.FromBase64String(payLoadConn.connFileContent);
                     //    var path = Path.Combine(
@@ -155,10 +164,8 @@ namespace GenerateApp.Controllers
 
 
                     //    return await path.FromExcel();
-                    default:
-                        ret.error = $"{val} is not implemented yet";
-                        return ret;
-                }
+                    
+                
             }
             catch (Exception ex)
             {

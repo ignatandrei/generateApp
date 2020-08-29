@@ -11,6 +11,8 @@ var ds= Model.FindAfterName("DataSource").Value;
     
     var nrRowsDS=ds.Rows.Count;
     var dtOptions= Model.FindAfterName("@@Options@@").Value;
+    var dataSource = dtOptions.Rows.Find("DataSource")[1].ToString();
+    var conString = dtOptions.Rows.Find("DataSourceConnectionString")[1].ToString();
     var nameTablesToRender = new string[nrRowsDS];
     var tables=new System.Data.DataTable[nrRowsDS];
     for (int iRowDS = 0; iRowDS < nrRowsDS; iRowDS++)
@@ -61,8 +63,24 @@ namespace TestWebAPI
             services.AddCors();
             services.AddControllers();
             services.AddDbContext<DatabaseContext>(options => options
-                .UseInMemoryDatabase(databaseName: "MyDB"));
 
+            @switch(dataSource){
+                case "SqlServerInMemory":
+                    <text>
+                            .UseInMemoryDatabase("@(conString)"));
+                    </text>
+                break;
+                case "MariaDB":
+                    <text>
+                           .UseMySql("@(conString)")); 
+                    </text>
+                break;
+                default:
+                    <text>
+                    NO SUCH DATABASE @(dataSource?.ToLower())
+                    </text>
+                    break;
+            }
        @foreach(var nameTable in nameTablesToRender){
 		   string nameClass= ClassNameFromTableName(nameTable);
             var idType = dtOptions.Rows.Find(nameTable +"_PK_Type")[1].ToString();      
