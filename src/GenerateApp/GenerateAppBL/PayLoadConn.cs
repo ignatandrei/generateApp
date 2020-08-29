@@ -29,11 +29,17 @@ namespace GenerateApp.Controllers
                 dt.Rows.Add(new object[2] { iTable, table.table.name });
                 var dtSheet = new DataTable();
                 dtSheet.TableName = table.table.name;
+                var dcPK = new List<DataColumn>();
                 foreach (var field in table.table.fields)
                 {
                     //make the real field type
-                    dtSheet.Columns.Add(field.name, typeof(string));
+                   var dc= dtSheet.Columns.Add(field.name, typeof(string));
+                    if (field.IsPK)
+                        dcPK.Add(dc);    
                 }
+                if(dcPK.Count>0)
+                    dtSheet.PrimaryKey = dcPK.ToArray();
+                
                 int idSheet = receiveData.AddNewTable(dtSheet);
                 receiveData.Metadata.AddTable(dtSheet, idSheet);
 
