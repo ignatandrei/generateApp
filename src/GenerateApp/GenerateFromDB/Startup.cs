@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Hellang.Middleware.ProblemDetails;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -30,13 +31,25 @@ namespace GenerateFromDB
             var Site = Configuration["BlocklySite:Site"];
             services.AddCors();
             services.AddControllers();
-            services.AddBlockly(Site); 
+            services.AddBlockly(Site);
+            services.AddProblemDetails(opts =>
+            {
+                
+                // Control when an exception is included
+                opts.IncludeExceptionDetails = (ctx, ex) =>
+                {
+                    // Fetch services from HttpContext.RequestServices
+                    //var env = ctx.RequestServices.GetRequiredService<IHostEnvironment>();
+                    //return env.IsDevelopment() || env.IsStaging();
+                    return true;
+                };
+            }); 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-
+            app.UseProblemDetails(); 
             var PrefixBlocks = Configuration["BlocklySite:PrefixBlocks"];
 
             app.UseCors(it => it.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
