@@ -8,13 +8,29 @@
   string lowerCaseFirst(string s){
 		return char.ToLower(s[0]) + s.Substring(1);
   }
+  string nameTypeForJS(string colTypeName){
+		string nameType = "";
+		switch(colTypeName.ToLower()){
+				case "string":
+					nameType="string";
+					break;
+				case "decimal":
+					nameType="number";
+					break;
+				default:
+					nameType="!!!!"+colTypeName;
+					break;
+			}
+		return nameType;
+	}
+
 		var dt= Model.FindAfterName("@Name@").Value;
     var nameTable =dt.TableName;
     var dtOptions= Model.FindAfterName("@@Options@@").Value;
     var idTable = dtOptions.Rows.Find(dt.TableName +"_PK")[1].ToString();
     idTable  =lowerCaseFirst(idTable);
     var idType = dtOptions.Rows.Find(dt.TableName +"_PK_Type")[1].ToString();  
-
+    idType = nameTypeForJS(idType);
 	var nameClass= ClassNameFromTableName(nameTable);
     var Inject=@"@Inject";
 }
@@ -44,7 +60,7 @@ export class @(nameClass)Service {
     
     return this.client.get<@(nameClass)[]>(url);
   }
-  public Get(id:number):Observable<@(nameClass)>{
+  public Get(id:@(idType)):Observable<@(nameClass)>{
     const url = this.baseUrl+'api/@(nameClass)/Get/'+id;
     
     return this.client.get<@(nameClass)>(url);
@@ -59,10 +75,10 @@ export class @(nameClass)Service {
     
     return this.client.post<@(nameClass)>(url,data);
   }
-  public Delete(id:number):Observable<number>{
+  public Delete(id:@(idType)):Observable<@(idType)>{
     const url = this.baseUrl+'api/@(nameClass)/Delete/'+id;
     
-    return this.client.delete<number>(url);
+    return this.client.delete<@(idType)>(url);
   }
   
 }

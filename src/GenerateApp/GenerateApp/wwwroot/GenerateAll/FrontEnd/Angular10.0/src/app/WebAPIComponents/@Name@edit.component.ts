@@ -5,10 +5,40 @@
 	string ClassNameFromTableName(string tableName){
 		return tableName.Replace(" ","").Replace(".","").Replace("(","").Replace(")","");
 	}
+  string nameTypeForJS(string colTypeName){
+		string nameType = "";
+		switch(colTypeName.ToLower()){
+				case "string":
+					nameType="string";
+					break;
+				case "decimal":
+					nameType="number";
+					break;
+				default:
+					nameType="!!!!"+colTypeName;
+					break;
+			}
+		return nameType;
+  }
+  string lowerCaseFirst(string s){
+		return char.ToLower(s[0]) + s.Substring(1);
+	}
+
 
 	var dt= Model.FindAfterName("@Name@").Value;
 	var nameTable =dt.TableName;
-	var nameClass = ClassNameFromTableName(nameTable);
+  var nameClass = ClassNameFromTableName(nameTable);
+  var dtOptions= Model.FindAfterName("@@Options@@").Value;
+  var idTable = dtOptions.Rows.Find(dt.TableName +"_PK")[1].ToString();
+  idTable  =lowerCaseFirst(idTable);
+  var idType = dtOptions.Rows.Find(dt.TableName +"_PK_Type")[1].ToString();  
+  var nameType = nameTypeForJS(idType);
+
+  string appender ="";
+				if(nameType == "number")
+					appender = "+";
+                
+
 }
 
 import { Component, OnInit } from '@angular/core';
@@ -23,7 +53,7 @@ import { @(nameClass)Service } from '../services/@(nameClass).service';
 })
 export class @(nameClass)EditComponent implements OnInit {
 
-  public id: number;
+  public id: @(nameType);
   public dataToEdit: @(nameClass);
   constructor(private route: ActivatedRoute , private router: Router, private mainService: @(nameClass)Service ) {
 
@@ -35,7 +65,7 @@ export class @(nameClass)EditComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.paramMap.pipe(
-      tap(params => this.id = +params.get('id')),
+      tap(params => this.id = @(appender)params.get('id') ),
       switchMap(it => this.mainService.Get(this.id) ),
       delay(1000),
       tap(it => this.dataToEdit = it)

@@ -45,7 +45,7 @@ import { @(nameClass)Service } from '../services/@(nameClass).service';
 })
 export class @(nameClass)AddComponent implements OnInit {
 
-  public id: number;
+  
   public dataToAdd: @(nameClass);
   constructor( private router: Router, private mainService: @(nameClass)Service ) {
 
