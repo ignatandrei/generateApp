@@ -38,7 +38,9 @@ namespace GenerateFromDB.Controllers
             }
             var info = app.GenerateInfoData();
             info.folderGenerator = Path.Combine(environment.WebRootPath, "GenerateAll");
-            info.pathFile = Path.Combine(environment.WebRootPath,app.payLoadConn.connDatabase,"a.txt");
+            info.pathFile = Path.Combine(environment.WebRootPath,DateTime.Now.ToString("yyyyMMddHHmmss"),"con.txt");
+            var di = Directory.CreateDirectory(Path.GetDirectoryName(info.pathFile));
+            System.IO.File.WriteAllText(info.pathFile, app.payLoadConn.ConnectionString());
             var data = await info.GenerateApp();
             if (!data)
             {
