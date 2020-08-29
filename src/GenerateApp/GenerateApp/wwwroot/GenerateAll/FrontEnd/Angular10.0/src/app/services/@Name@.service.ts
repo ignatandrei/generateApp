@@ -13,6 +13,7 @@
     var dtOptions= Model.FindAfterName("@@Options@@").Value;
     var idTable = dtOptions.Rows.Find(dt.TableName +"_PK")[1].ToString();
     idTable  =lowerCaseFirst(idTable);
+    var idType = dtOptions.Rows.Find(dt.TableName +"_PK_Type")[1].ToString();  
 
 	var nameClass= ClassNameFromTableName(nameTable);
     var Inject=@"@Inject";

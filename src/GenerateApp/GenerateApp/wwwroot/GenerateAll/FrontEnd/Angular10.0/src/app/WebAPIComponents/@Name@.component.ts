@@ -9,6 +9,7 @@
   var nameTable =dt.TableName;
   var dtOptions= Model.FindAfterName("@@Options@@").Value;
   var idTable = dtOptions.Rows.Find(dt.TableName +"_PK")[1].ToString();
+  var idType = dtOptions.Rows.Find(dt.TableName +"_PK_Type")[1].ToString();  
   idTable = lowerCaseFirst(idTable);
   var nameClass = ClassNameFromTableName(nameTable);
   var nrCols= dt.Columns.Count;
@@ -41,6 +42,23 @@
     var col = dt.Columns[iCol];
     colNames += "'"+ lowerCaseFirst(nameProperty(col.ColumnName)) +"',";
   }
+
+  string nameTypeForJS(string colTypeName){
+		string nameType = "";
+		switch(colTypeName.ToLower()){
+				case "string":
+					nameType="string";
+					break;
+				case "decimal":
+					nameType="number";
+					break;
+				default:
+					nameType="!!!!"+colTypeName;
+					break;
+			}
+		return nameType;
+	}
+
 }
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {MatPaginator} from '@angular/material/paginator';
@@ -89,7 +107,7 @@ export class @(nameClass)Component implements OnInit {
   }
 
 
-  public deleteData(id: number): void{
+  public deleteData(id: @(nameTypeForJS(idType))): void{
 
     if(!window.confirm("do you want to delete row "+ id)){
       return;

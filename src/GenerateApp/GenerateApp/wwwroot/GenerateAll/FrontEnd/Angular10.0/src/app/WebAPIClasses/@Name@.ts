@@ -6,6 +6,7 @@ string ClassNameFromTableName(string tableName){
     var dt= Model.FindAfterName("@Name@").Value;
     var dtOptions= Model.FindAfterName("@@Options@@").Value;
     var idTable = dtOptions.Rows.Find(dt.TableName +"_PK")[1].ToString();
+    var idType = dtOptions.Rows.Find(dt.TableName +"_PK_Type")[1].ToString();  
 	idTable = lowerCaseFirst(idTable);
     var nrCols =dt.Columns.Count;
 	string lowerCaseFirst(string s){
@@ -79,11 +80,13 @@ export class @(nameClass)
 
             
         }
-        public  @(idTable): number;
+        public  @(idTable): @(nameTypeForJS(idType));
             
         @for(int iCol = 0;iCol < nrCols; iCol++){
             var col = dt.Columns[iCol];
             var colName= nameProperty(col.ColumnName) ;
+            if(colName == idTable)
+                continue;
             var colType = col.DataType;
 			var nameType = nameTypeForJS(colType.Name);
 			
