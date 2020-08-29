@@ -16,7 +16,7 @@ namespace GenerateApp.Controllers
         }
         public bool IsPK { get; set; }
         private string generateType() =>
-            originalType switch
+            originalType?.ToLower() switch
             {
                 null => "does not exist ",
                 string s when s.Contains("int",StringComparison.InvariantCultureIgnoreCase) => "number",
@@ -25,6 +25,17 @@ namespace GenerateApp.Controllers
                 string s when s.Contains("date", StringComparison.InvariantCultureIgnoreCase) => "date",
 
                 _ => $"not found {originalType}"
+            };
+        public Type DotNetType() =>
+            originalType?.ToLower() switch
+            {
+                null => null,
+                string s when s.Contains("int", StringComparison.InvariantCultureIgnoreCase) => typeof(int),
+                string s when s.Contains("varchar", StringComparison.InvariantCultureIgnoreCase) => typeof(string),
+                string s when s.Contains("bool", StringComparison.InvariantCultureIgnoreCase) => typeof(bool),
+                string s when s.Contains("date", StringComparison.InvariantCultureIgnoreCase) => typeof(DateTime),
+
+                _ => null
             };
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

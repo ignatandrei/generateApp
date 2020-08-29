@@ -33,7 +33,7 @@ namespace GenerateApp.Controllers
                 foreach (var field in table.table.fields)
                 {
                     //make the real field type
-                   var dc= dtSheet.Columns.Add(field.name, typeof(string));
+                   var dc= dtSheet.Columns.Add(field.name, field.DotNetType());
                     if (field.IsPK)
                         dcPK.Add(dc);    
                 }
