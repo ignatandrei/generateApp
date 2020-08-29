@@ -66,7 +66,7 @@ export class @(nameClass)EditComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.paramMap.pipe(
-      tap(params => this.id = @(appender)params.get('id') ),
+      tap(params => this.id = @Raw(appender)params.get('id') ),
       switchMap(it => this.mainService.Get(this.id) ),
       delay(1000),
       tap(it => this.dataToEdit = it)
