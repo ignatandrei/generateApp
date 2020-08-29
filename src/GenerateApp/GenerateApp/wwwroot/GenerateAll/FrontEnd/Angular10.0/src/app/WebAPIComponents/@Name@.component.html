@@ -50,17 +50,17 @@ List of @(nameTable)
   
   <div class="mat-elevation-z8">
 	<table mat-table [dataSource]="dataSource" matSort>
-
+		<ng-container matColumnDef="rowIndex">
+			<th mat-header-cell *matHeaderCellDef> Index </th>
+			<td mat-cell *matCellDef="let row;index as i;"> {{ i+1   + (paginator.pageIndex * paginator.pageSize) }} </td>
+		</ng-container>
+	
 		@for(int iCol = 0;iCol < nrCols; iCol++){
 			var col = dt.Columns[iCol];
 			var colName= col.ColumnName ;
 			
 			string display="{{row." + lowerCaseFirst(nameProperty(colName))+"}}";
 			<text>
-	<ng-container matColumnDef="rowIndex">
-		<th mat-header-cell *matHeaderCellDef> Index </th>
-		<td mat-cell *matCellDef="let row;index as i;"> {{ i+1   + (paginator.pageIndex * paginator.pageSize) }} </td>
-	</ng-container>
 
 	  <ng-container matColumnDef="@(lowerCaseFirst(nameProperty(colName)))">
 		<th mat-header-cell *matHeaderCellDef mat-sort-header> @(colName) </th>
