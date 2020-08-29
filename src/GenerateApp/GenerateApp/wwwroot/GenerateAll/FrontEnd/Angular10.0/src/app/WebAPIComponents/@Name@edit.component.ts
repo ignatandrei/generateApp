@@ -12,6 +12,7 @@
 					nameType="string";
 					break;
 				case "decimal":
+        case "int32":
 					nameType="number";
 					break;
 				default:
