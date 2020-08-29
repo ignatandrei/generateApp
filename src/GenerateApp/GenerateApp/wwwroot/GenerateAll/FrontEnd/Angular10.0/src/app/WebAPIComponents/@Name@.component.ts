@@ -77,7 +77,7 @@ import {@(nameClass)Service} from './../services/@(nameClass).service';
 })
 export class @(nameClass)Component implements OnInit {
 
-  displayedColumns: string[] = [@Raw(colNames) 'operations'];
+  displayedColumns: string[] = [@Raw(colNames) 'operations', 'rowIndex'];
   dataSource: MatTableDataSource<@(nameClass)>;
 
   @(ViewChild)(MatPaginator, {static: true}) paginator: MatPaginator;
