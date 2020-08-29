@@ -1,4 +1,5 @@
-﻿using MySqlConnector;
+﻿using Microsoft.AspNetCore.Server.Kestrel;
+using MySqlConnector;
 using Stankins.Excel;
 using Stankins.MariaDB;
 using StankinsObjects;
@@ -64,23 +65,36 @@ namespace GenerateApp.Controllers
 
                 var tables = data.FindAfterName("tables").Value.Rows;
                 var columns = data.FindAfterName("columns").Value.Rows;
+                var keys = data.FindAfterName("keys").Value;
                 var nameTables = new List<Table>();
                 foreach (DataRow dr in tables)
                 {
                     var t = new Table();
                     t.name = dr["name"].ToString();
                     var id = dr["id"].ToString();
-                    nameTables.Add(t);
-                    foreach (DataRow item in columns)
+                    bool HasPK = false;
+                    foreach (DataRow col in columns)
                     {
-                        if (item["tableId"].ToString() == id)
+                        if (col["tableId"].ToString() == id)
                         {
                             var f = new Field();
-                            f.name = item["name"].ToString();
-                            f.originalType = item["type"].ToString();
+                            f.name = col["name"].ToString();
+                            f.originalType = col["type"].ToString();
+                            foreach(DataRow row in keys.Rows)
+                            {
+                                if(col["id"] + ".PRIMARY" == row["id"].ToString())
+                                {
+                                    f.IsPK = true;
+                                    HasPK = true;
+                                    continue;
+                                }
+                            }
                             t.fields.Add(f);
+
                         }
                     }
+                    if(HasPK)
+                        nameTables.Add(t);
                 }
                 var res = new TablesFromDataSource();
                 res.Success = true;

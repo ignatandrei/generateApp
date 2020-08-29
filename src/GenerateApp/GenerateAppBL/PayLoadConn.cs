@@ -82,6 +82,7 @@ namespace GenerateApp.Controllers
                     }
                     //TODO: put in another part than validate
                     sent.originalType = fieldFromDb.originalType;
+                    sent.IsPK = fieldFromDb.IsPK;
 
                 }
             }

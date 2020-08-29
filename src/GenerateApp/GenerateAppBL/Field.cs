@@ -14,6 +14,7 @@ namespace GenerateApp.Controllers
                 return generateType();
             }
         }
+        public bool IsPK { get; set; }
         private string generateType() =>
             originalType switch
             {
