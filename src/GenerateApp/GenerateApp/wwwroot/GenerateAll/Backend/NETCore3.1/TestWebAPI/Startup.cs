@@ -62,17 +62,19 @@ namespace TestWebAPI
             // add logging
             services.AddCors();
             services.AddControllers();
-            services.AddDbContext<DatabaseContext>(options => options
+            services.AddDbContext<DatabaseContext>(options => 
 
             @switch(dataSource){
                 case "SqlServerInMemory":
                     <text>
+                    options
+                    //.UseSqlServer("")
                             .UseInMemoryDatabase("@(conString)"));
                     </text>
                 break;
                 case "MariaDB":
                     <text>
-                           .UseMySql("@(conString)")); 
+                           options.UseMySql("@(conString)")); 
                     </text>
                 break;
                 default:
