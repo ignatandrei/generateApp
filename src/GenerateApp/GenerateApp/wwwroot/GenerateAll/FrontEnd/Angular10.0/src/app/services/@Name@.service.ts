@@ -8,6 +8,25 @@
   string lowerCaseFirst(string s){
 		return char.ToLower(s[0]) + s.Substring(1);
   }
+  string nameProperty(string original){
+		var name = original.Replace(" ","").Replace("<","").Replace(">","").Replace("(","").Replace(")","").ToLower();
+		if(!IsIdentifier(name))
+			name = "generated_"+name;
+		
+		return name;
+	}
+	//https://docs.microsoft.com/en-us/dotnet/api/microsoft.codeanalysis.csharp.syntaxfacts?view=roslyn-dotnet
+	bool IsIdentifier(string text)
+	{
+     if (string.IsNullOrEmpty(text))
+        return false;
+     if (!char.IsLetter(text[0]) && text[0] != '_')
+        return false;
+     for (int ix = 1; ix < text.Length; ++ix)
+        if (!char.IsLetterOrDigit(text[ix]) && text[ix] != '_')
+           return false;
+     return true;
+	}
   string nameTypeForJS(string colTypeName){
 		string nameType = "";
 		switch(colTypeName.ToLower()){
@@ -29,7 +48,7 @@
     var nameTable =dt.TableName;
     var dtOptions= Model.FindAfterName("@@Options@@").Value;
     var idTable = dtOptions.Rows.Find(dt.TableName +"_PK")[1].ToString();
-    idTable  =lowerCaseFirst(idTable);
+    idTable  =nameProperty(idTable);
     var idType = dtOptions.Rows.Find(dt.TableName +"_PK_Type")[1].ToString();  
     idType = nameTypeForJS(idType);
 	var nameClass= ClassNameFromTableName(nameTable);
@@ -67,7 +86,7 @@ export class @(nameClass)Service {
     return this.client.get<@(nameClass)>(url);
   }
   public Update(data:@(nameClass)):Observable<@(nameClass)>{
-    const url = this.baseUrl+'api/@(nameClass)/Put/'+data.@(idTable);
+    const url = this.baseUrl+'api/@(nameClass)/Put/'+data.@(nameProperty(idTable));
     
     return this.client.put<@(nameClass)>(url,data);
   }

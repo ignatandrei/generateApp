@@ -2,12 +2,14 @@
 @{
 string ClassNameFromTableName(string tableName){
 		return tableName.Replace(" ","").Replace(".","").Replace("(","").Replace(")","");
-	}
+    }
+    
+   
     var dt= Model.FindAfterName("@Name@").Value;
     var dtOptions= Model.FindAfterName("@@Options@@").Value;
     var idTable = dtOptions.Rows.Find(dt.TableName +"_PK")[1].ToString();
     var idType = dtOptions.Rows.Find(dt.TableName +"_PK_Type")[1].ToString();  
-	idTable = lowerCaseFirst(idTable);
+	idTable = nameProperty(idTable);
     var nrCols =dt.Columns.Count;
 	string lowerCaseFirst(string s){
 		return char.ToLower(s[0]) + s.Substring(1);
@@ -93,7 +95,7 @@ export class @(nameClass)
 			
 
             <text>
-            public @lowerCaseFirst(colName) : @nameType;
+            public @nameProperty(colName) : @nameType;
             </text>
 
         }
