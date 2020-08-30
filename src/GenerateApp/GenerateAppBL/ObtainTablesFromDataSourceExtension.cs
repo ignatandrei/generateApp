@@ -1,11 +1,14 @@
 ﻿using Microsoft.AspNetCore.Server.Kestrel;
+using Microsoft.Data.SqlClient;
 using MySqlConnector;
 using Stankins.Excel;
 using Stankins.MariaDB;
+using Stankins.SqlServer;
 using StankinsObjects;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
 using System.Threading.Tasks;
 
 namespace GenerateApp.Controllers
@@ -51,6 +54,61 @@ namespace GenerateApp.Controllers
                 var res = new TablesFromDataSource();
                 res.Success = false;
                 res.error = ex.Message + "!!" + ex.StackTrace;
+                return res;
+            }
+        }
+        public async static Task<TablesFromDataSource> FromMSSQL(this string connection)
+        {
+            try
+            {
+                var recData = new ReceiveMetadataFromDatabaseSql(connection);
+
+                var data = await recData.TransformData(null);
+
+                var tables = data.FindAfterName("tables").Value.Rows;
+                var columns = data.FindAfterName("columns").Value.Rows;
+                var keys = data.FindAfterName("keys").Value;
+                var nameTables = new List<Table>();
+                foreach (DataRow dr in tables)
+                {
+                    var t = new Table();
+                    t.name = dr["name"].ToString();
+                    var id = dr["id"].ToString();
+                    bool HasPK = false;
+                    foreach (DataRow col in columns)
+                    {
+                        if (col["tableId"].ToString() == id)
+                        {
+                            var f = new Field();
+                            f.name = col["name"].ToString();
+                            f.originalType = col["type"].ToString();
+                            foreach (DataRow row in keys.Rows)
+                            {
+                                if (col["id"] + ".PRIMARY" == row["id"].ToString())
+                                {
+                                    f.IsPK = true;
+                                    HasPK = true;
+                                    continue;
+                                }
+                            }
+                            t.fields.Add(f);
+
+                        }
+                    }
+                    if (HasPK)
+                        nameTables.Add(t);
+                }
+                var res = new TablesFromDataSource();
+                res.Success = true;
+                res.input = nameTables.ToArray();
+
+                return res;
+            }
+            catch (Exception ex)
+            {
+                var res = new TablesFromDataSource();
+                res.Success = false;
+                res.error = connection + "!!!" + ex.Message + "!!" + ex.StackTrace;
                 return res;
             }
         }
@@ -114,19 +172,37 @@ namespace GenerateApp.Controllers
         {
             
             var typeToLoad = Enum.Parse<connTypes>(payLoadConn.connType, true);
+            
             switch (typeToLoad)
             {
                 case connTypes.MARIADB:
-                    var b = new MySqlConnectionStringBuilder();
-                    b.Database = payLoadConn.connDatabase;
-                    b.Server = payLoadConn.connHost;
-                    b.UserID = payLoadConn.connUser;
-                    b.Password = payLoadConn.connPassword;
-                    if (int.TryParse(payLoadConn.connPort, out var port))
                     {
-                        b.Port = (uint)port;
+                        var mariaDBConStr = new MySqlConnectionStringBuilder();
+                        mariaDBConStr.Database = payLoadConn.connDatabase;
+                        mariaDBConStr.Server = payLoadConn.connHost;
+                        mariaDBConStr.UserID = payLoadConn.connUser;
+                        mariaDBConStr.Password = payLoadConn.connPassword;
+                        if (int.TryParse(payLoadConn.connPort, out var port))
+                        {
+                            mariaDBConStr.Port = (uint)port;
+                        }
+                        return mariaDBConStr.ConnectionString;
                     }
-                    return b.ConnectionString;
+                case connTypes.MSSQL:
+                    {
+                        var sqlConStr = new SqlConnectionStringBuilder();
+                        sqlConStr.DataSource = payLoadConn.connHost;
+                        if (int.TryParse(payLoadConn.connPort, out var port))
+                        {
+                            sqlConStr.DataSource += ","+(uint)port;
+                        }
+                        sqlConStr.InitialCatalog = payLoadConn.connDatabase;
+                        sqlConStr.UserID = payLoadConn.connUser;
+                        sqlConStr.Password = payLoadConn.connPassword;
+                        
+                        return sqlConStr.ConnectionString;
+                    }
+
                 default:
                     throw new ArgumentException($"no connection for {typeToLoad}");
 
@@ -152,7 +228,16 @@ namespace GenerateApp.Controllers
             try
             {
                     connection = payLoadConn.ConnectionString();
-                    return await connection.FromMariaDB() ;
+                switch (typeToLoad)
+                {
+                    case connTypes.MARIADB:
+                        return await connection.FromMariaDB();
+                    case connTypes.MSSQL:
+                        return await connection.FromMSSQL();
+                    default:
+                        throw new ArgumentException($"not such {typeToLoad} ");
+                }
+                    
                     //case connTypes.XLS:
                     //    var bytes = Convert.FromBase64String(payLoadConn.connFileContent);
                     //    var path = Path.Combine(

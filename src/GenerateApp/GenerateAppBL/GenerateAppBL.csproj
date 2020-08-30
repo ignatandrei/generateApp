@@ -8,6 +8,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.7" />
     <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="3.7.0" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="3.7.0" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="2.0.1" />
     <PackageReference Include="Microsoft.Web.Administration" Version="11.1.0" />
     <PackageReference Include="Octokit" Version="0.48.0" />
     <PackageReference Include="Stankins.Excel" Version="2020.8.24-beta291" />
@@ -17,6 +18,7 @@
     <PackageReference Include="Stankins.Razor" Version="2020.8.24-beta291" />
     <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="3.7.0" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="3.7.0" />
+    <PackageReference Include="Stankins.SqlServer" Version="2020.8.16.282" />
 
 
   </ItemGroup>
