@@ -58,6 +58,7 @@ namespace TestGenerate
                 output.WriteLine(ass.error);
             }
             Assert.True(ass.Success);
+            Assert.True(ass.input?.Length > 0);
 
         }
         [Theory]

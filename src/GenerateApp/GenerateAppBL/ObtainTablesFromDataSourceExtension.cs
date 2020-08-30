@@ -77,24 +77,33 @@ namespace GenerateApp.Controllers
                     bool HasPK = false;
                     foreach (DataRow col in columns)
                     {
-                        if (col["tableId"].ToString() == id)
+                        if (col["tableId"].ToString() != id)
+                            continue;
+
+
+                        var f = new Field();
+                        f.name = col["name"].ToString();
+                        f.originalType = col["type"].ToString();
+                        foreach (DataRow row in keys.Rows)
                         {
-                            var f = new Field();
-                            f.name = col["name"].ToString();
-                            f.originalType = col["type"].ToString();
-                            foreach (DataRow row in keys.Rows)
-                            {
-                                if (col["id"] + ".PRIMARY" == row["id"].ToString())
-                                {
-                                    f.IsPK = true;
-                                    HasPK = true;
-                                    continue;
-                                }
-                            }
-                            t.fields.Add(f);
+                            if (row["type_desc"].ToString() != "PRIMARY_KEY_CONSTRAINT")
+                                continue;
+
+                            if (row["tableId"].ToString() != id.ToString())
+                                continue;
+
+                            if (row["column_id"].ToString() != col["id"].ToString())
+                                continue;
+
+                            f.IsPK = true;
+                            HasPK = true;
+                            continue;
 
                         }
+                        t.fields.Add(f);
+
                     }
+                    
                     if (HasPK)
                         nameTables.Add(t);
                 }

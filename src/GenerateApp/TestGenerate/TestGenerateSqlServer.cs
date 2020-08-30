@@ -57,7 +57,33 @@ namespace TestGenerate
                 output.WriteLine(ass.error);
             }
             Assert.True(ass.Success);
+            Assert.True(ass.input?.Length>0);
 
+        }
+
+         [Theory]
+        [InlineData(@"E:\ignatandrei\generateApp\src\GenerateApp\GenerateApp\wwwroot\GenerateAll")]
+        public async void TestGenerate(string pathGenerate)
+        {
+            var app = gen();
+            int errors = 0;
+            await foreach(var item in app.Validate())
+            {
+                errors++;
+                output.WriteLine(item.ErrorMessage);
+            }
+
+            Assert.Equal(0,errors );
+            var info = app.GenerateInfoData();
+            info.folderGenerator = pathGenerate;
+            info.pathFile = @"E:\test\a.txt";
+            var data = await info.GenerateApp();
+            if (!data)
+            {
+                output.WriteLine(info.logs[info.logs.Count - 2]);
+                output.WriteLine(info.logs[info.logs.Count - 1]);
+            }
+            Assert.True(data);
         }
     }
 }
