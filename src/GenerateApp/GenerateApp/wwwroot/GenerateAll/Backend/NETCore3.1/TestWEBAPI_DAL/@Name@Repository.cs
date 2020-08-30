@@ -3,6 +3,25 @@
 	string ClassNameFromTableName(string tableName){
 		return tableName.Replace(" ","").Replace(".","").Replace("(","").Replace(")","");
 	}
+    string nameProperty(string original){
+		var name = original.Replace(" ","").Replace("<","").Replace(">","").Replace("(","").Replace(")","").ToLower();
+		if(!IsIdentifier(name))
+			name = "generated_"+name;
+		
+		return name;
+	}
+	//https://docs.microsoft.com/en-us/dotnet/api/microsoft.codeanalysis.csharp.syntaxfacts?view=roslyn-dotnet
+	bool IsIdentifier(string text)
+	{
+     if (string.IsNullOrEmpty(text))
+        return false;
+     if (!char.IsLetter(text[0]) && text[0] != '_')
+        return false;
+     for (int ix = 1; ix < text.Length; ++ix)
+        if (!char.IsLetterOrDigit(text[ix]) && text[ix] != '_')
+           return false;
+     return true;
+	}
     var dt= Model.FindAfterName("@Name@").Value;
     var dtOptions= Model.FindAfterName("@@Options@@").Value;
     var idTable = dtOptions.Rows.Find(dt.TableName +"_PK")[1].ToString();
@@ -35,7 +54,7 @@ namespace TestWEBAPI_DAL
         }
         public Task<@(nameClass)> FindAfterId(@(idType) id)
         {
-            var data = databaseContext.@(nameClass).FirstOrDefaultAsync(it => it.@(idTable) == id);
+            var data = databaseContext.@(nameClass).FirstOrDefaultAsync(it => it.@(nameProperty(idTable)) == id);
             return data;
         }
         public Task<@(nameClass)> FindSingle(Func<@(nameClass) ,bool> f)
@@ -59,7 +78,7 @@ namespace TestWEBAPI_DAL
             var original = await FindAfterId(p.@(idTable));
             if(original == null)
             {
-                throw new ArgumentException("cannot found @(nameClass)  with id = {p.@(idTable)} ", nameof(p.@(idTable)));
+                throw new ArgumentException("cannot found @(nameClass)  with id = {p.@(nameProperty(idTable))} ", nameof(p.@(nameProperty(idTable))));
             }
             original.CopyPropertiesFrom(other: p, withID: true);                        
             await databaseContext.SaveChangesAsync();
@@ -67,7 +86,7 @@ namespace TestWEBAPI_DAL
         }
         public async Task<@(nameClass)> Delete(@(nameClass) p)
         {
-            var original = await FindAfterId(p.@(idTable));
+            var original = await FindAfterId(p.@(nameProperty(idTable)));
             databaseContext.@(nameClass).Remove(original);
             await databaseContext.SaveChangesAsync();
             return p;

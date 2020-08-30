@@ -4,7 +4,25 @@
 string ClassNameFromTableName(string tableName){
 		return tableName.Replace(" ","").Replace(".","").Replace("(","").Replace(")","");
 	}
-
+string nameProperty(string original){
+		var name = original.Replace(" ","").Replace("<","").Replace(">","").Replace("(","").Replace(")","").ToLower();
+		if(!IsIdentifier(name))
+			name = "generated_"+name;
+		
+		return name;
+	}
+	//https://docs.microsoft.com/en-us/dotnet/api/microsoft.codeanalysis.csharp.syntaxfacts?view=roslyn-dotnet
+	bool IsIdentifier(string text)
+	{
+     if (string.IsNullOrEmpty(text))
+        return false;
+     if (!char.IsLetter(text[0]) && text[0] != '_')
+        return false;
+     for (int ix = 1; ix < text.Length; ++ix)
+        if (!char.IsLetterOrDigit(text[ix]) && text[ix] != '_')
+           return false;
+     return true;
+	}
     var dt= Model.FindAfterName("@Name@").Value;
 
     var dtOptions= Model.FindAfterName("@@Options@@").Value;
@@ -67,7 +85,7 @@ namespace TestWebAPI.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult<@(nameClass)>> Update(@(idType) id, @(nameClass) record)
         {
-            if (id != record.@(idTable))
+            if (id != record.@(nameProperty(idTable)))
             {
                 return BadRequest();
             }
@@ -94,7 +112,7 @@ namespace TestWebAPI.Controllers
         {
             
             await _repository.Delete( new @(nameClass)(){
-                @(idTable)=id
+                @(nameProperty(idTable))=id
             });
 
 

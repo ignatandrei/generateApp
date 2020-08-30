@@ -55,11 +55,13 @@ namespace TestWebAPI_BL
         }
         public void CopyPropertiesFrom(@(nameClass) other, bool withID){
             if(withID){
-                this.@(idTable)= other.@(idTable);
+                this.@(nameProperty(idTable))= other.@(nameProperty(idTable));
             }
             @for(int iCol = 0;iCol < nrCols; iCol++){
                 var col = dt.Columns[iCol];
                 var colName= nameProperty(col.ColumnName) ;
+                 if(colName == nameProperty(idTable))
+                        continue;
                 
                 <text>
             this.@colName = other.@colName;
@@ -73,7 +75,7 @@ namespace TestWebAPI_BL
         #endregion
         
         #region Properties
-        public @(idType) @(idTable){get;set;}
+        public @(idType) @(nameProperty(idTable)){get;set;}
             
         @for(int iCol = 0;iCol < nrCols; iCol++){
             var col = dt.Columns[iCol];
