@@ -5,6 +5,7 @@
         None = 0,
         Excel=1,
         CSV=2,
-        MariaDB =3
+        MariaDB =3,
+        MSSQL=4
     }
 }

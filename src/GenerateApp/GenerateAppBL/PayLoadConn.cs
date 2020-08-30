@@ -45,7 +45,8 @@ namespace GenerateApp.Controllers
 
 
             }
-            var i = new InfoData(SourceData.MariaDB)
+            var con = Enum.Parse<SourceData>(this.payLoadConn.connType, true);
+            var i = new InfoData(con)
             {
                 logs = new Logs(),
                 name = "custom" + DateTime.UtcNow.ToString("yyyyMMddHHmmss"),

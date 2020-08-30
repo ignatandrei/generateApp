@@ -106,10 +106,11 @@ namespace GenerateApp.Controllers
                     data = await ReadExcel();
                     break;
                 case SourceData.MariaDB:
+                case SourceData.MSSQL:
                     data = ReadCustom();
                     break;
                 default:
-                    throw new ArgumentException($"not supported {nameof(sourceData)} {sourceData} ");
+                    throw new ArgumentException($"not supported1 {nameof(sourceData)} {sourceData} ");
             }
             ;
             var ds = data.FindAfterName("DataSource").Value;
@@ -133,10 +134,11 @@ namespace GenerateApp.Controllers
                         }
                         break;
                     case SourceData.MariaDB:
+                    case SourceData.MSSQL:
                         nameTablesToRender.Add(dt.TableName);
                         break;
                     default:
-                        throw new ArgumentException($"not supported {nameof(sourceData)} {sourceData} ");
+                        throw new ArgumentException($"not supported2 {nameof(sourceData)} {sourceData} ");
                 }
 
             }
@@ -161,12 +163,13 @@ namespace GenerateApp.Controllers
                     }
                     break;
                 case SourceData.MariaDB:
+                case SourceData.MSSQL:
                     {
                         dtOptions = new DataTable("@@Options@@");
                         var dcName = dtOptions.Columns.Add("name", typeof(string));
                         dtOptions.Columns.Add("value", typeof(string));
                         dtOptions.PrimaryKey = new[] { dcName };
-                        dtOptions.Rows.Add("DataSource", "MariaDB");
+                        dtOptions.Rows.Add("DataSource", sourceData.ToString());
                         dtOptions.Rows.Add("DataSourceConnectionString", this.GenerateAppV1.payLoadConn.ConnectionString());
                         
                         // make here the generated id
@@ -182,7 +185,7 @@ namespace GenerateApp.Controllers
                     }
                     break;
                 default:
-                    throw new ArgumentException($"not supported {nameof(sourceData)} {sourceData} ");
+                    throw new ArgumentException($"not supported3 {nameof(sourceData)} {sourceData} ");
 
             }
             
@@ -223,9 +226,10 @@ namespace GenerateApp.Controllers
                                     continue;
                                 break;
                             case SourceData.MariaDB:
+                            case SourceData.MSSQL:
                                 break;
                             default:
-                                throw new ArgumentException($"not supported {nameof(sourceData)} {sourceData} ");
+                                throw new ArgumentException($"not supported4 {nameof(sourceData)} {sourceData} ");
 
                         }
                         string correctNameFile = nameTable.Replace(" ", "").Replace(".", "").Replace("(", "").Replace(")", "");
@@ -252,9 +256,10 @@ namespace GenerateApp.Controllers
                                     continue;
                                 break;
                             case SourceData.MariaDB:
+                            case SourceData.MSSQL:
                                 break;
                             default:
-                                throw new ArgumentException($"not supported {nameof(sourceData)} {sourceData} ");
+                                throw new ArgumentException($"not supported5 {nameof(sourceData)} {sourceData} ");
 
                         }
                         string correctNameFile = nameTable.Replace(" ", "").Replace(".", "").Replace("(", "").Replace(")", "");

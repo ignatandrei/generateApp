@@ -17,14 +17,14 @@ namespace TestGenerate
             var t = new TableGenerator[2];
             t[0] = new TableGenerator();
             t[0].table = new Table();
-            t[0].table.name = "Department";
+            t[0].table.name = "dbo.Department";
             t[0].table.fields = new List<Field>();
             t[0].table.fields.Add(new Field() { name = "IDDepartment" });
             t[0].table.fields.Add(new Field() { name = "Name" });
 
             t[1] = new TableGenerator();
             t[1].table = new Table();
-            t[1].table.name = "Employee";
+            t[1].table.name = "dbo.Employee";
             t[1].table.fields = new List<Field>();
             t[1].table.fields.Add(new Field() { name = "IDEmployee" });
             t[1].table.fields.Add(new Field() { name = "Name" });
