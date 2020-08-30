@@ -79,7 +79,7 @@ namespace TestWebAPI_BL
             var col = dt.Columns[iCol];
             var colName= nameProperty(col.ColumnName) ;
             var colType = col.DataType;
-            if(colName == idTable)
+             if(colName.ToLower() == idTable.ToLower())
                 continue;
             <text>
             public @(colType.Name) @(colName) { get; set; }

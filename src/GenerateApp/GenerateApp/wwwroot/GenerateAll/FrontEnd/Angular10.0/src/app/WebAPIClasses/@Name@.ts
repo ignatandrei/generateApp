@@ -86,7 +86,7 @@ export class @(nameClass)
         @for(int iCol = 0;iCol < nrCols; iCol++){
             var col = dt.Columns[iCol];
             var colName= nameProperty(col.ColumnName) ;
-            if(colName == idTable)
+            if(colName.ToLower() == idTable.ToLower())
                 continue;
             var colType = col.DataType;
 			var nameType = nameTypeForJS(colType.Name);

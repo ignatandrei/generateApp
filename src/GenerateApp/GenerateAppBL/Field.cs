@@ -30,6 +30,7 @@ namespace GenerateApp.Controllers
             originalType?.ToLower() switch
             {
                 null => null,
+                string s when s.Contains("bigint", StringComparison.InvariantCultureIgnoreCase) => typeof(long),
                 string s when s.Contains("int", StringComparison.InvariantCultureIgnoreCase) => typeof(int),
                 string s when s.Contains("varchar", StringComparison.InvariantCultureIgnoreCase) => typeof(string),
                 string s when s.Contains("bool", StringComparison.InvariantCultureIgnoreCase) => typeof(bool),
