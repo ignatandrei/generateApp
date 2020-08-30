@@ -48,7 +48,7 @@ namespace GenerateFromDB.Controllers
                 Console.WriteLine(info.logs[info.logs.Count - 1]);
                 throw new Exception(info.logs[info.logs.Count - 1]);
             }
-            string pathDir =Path.GetDirectoryName (info.folderGenerator);
+            string pathDir =Path.GetDirectoryName (info.pathFile);
             return pathDir;
         }
         [HttpPost]
