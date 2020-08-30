@@ -10,7 +10,7 @@
 	var nameTable =dt.TableName;
 	var dtOptions= Model.FindAfterName("@@Options@@").Value;
 	var idTable = dtOptions.Rows.Find(dt.TableName +"_PK")[1].ToString();
-	idTable = lowerCaseFirst(idTable);
+	idTable = nameProperty(idTable);
 	var nameClass = ClassNameFromTableName(nameTable);
 	var routeName = nameClass.ToLower();
 	var nrCols= dt.Columns.Count;
