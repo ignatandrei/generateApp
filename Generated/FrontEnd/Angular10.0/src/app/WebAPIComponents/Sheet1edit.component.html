@@ -1,0 +1,51 @@
+
+<div *ngIf="dataToEdit == null">Loading data for {{id}} ...</div>
+<div *ngIf="dataToEdit != null">
+	Edit 
+
+
+<table>
+	<thead>
+		<tr>
+			<th>Name</th>
+			<th>Value</th>
+		</tr>
+	</thead>
+	
+
+	<tr>
+	<td>First name</td>
+	<td>
+		<input type="text"  [(ngModel)]="dataToEdit.firstname" />
+	</td>
+	</tr>
+
+	
+	
+	<tr>
+	<td>last name</td>
+	<td>
+		<input type="text"  [(ngModel)]="dataToEdit.lastname" />
+	</td>
+	</tr>
+
+	
+				
+			<tr>
+				<td>&nbsp;</td>
+				<td>
+				  &nbsp;
+				</td>
+			  </tr>
+			
+			  <tr>
+				<td align="left">
+				  <button (click)="save()">Save</button>
+				</td>
+				<td align="left">
+				  <button (click)="cancel()">Back to list of Sheet1</button>
+				</td>
+			  </tr>
+			
+</table>
+</div>

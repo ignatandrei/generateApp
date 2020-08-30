@@ -1,0 +1,78 @@
+@model Stankins.Interfaces.IDataToSent
+@{
+	var angular="@angular";
+	var Injectable = "@Injectable";
+	var dt= Model.FindAfterName("Sheet1").Value;
+	var nameTable =dt.TableName;
+	var nrCols= dt.Columns.Count;
+	string lowerCaseFirst(string s){
+		return char.ToLower(s[0]) + s.Substring(1);
+	}
+	string nameProperty(string original){
+		var name = original.Replace(" ","").Replace("<","").Replace(">","").Replace("(","").Replace(")","").ToLower();
+		if(!IsIdentifier(name))
+			name = "generated_"+name;
+		
+		return name;
+	}
+	bool IsIdentifier(string text)
+	{
+     if (string.IsNullOrEmpty(text))
+        return false;
+     if (!char.IsLetter(text[0]) && text[0] != '_')
+        return false;
+     for (int ix = 1; ix < text.Length; ++ix)
+        if (!char.IsLetterOrDigit(text[ix]) && text[ix] != '_')
+           return false;
+     return true;
+	}
+}
+
+<div *ngIf="dataToEdit == null">Loading data for {{id}} ...</div>
+<div *ngIf="dataToEdit != null">
+	Edit 
+
+
+<table>
+	<thead>
+		<tr>
+			<th>Name</th>
+			<th>Value</th>
+		</tr>
+	</thead>
+	
+		@for(int iCol = 0;iCol < nrCols; iCol++){
+                var col = dt.Columns[iCol];
+                var colName= col.ColumnName ;
+                
+	<text>
+	<tr>
+	<td>@colName</td>
+	<td>
+		<input type="text"  [(ngModel)]="dataToEdit.@(lowerCaseFirst(nameProperty(colName)))" />
+	</td>
+	</tr>
+
+	
+	</text>
+
+			}
+			
+			<tr>
+				<td>&nbsp;</td>
+				<td>
+				  &nbsp;
+				</td>
+			  </tr>
+			
+			  <tr>
+				<td align="left">
+				  <button (click)="save()">Save</button>
+				</td>
+				<td align="left">
+				  <button (click)="cancel()">Back to list of @(nameTable)</button>
+				</td>
+			  </tr>
+			
+</table>
+</div>
