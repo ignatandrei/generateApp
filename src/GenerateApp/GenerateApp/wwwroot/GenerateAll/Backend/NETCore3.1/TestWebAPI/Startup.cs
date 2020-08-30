@@ -66,6 +66,7 @@ namespace TestWebAPI
 
             @switch(dataSource){
                 case "SqlServerInMemory":
+                case "MSSQL":
                     <text>{
                         var conStr = Configuration.GetConnectionString("DefaultConnection");
                         if(string.IsNullOrWhiteSpace(conStr)){
@@ -87,7 +88,7 @@ namespace TestWebAPI
                 break;
                 default:
                     <text>
-                    NO SUCH DATABASE @(dataSource?.ToLower())
+                    NO SUCH DATABASE @(dataSource)
                     </text>
                     break;
             }
