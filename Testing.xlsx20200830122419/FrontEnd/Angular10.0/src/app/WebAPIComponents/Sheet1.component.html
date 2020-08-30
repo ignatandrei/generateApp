@@ -1,0 +1,90 @@
+@model Stankins.Interfaces.IDataToSent
+@{
+	var angular="@angular";
+	var Injectable = "@Injectable";
+	string ClassNameFromTableName(string tableName){
+		return tableName.Replace(" ","").Replace(".","").Replace("(","").Replace(")","");
+	}
+
+	var dt= Model.FindAfterName("Sheet1").Value;
+	var nameTable =dt.TableName;
+	var dtOptions= Model.FindAfterName("@@Options@@").Value;
+	var idTable = dtOptions.Rows.Find(dt.TableName +"_PK")[1].ToString();
+	idTable = lowerCaseFirst(idTable);
+	var nameClass = ClassNameFromTableName(nameTable);
+	var routeName = nameClass.ToLower();
+	var nrCols= dt.Columns.Count;
+	string lowerCaseFirst(string s){
+		return char.ToLower(s[0]) + s.Substring(1);
+	}
+	string nameProperty(string original){
+		var name = original.Replace(" ","").Replace("<","").Replace(">","").Replace("(","").Replace(")","").ToLower();
+		if(!IsIdentifier(name))
+			name = "generated_"+name;
+		
+		return name;
+	}
+	bool IsIdentifier(string text)
+	{
+     if (string.IsNullOrEmpty(text))
+        return false;
+     if (!char.IsLetter(text[0]) && text[0] != '_')
+        return false;
+     for (int ix = 1; ix < text.Length; ++ix)
+        if (!char.IsLetterOrDigit(text[ix]) && text[ix] != '_')
+           return false;
+     return true;
+	}
+}
+
+
+<br />
+<h1>
+List of @(nameTable)
+</h1>
+
+<mat-form-field>
+	<mat-label>Filter</mat-label>
+	<input matInput (keyup)="applyFilter($event)" placeholder="filter text" #input>
+  </mat-form-field>
+  
+  <div class="mat-elevation-z8">
+	<table mat-table [dataSource]="dataSource" matSort>
+
+		@for(int iCol = 0;iCol < nrCols; iCol++){
+			var col = dt.Columns[iCol];
+			var colName= col.ColumnName ;
+			
+			string display="{{row." + lowerCaseFirst(nameProperty(colName))+"}}";
+			<text>
+	
+	  <ng-container matColumnDef="@(lowerCaseFirst(nameProperty(colName)))">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> @(colName) </th>
+		<td mat-cell *matCellDef="let row"> @(display) </td>
+	  </ng-container>
+		  </text>
+		}
+  
+	  <ng-container matColumnDef="operations">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> Operations </th>
+		<td mat-cell *matCellDef="let row" > <a routerLink="/@(routeName)/edit/{{row.@(idTable)}}" >Edit</a>
+		
+			&nbsp;
+			<button (click)="deleteData(row.@(idTable))">Delete</button>
+			
+		</td>
+	  </ng-container>
+  
+	  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+	  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  
+	  <!-- Row shown when there is no matching data. -->
+	  <tr class="mat-row" *matNoDataRow>
+		<td class="mat-cell" colspan="4">No data in @(nameTable) matching the filter "{{input.value}}"</td>
+	  </tr>
+	</table>
+  
+	<mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+  </div>
+
+  <button (click)="add()">Add new @(nameTable)</button>
