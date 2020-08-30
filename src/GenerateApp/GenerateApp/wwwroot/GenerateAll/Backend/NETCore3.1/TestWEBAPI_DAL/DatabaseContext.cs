@@ -83,7 +83,7 @@ namespace TestWEBAPI_DAL
          <text>
             modelBuilder.Entity<@(nameClass)>()
                 .ToTable(@Raw(WithSchema))
-                .HasKey(it=>it.@(idTable));
+                .HasKey(it=>it.@(nameProperty(idTable)));
          </text>
         }            
 

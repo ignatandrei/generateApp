@@ -75,7 +75,7 @@ namespace TestWEBAPI_DAL
         }
         public async Task<@(nameClass)> Update(@(nameClass) p)
         {
-            var original = await FindAfterId(p.@(idTable));
+            var original = await FindAfterId(p.@(nameProperty(idTable)));
             if(original == null)
             {
                 throw new ArgumentException("cannot found @(nameClass)  with id = {p.@(nameProperty(idTable))} ", nameof(p.@(nameProperty(idTable))));
