@@ -150,7 +150,7 @@ namespace GenerateApp.Controllers
                         dtOptions.Columns.Add("value", typeof(string));
                         dtOptions.PrimaryKey = new[] { dcName };
                         dtOptions.Rows.Add("DataSource", "SqlServerInMemory");
-                        dtOptions.Rows.Add("DataSourceConnectionString", "MyDB");
+                        dtOptions.Rows.Add("DataSourceConnectionString", "");
                         dtOptions.Rows.Add("ConnectionString", "excel");
                         for (int iRowDS = nrRowsDS - 1; iRowDS > -1; iRowDS--)
                         {

@@ -66,15 +66,23 @@ namespace TestWebAPI
 
             @switch(dataSource){
                 case "SqlServerInMemory":
-                    <text>
-                    options
-                    //.UseSqlServer("")
-                            .UseInMemoryDatabase("@(conString)"));
+                    <text>{
+                        var conStr = Configuration.GetConnectionString("DefaultConnection");
+                        if(string.IsNullOrWhiteSpace(conStr)){
+                            options.UseInMemoryDatabase("myInMemory");
+                        }
+                        else{
+                            options.UseSqlServer(conStr);
+                        }
+                    
+                    
+                            
+                    });
                     </text>
                 break;
                 case "MariaDB":
                     <text>
-                           options.UseMySql("@(conString)")); 
+                           options.UseMySql(Configuration.GetConnectionString("DefaultConnection"))); 
                     </text>
                 break;
                 default:
