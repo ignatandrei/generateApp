@@ -73,9 +73,16 @@ namespace TestWEBAPI_DAL
 
         @foreach(var nameTable in nameTablesToRender){
 			string nameClass=ClassNameFromTableName(nameTable);
+            var arr = nameTable.Split('.');
+            for(var nr=0;nr<arr.Length;nr++){
+                arr[nr]="\"" + arr[nr] + "\"";
+            }
+            System.Array.Reverse(arr);
+            string  WithSchema =string.Join(",",arr);
             var idTable = dtOptions.Rows.Find(nameTable +"_PK")[1].ToString();
          <text>
             modelBuilder.Entity<@(nameClass)>()
+                .ToTable(@Raw(WithSchema))
                 .HasKey(it=>it.@(idTable));
          </text>
         }            
