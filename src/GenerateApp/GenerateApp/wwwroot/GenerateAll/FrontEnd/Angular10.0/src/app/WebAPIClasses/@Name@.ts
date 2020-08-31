@@ -40,6 +40,7 @@ string ClassNameFromTableName(string tableName){
 					break;
 				case "decimal":
                 case "int32":
+                case "int64":
 					nameType="number";
 					break;
 				default:

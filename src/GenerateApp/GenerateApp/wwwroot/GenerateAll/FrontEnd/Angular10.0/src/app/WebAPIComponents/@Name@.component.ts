@@ -51,6 +51,7 @@
 					break;
 				case "decimal":
         case "int32":
+        case "int64":
 					nameType="number";
 					break;
 				default:
@@ -122,7 +123,7 @@ export class @(nameClass)Component implements OnInit {
     // const ndx = this.rows.findIndex(it=>it.id == idDeleted);
       // this.rows.splice(ndx,1);
       // this.dataSource = new MatTableDataSource(this.rows);
-      const ndx = this.rows.findIndex(it => it.@(idTable) === idDeleted);
+      const ndx = this.rows.findIndex(it => it.@nameProperty(idTable) === idDeleted);
       this.dataSource.data.splice(ndx, 1);
       this.dataSource._updateChangeSubscription();
     })
