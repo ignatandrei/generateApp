@@ -423,7 +423,7 @@ namespace GenerateApp.Controllers
             return this.GenerateAppV1.receiveData;
         }
 
-        static void CreateVDir(string name, string folder)
+        public static void CreateVDir(string name, string folder)
         {
 
             ServerManager manager = new ServerManager();

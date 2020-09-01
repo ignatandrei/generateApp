@@ -62,8 +62,11 @@ namespace GenerateFromDB.Controllers
             ps.Arguments = powershellFile;
             ps.CreateNoWindow = false;
             Process.Start(ps).WaitForExit();
+            string outDir = Path.Combine(Path.GetDirectoryName(powershellFile), "out", "netcore3.1", "win-x64");
+
+            InfoData.CreateVDir(dateNow, outDir);
             // execute powershell
-            return powershellFile;
+            return "http://alex360.go.ro:86/"+ dateNow;
         }
         [HttpPost]
         public TableGenerator[] tableGenerator([FromBody] Table[] tables)
