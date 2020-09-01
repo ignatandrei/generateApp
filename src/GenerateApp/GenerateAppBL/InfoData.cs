@@ -330,59 +330,10 @@ namespace GenerateApp.Controllers
 
                 var save = new SenderOutputToFolder(outputFolder, false, "OutputString");
                 data = await save.TransformData(data);
+                if (!string.IsNullOrWhiteSpace(GitOps.CredentialsToken))
+                    return await CreateFromGit(g, outputFolder);
 
-                if (string.IsNullOrWhiteSpace(GitOps.CredentialsToken))
-                    return true;
-
-                logs.AddLog(this.name,$"creating branch {g}");
-
-                Console.WriteLine($"branch : {g} ");
-                var b = await GitOps.CreateBranch(g);
-
-                logs.AddLog(this.name,$"sending data {g}");
-
-                var final = await GitOps.CommitDir(b, outputFolder);
-                logs.AddLog(this.name,$"waiting {g} -it will take some time");
-
-                var ret = await GitOps.waitForRuns(g);
-                logs.AddLog(this.name,$"success?  {ret}");
-                await Task.Delay(10 * 1000);//some timeout for finding asserts
-                //Console.WriteLine(string.Join(Environment.NewLine, ret));
-                if (!ret)
-                    return false;
-
-
-                var assets = await GitOps.FindAssetsInRelease(g);
-                if (assets.Length != 1)
-                {
-                    logs.AddLog(this.name,$" number of assets {assets.Length}");
-                    return false;
-                }
-
-                var realAssets = assets.First().Assets.ToArray();
-                foreach (var item in realAssets)
-                {
-                    logs.AddLog(this.name,$"Release {item.Name} {item.BrowserDownloadUrl}");
-                    this.Releases.Add(item.Name, item.BrowserDownloadUrl);
-                }
-                logs.AddLog(this.name,$"getting exes ");
-                string output = Path.Combine(outputFolder, "output");
-                var zip = await GitOps.DownloadExe(realAssets, output);
-                logs.AddLog(this.name,$"getting downloaded {Path.GetFileName(zip)}");
-                RealExeLocation = GitOps.UnzipAndFindWin64(zip);
-                logs.AddLog(this.name,$"getting {Path.GetDirectoryName(RealExeLocation)}");
-                //add here to run file 
-                if (!InsideIIS)
-                {
-                    //TODO: run the file
-                }
-                else
-                {
-                    logs.AddLog(this.name,$"creating VDir {name}");
-                    CreateVDir(this.name, RealExeLocation);
-                }
-
-
+                return false;
             }
             catch (Exception ex)
             {
@@ -403,9 +354,65 @@ namespace GenerateApp.Controllers
 
                 }
             }
+           
+
+
+
+        }
+
+        private async Task<bool> CreateFromGit(string nameBranch, string outputFolder)
+        {
+            if (string.IsNullOrWhiteSpace(GitOps.CredentialsToken))
+                return true;
+
+            logs.AddLog(this.name, $"creating branch {nameBranch}");
+
+            Console.WriteLine($"branch : {nameBranch} ");
+            var b = await GitOps.CreateBranch(nameBranch);
+
+            logs.AddLog(this.name, $"sending data {nameBranch}");
+
+            var final = await GitOps.CommitDir(b, outputFolder);
+            logs.AddLog(this.name, $"waiting {nameBranch} -it will take some time");
+
+            var ret = await GitOps.waitForRuns(nameBranch);
+            logs.AddLog(this.name, $"success?  {ret}");
+            await Task.Delay(10 * 1000);//some timeout for finding asserts
+                                        //Console.WriteLine(string.Join(Environment.NewLine, ret));
+            if (!ret)
+                return false;
+
+
+            var assets = await GitOps.FindAssetsInRelease(nameBranch);
+            if (assets.Length != 1)
+            {
+                logs.AddLog(this.name, $" number of assets {assets.Length}");
+                return false;
+            }
+
+            var realAssets = assets.First().Assets.ToArray();
+            foreach (var item in realAssets)
+            {
+                logs.AddLog(this.name, $"Release {item.Name} {item.BrowserDownloadUrl}");
+                this.Releases.Add(item.Name, item.BrowserDownloadUrl);
+            }
+            logs.AddLog(this.name, $"getting exes ");
+            string output = Path.Combine(outputFolder, "output");
+            var zip = await GitOps.DownloadExe(realAssets, output);
+            logs.AddLog(this.name, $"getting downloaded {Path.GetFileName(zip)}");
+            RealExeLocation = GitOps.UnzipAndFindWin64(zip);
+            logs.AddLog(this.name, $"getting {Path.GetDirectoryName(RealExeLocation)}");
+            //add here to run file 
+            if (!InsideIIS)
+            {
+                //TODO: run the file
+            }
+            else
+            {
+                logs.AddLog(this.name, $"creating VDir {name}");
+                CreateVDir(this.name, RealExeLocation);
+            }
             return true;
-
-
 
         }
 
