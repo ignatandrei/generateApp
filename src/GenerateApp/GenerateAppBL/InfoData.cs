@@ -334,7 +334,7 @@ namespace GenerateApp.Controllers
                     return await CreateFromGit(g, outputFolder);
 
 
-                return false;
+                return true;
             }
             catch (Exception ex)
             {
