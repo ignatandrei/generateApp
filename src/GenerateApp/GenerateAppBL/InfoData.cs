@@ -333,6 +333,7 @@ namespace GenerateApp.Controllers
                 if (!string.IsNullOrWhiteSpace(GitOps.CredentialsToken))
                     return await CreateFromGit(g, outputFolder);
 
+
                 return false;
             }
             catch (Exception ex)
