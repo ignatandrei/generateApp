@@ -62,7 +62,7 @@ namespace TestGenerate
 
         }
         [Theory]
-        [InlineData(@"E:\generateApp\src\GenerateApp\GenerateApp\wwwroot\GenerateAll")]
+        [InlineData(@"E:\ignatandrei\generateApp\src\GenerateApp\GenerateApp\wwwroot\GenerateAll")]
         public async void TestGenerate(string pathGenerate)
         {
             var app = gen();
