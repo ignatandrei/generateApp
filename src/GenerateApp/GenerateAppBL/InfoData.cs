@@ -201,7 +201,7 @@ namespace GenerateApp.Controllers
                 logs.AddLog(this.name,"copy generator");
 
                 File.Copy(generator, Path.Combine(outputFolder, "describe.txt"), true);
-                File.Copy(generator, Path.Combine(outputFolder, "dockerWin.ps1"), true);
+                File.Copy(Path.Combine(folderGenerator, "generateWin.ps1"), Path.Combine(outputFolder, "generateWin.ps1"), true);
                 var backendFolder = Path.Combine(folderWithTemplates, "Backend", backendFolderName);
                 var frontendFolder = Path.Combine(folderWithTemplates, "FrontEnd", frontendFolderName);
                 logs.AddLog(this.name,"copy backend");

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -38,7 +39,8 @@ namespace GenerateFromDB.Controllers
             }
             var info = app.GenerateInfoData();
             info.folderGenerator = Path.Combine(environment.WebRootPath, "GenerateAll");
-            info.pathFile = Path.Combine(environment.WebRootPath,DateTime.Now.ToString("yyyyMMddHHmmss"),"conection.txt");
+            string dateNow = DateTime.Now.ToString("yyyyMMddHHmmss");
+            info.pathFile = Path.Combine(environment.WebRootPath,dateNow,"conection.txt");
             var di = Directory.CreateDirectory(Path.GetDirectoryName(info.pathFile));
             System.IO.File.WriteAllText(info.pathFile, app.payLoadConn.ConnectionString());
             var data = await info.GenerateApp();
@@ -50,7 +52,16 @@ namespace GenerateFromDB.Controllers
             }
             
             string pathDir =Path.GetDirectoryName (info.pathFile);
-            var powershellFile = Path.Combine(info.pathFile, "generateWin.ps1"); 
+            var powershellFile = Directory.GetFiles(pathDir, "generateWin.ps1",SearchOption.AllDirectories).FirstOrDefault();
+            if (powershellFile == null)
+                throw new ArgumentException("cannot find powershell docker file");
+
+            var ps = new ProcessStartInfo();
+            ps.FileName = "powershell.exe";
+            ps.WorkingDirectory = Path.GetDirectoryName(powershellFile);
+            ps.Arguments = powershellFile;
+            ps.CreateNoWindow = false;
+            Process.Start(ps).WaitForExit();
             // execute powershell
             return powershellFile;
         }

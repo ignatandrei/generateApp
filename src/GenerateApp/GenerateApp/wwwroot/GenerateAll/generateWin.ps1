@@ -30,7 +30,7 @@
         &"docker" cp ${nameDockerContainer}:/app/out  $currentDir\out\$nameDockerImage
         &"docker" container kill ${nameDockerContainer}
         dir $currentDir\out
-        pause
+        # pause
         # gci $currentDir/out -recurse -name
         Pop-Location
 
