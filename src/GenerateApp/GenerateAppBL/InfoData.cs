@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Server.IIS.Core;
 using Microsoft.Web.Administration;
 using Newtonsoft.Json;
@@ -147,6 +148,7 @@ namespace GenerateApp.Controllers
             {
                 case SourceData.Excel:
                     {
+                        var dtNow = DateTime.Now.ToString("yyyyMMddHHmmss");
                         dtOptions = new DataTable("@@Options@@");
                         var dcName = dtOptions.Columns.Add("name", typeof(string));
                         dtOptions.Columns.Add("value", typeof(string));
@@ -157,7 +159,7 @@ namespace GenerateApp.Controllers
                         for (int iRowDS = nrRowsDS - 1; iRowDS > -1; iRowDS--)
                         {
                             var nameTable = ds.Rows[iRowDS]["TableName"].ToString();
-                            dtOptions.Rows.Add($"{nameTable}_PK", "id");
+                            dtOptions.Rows.Add($"{nameTable}_PK", "id"+dtNow);
                             dtOptions.Rows.Add($"{nameTable}_PK_Type", $"long");
                         }
                     }

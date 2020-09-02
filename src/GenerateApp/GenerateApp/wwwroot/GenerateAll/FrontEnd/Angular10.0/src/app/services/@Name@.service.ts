@@ -36,6 +36,7 @@
 				case "decimal":
         case "int32":
         case "int64":
+        case "long":
 					nameType="number";
 					break;
 				default:
