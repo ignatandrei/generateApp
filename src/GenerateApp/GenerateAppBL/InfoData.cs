@@ -35,6 +35,7 @@ namespace GenerateApp.Controllers
         {
             startedDate = DateTime.UtcNow;
             this.sourceData = sourceData;
+            this.logs = new Logs();
         }
         public bool InProgress()
         {

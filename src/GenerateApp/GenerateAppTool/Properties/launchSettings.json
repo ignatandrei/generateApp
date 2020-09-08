@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "GenerateAppTool": {
+      "commandName": "Project",
+      "commandLineArgs": "-t excel -f:E:\\KPI\\src\\data\\Client.xlsx"
+    }
+  }
+}
