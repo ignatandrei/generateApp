@@ -1,6 +1,8 @@
 @model Stankins.Interfaces.IDataToSent
 @{
-
+  var dtOptions= Model.FindAfterName("@@Options@@").Value;
+  var nameApp = dtOptions.Rows.Find("ApplicationName")[1].ToString();
+  
 string ClassNameFromTableName(string tableName){
 		return tableName.Replace(" ","").Replace(".","").Replace("(","").Replace(")","");
 	}
@@ -52,7 +54,7 @@ string nameClass=ClassNameFromTableName(nameTable);
       >
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
-      <span>My application</span> 
+      <span>@(nameApp)</span> 
     </mat-toolbar>
     <mat-spinner *ngIf="isLoading"></mat-spinner>    
     <router-outlet></router-outlet>

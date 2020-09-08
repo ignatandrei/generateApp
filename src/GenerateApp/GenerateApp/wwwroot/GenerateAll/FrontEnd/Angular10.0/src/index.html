@@ -1,8 +1,14 @@
+@model Stankins.Interfaces.IDataToSent
+@{
+  var dtOptions= Model.FindAfterName("@@Options@@").Value;
+  var nameApp = dtOptions.Rows.Find("ApplicationName")[1].ToString();
+  
+}
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>My application </title>
+  <title>@(nameApp)</title>
   <!-- <base href="/"> -->
   <script>
   var isCordovaApp = !!window.cordova;

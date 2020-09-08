@@ -154,6 +154,7 @@ namespace GenerateApp.Controllers
                         var dcName = dtOptions.Columns.Add("name", typeof(string));
                         dtOptions.Columns.Add("value", typeof(string));
                         dtOptions.PrimaryKey = new[] { dcName };
+                        dtOptions.Rows.Add("ApplicationName",Path.GetFileNameWithoutExtension( pathFile));
                         dtOptions.Rows.Add("DataSource", "SqlServerInMemory");
                         dtOptions.Rows.Add("DataSourceConnectionString", "");
                         dtOptions.Rows.Add("ConnectionString", "excel");
@@ -172,6 +173,7 @@ namespace GenerateApp.Controllers
                         var dcName = dtOptions.Columns.Add("name", typeof(string));
                         dtOptions.Columns.Add("value", typeof(string));
                         dtOptions.PrimaryKey = new[] { dcName };
+                        dtOptions.Rows.Add("ApplicationName", this.GenerateAppV1.payLoadConn.connDatabase );
                         dtOptions.Rows.Add("DataSource", sourceData.ToString());
                         dtOptions.Rows.Add("DataSourceConnectionString", this.GenerateAppV1.payLoadConn.ConnectionString());
                         
