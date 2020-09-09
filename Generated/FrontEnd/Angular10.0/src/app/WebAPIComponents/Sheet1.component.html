@@ -1,0 +1,117 @@
+
+
+<br />
+<h1>
+List of Sheet1
+</h1>
+
+<mat-form-field>
+	<mat-label>Filter</mat-label>
+	<input matInput (keyup)="applyFilter($event)" placeholder="filter text" #input>
+  </mat-form-field>
+  
+  <div class="mat-elevation-z8">
+	<table mat-table [dataSource]="dataSource" matSort>
+
+
+	
+	  <ng-container matColumnDef="noticeno">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> Notice No </th>
+		<td mat-cell *matCellDef="let row"> {{row.noticeno}} </td>
+	  </ng-container>
+		  
+	
+	  <ng-container matColumnDef="contractobject">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> Contract Object </th>
+		<td mat-cell *matCellDef="let row"> {{row.contractobject}} </td>
+	  </ng-container>
+		  
+	
+	  <ng-container matColumnDef="contractingauthority">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> Contracting Authority </th>
+		<td mat-cell *matCellDef="let row"> {{row.contractingauthority}} </td>
+	  </ng-container>
+		  
+	
+	  <ng-container matColumnDef="supplier">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> Supplier </th>
+		<td mat-cell *matCellDef="let row"> {{row.supplier}} </td>
+	  </ng-container>
+		  
+	
+	  <ng-container matColumnDef="contractvalue">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> Contract Value </th>
+		<td mat-cell *matCellDef="let row"> {{row.contractvalue}} </td>
+	  </ng-container>
+		  
+	
+	  <ng-container matColumnDef="currency">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> Currency </th>
+		<td mat-cell *matCellDef="let row"> {{row.currency}} </td>
+	  </ng-container>
+		  
+	
+	  <ng-container matColumnDef="cpvcode">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> Cpv Code </th>
+		<td mat-cell *matCellDef="let row"> {{row.cpvcode}} </td>
+	  </ng-container>
+		  
+	
+	  <ng-container matColumnDef="noticetype">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> Notice Type </th>
+		<td mat-cell *matCellDef="let row"> {{row.noticetype}} </td>
+	  </ng-container>
+		  
+	
+	  <ng-container matColumnDef="procedurestate">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> Procedure State </th>
+		<td mat-cell *matCellDef="let row"> {{row.procedurestate}} </td>
+	  </ng-container>
+		  
+	
+	  <ng-container matColumnDef="awardstate">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> Award State </th>
+		<td mat-cell *matCellDef="let row"> {{row.awardstate}} </td>
+	  </ng-container>
+		  
+	
+	  <ng-container matColumnDef="county">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> County </th>
+		<td mat-cell *matCellDef="let row"> {{row.county}} </td>
+	  </ng-container>
+		  
+	
+	  <ng-container matColumnDef="communityreference">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> Community Reference </th>
+		<td mat-cell *matCellDef="let row"> {{row.communityreference}} </td>
+	  </ng-container>
+		  
+	
+	  <ng-container matColumnDef="publicationdate">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> Publication Date </th>
+		<td mat-cell *matCellDef="let row"> {{row.publicationdate}} </td>
+	  </ng-container>
+		    
+	  <ng-container matColumnDef="operations">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> Operations </th>
+		<td mat-cell *matCellDef="let row" > <a routerLink="/sheet1/edit/{{row.id}}" >Edit</a>
+		
+			&nbsp;
+			<button (click)="deleteData(row.id)">Delete</button>
+			
+		</td>
+	  </ng-container>
+  
+	  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+	  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  
+	  <!-- Row shown when there is no matching data. -->
+	  <tr class="mat-row" *matNoDataRow>
+		<td class="mat-cell" colspan="4">No data in Sheet1 matching the filter "{{input.value}}"</td>
+	  </tr>
+	</table>
+  
+	<mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+  </div>
+
+  <button (click)="add()">Add new Sheet1</button>
