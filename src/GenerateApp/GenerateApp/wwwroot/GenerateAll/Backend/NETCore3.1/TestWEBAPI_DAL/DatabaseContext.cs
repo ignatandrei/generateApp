@@ -108,6 +108,9 @@ namespace TestWEBAPI_DAL
                         var val =dt.Rows[iRow][iCol];
                         if(val == System.DBNull.Value)
                             val=null;
+                        if(val != null)
+                            val = val.ToString().Replace("\"","\"\"");
+
                         switch(column.DataType.Name.ToLower()){
                             case "string":
                                 text+=", "+  nameColumn +" = " + "@\"" + (val??"") + "\"" ;
