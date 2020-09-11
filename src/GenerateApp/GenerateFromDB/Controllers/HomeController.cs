@@ -75,7 +75,7 @@ namespace GenerateFromDB.Controllers
             return new ReturnData()
             {
                 Site = dateNow,
-                ZipGenerated = "generated.zip"
+                ZipGenerated = $"{dateNow}/generated.zip"
             };
          }
         [HttpPost]
