@@ -69,7 +69,7 @@ namespace GenerateFromDB.Controllers
 
             string generated = Path.Combine(Path.GetDirectoryName(powershellFile), "generated");
             string zip = Path.Combine(outDir, "wwwroot", "generated.zip");
-            ZipFile.CreateFromDirectory(generated, Path.Combine(Path.GetDirectoryName(powershellFile), "generated.zip"));
+            ZipFile.CreateFromDirectory(outDir, Path.Combine(Path.GetDirectoryName(powershellFile), "generated.zip"));
 
             // execute powershell
             return new ReturnData()
