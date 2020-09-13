@@ -50,180 +50,180 @@ namespace GenerateApp.Controllers
             var t = typeof(Microsoft.CodeAnalysis.CSharp.Scripting.CSharpScript);
             return t.AssemblyQualifiedName;
         }
-        [HttpPost]
-        public async Task<IActionResult> UploadCSV(string id)
-        {
-            if (string.IsNullOrWhiteSpace(id))
-                return Content("please add some content to the csv");
-            var name = "CSV";
-            var i = new InfoData(SourceData.CSV)
-            {
-                logs = new Logs(),
-                name = name,
-                folderGenerator = Path.Combine(environment.WebRootPath, "GenerateAll"),
-                pathFile = ""
+        //[HttpPost]
+        //public async Task<IActionResult> UploadCSV(string id)
+        //{
+        //    if (string.IsNullOrWhiteSpace(id))
+        //        return Content("please add some content to the csv");
+        //    var name = "CSV";
+        //    var i = new InfoData(SourceData.CSV)
+        //    {
+        //        logs = new Logs(),
+        //        name = name,
+        //        folderGenerator = Path.Combine(environment.WebRootPath, "GenerateAll"),
+        //        pathFile = ""
 
-            };
+        //    };
 
-            do
-            {
-                name = name + DateTime.UtcNow.ToString("yyyyMMddHHmmss");
+        //    do
+        //    {
+        //        name = name + DateTime.UtcNow.ToString("yyyyMMddHHmmss");
 
-            } while (!data.TryAdd(name, i));
-            i.name = name;
-            var path = Path.Combine(environment.WebRootPath,name+".csv");
-            i.pathFile = path;
+        //    } while (!data.TryAdd(name, i));
+        //    i.name = name;
+        //    var path = Path.Combine(environment.WebRootPath,name+".csv");
+        //    i.pathFile = path;
 
-            await System.IO.File.WriteAllTextAsync(name + ".csv", id);
-            var t = new Task(async i =>
-            {
-                var info = i as InfoData;
-                info.result = await GenerateApp(i as InfoData);
-            }
-            , i);
+        //    await System.IO.File.WriteAllTextAsync(name + ".csv", id);
+        //    var t = new Task(async i =>
+        //    {
+        //        var info = i as InfoData;
+        //        info.result = await GenerateApp(i as InfoData);
+        //    }
+        //    , i);
 
-            return RedirectToAction("Info", new { id = name });
+        //    return RedirectToAction("Info", new { id = name });
 
-        }
-        [HttpPost]
-        public async Task<TablesFromDataSource> MariaDBConnectionToObtainFields(string connection)
-        {
-            return await connection.FromMariaDB();
-        }
+        //}
+        //[HttpPost]
+        //public async Task<TablesFromDataSource> MariaDBConnectionToObtainFields(string connection)
+        //{
+        //    return await connection.FromMariaDB();
+        //}
         //to be deleted
 
-        [HttpGet]
-        public GenerateAppV1 GenerateApp()
-        {
-            var v = new GenerateAppV1();
-            v.payLoadConn = new PayLoadConn();
+        //[HttpGet]
+        //public GenerateAppV1 GenerateApp()
+        //{
+        //    var v = new GenerateAppV1();
+        //    v.payLoadConn = new PayLoadConn();
             
-            v.input = new TableGenerator[1];
-            v.input[0] = new TableGenerator()
-            {
-                crudEndpoints =new CrudEndpoints(),
-                table=  new Table()
-                {
-                    fields = new List<Field>()
-                    {
-                        new Field()
-                        {
-                             name="testField",
-                             originalType= "nvarchar(30)"
-                        }
-                    },
+        //    v.input = new TableGenerator[1];
+        //    v.input[0] = new TableGenerator()
+        //    {
+        //        crudEndpoints =new CrudEndpoints(),
+        //        table=  new Table()
+        //        {
+        //            fields = new List<Field>()
+        //            {
+        //                new Field()
+        //                {
+        //                     name="testField",
+        //                     originalType= "nvarchar(30)"
+        //                }
+        //            },
 
-                    name = "testTable"
-                }
+        //            name = "testTable"
+        //        }
 
-            };
-            return v;
-        }
-        //alex
-        [HttpPost]
-        public GenerateAppV1 GenerateApp([FromBody] GenerateAppV1 app)
-        {
-            return app;
-        }
-            //alex
-            [HttpPost]
-        public async Task<TablesFromDataSource> FindTables([FromBody] PayLoadConn payLoadConn)
-        {
-            return await payLoadConn.FromPayloadConn();
+        //    };
+        //    return v;
+        //}
+        ////alex
+        //[HttpPost]
+        //public GenerateAppV1 GenerateApp([FromBody] GenerateAppV1 app)
+        //{
+        //    return app;
+        //}
+        //    //alex
+        //    [HttpPost]
+        //public async Task<TablesFromDataSource> FindTables([FromBody] PayLoadConn payLoadConn)
+        //{
+        //    return await payLoadConn.FromPayloadConn();
 
-        }
+        //}
        
-        public async Task<TablesFromDataSource> UploadExcelToObtainFields(IFormFile file)
-        {
-            try
-            {
-                string name = Path.GetFileNameWithoutExtension(file.FileName);
-                var path = Path.Combine(
-                          environment.WebRootPath,
-                          Path.GetFileName(file.FileName));
-                if (System.IO.File.Exists(path))
-                    System.IO.File.Delete(path);
+        //public async Task<TablesFromDataSource> UploadExcelToObtainFields(IFormFile file)
+        //{
+        //    try
+        //    {
+        //        string name = Path.GetFileNameWithoutExtension(file.FileName);
+        //        var path = Path.Combine(
+        //                  environment.WebRootPath,
+        //                  Path.GetFileName(file.FileName));
+        //        if (System.IO.File.Exists(path))
+        //            System.IO.File.Delete(path);
 
-                using (var stream = new FileStream(path, FileMode.Create))
-                {
-                    await file.CopyToAsync(stream);
-                }
-                return await path.FromExcel();
+        //        using (var stream = new FileStream(path, FileMode.Create))
+        //        {
+        //            await file.CopyToAsync(stream);
+        //        }
+        //        return await path.FromExcel();
 
-            }
-            catch (Exception ex)
-            {
-                var res = new TablesFromDataSource();
-                res.Success = false;
-                res.error = ex.Message + "!!" + ex.StackTrace;
-                return res;
-            }
-        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        var res = new TablesFromDataSource();
+        //        res.Success = false;
+        //        res.error = ex.Message + "!!" + ex.StackTrace;
+        //        return res;
+        //    }
+        //}
 
-        public IActionResult TestExcel()
-        {
-            return View();
-        }
-        [HttpPost]
-        public async Task<IActionResult> UploadFileCSV([FromForm]string myCSV)
-        {
-            string nameFile ="csv"+ DateTime.UtcNow.ToString("yyyyMMddHHmmss") + ".csv";
-            nameFile = Path.Combine(
-                      environment.WebRootPath,
-                      nameFile);
-            await System.IO.File.WriteAllTextAsync(nameFile, myCSV);
-            var recCSV = new ReceiverCSVFile(nameFile);
-            var data = await recCSV.TransformData(null);
-            var table = data.DataToBeSentFurther.First().Value;
-            nameFile = nameFile.Replace(".csv", ".xlsx");
-            var res= await WriteExcelFromDataTable(table, nameFile);
-            if (res)
-            {
-                var name = GenerateExcelFromPathFile(nameFile);
-                return RedirectToAction("Info", new { id = name });
-            }
-            else
-            {
-                return Content($"error happened. Please send email to ignatandrei@yahoo.com with {Path.GetFileNameWithoutExtension(nameFile)} ");
-            }
+        //public IActionResult TestExcel()
+        //{
+        //    return View();
+        //}
+        //[HttpPost]
+        //public async Task<IActionResult> UploadFileCSV([FromForm]string myCSV)
+        //{
+        //    string nameFile ="csv"+ DateTime.UtcNow.ToString("yyyyMMddHHmmss") + ".csv";
+        //    nameFile = Path.Combine(
+        //              environment.WebRootPath,
+        //              nameFile);
+        //    await System.IO.File.WriteAllTextAsync(nameFile, myCSV);
+        //    var recCSV = new ReceiverCSVFile(nameFile);
+        //    var data = await recCSV.TransformData(null);
+        //    var table = data.DataToBeSentFurther.First().Value;
+        //    nameFile = nameFile.Replace(".csv", ".xlsx");
+        //    var res= await WriteExcelFromDataTable(table, nameFile);
+        //    if (res)
+        //    {
+        //        var name = GenerateExcelFromPathFile(nameFile);
+        //        return RedirectToAction("Info", new { id = name });
+        //    }
+        //    else
+        //    {
+        //        return Content($"error happened. Please send email to ignatandrei@yahoo.com with {Path.GetFileNameWithoutExtension(nameFile)} ");
+        //    }
             
-        }
-        private async Task<bool> WriteExcelFromDataTable(DataTable dt,string excelFileName)
-        {
+        //}
+        //private async Task<bool> WriteExcelFromDataTable(DataTable dt,string excelFileName)
+        //{
             
-            IWorkbook workbook = new XSSFWorkbook();
-            ISheet worksheet = workbook.CreateSheet(Path.GetFileNameWithoutExtension(excelFileName));
-            var nrCols = dt.Columns.Count;
-            var nrRows = dt.Rows.Count;
-            var row = worksheet.CreateRow(0);
-            for (int i = 0; i < nrCols; i++)
-            {
+        //    IWorkbook workbook = new XSSFWorkbook();
+        //    ISheet worksheet = workbook.CreateSheet(Path.GetFileNameWithoutExtension(excelFileName));
+        //    var nrCols = dt.Columns.Count;
+        //    var nrRows = dt.Rows.Count;
+        //    var row = worksheet.CreateRow(0);
+        //    for (int i = 0; i < nrCols; i++)
+        //    {
 
-                row.CreateCell(i).SetCellValue(dt.Columns[i].ColumnName);
-            }
+        //        row.CreateCell(i).SetCellValue(dt.Columns[i].ColumnName);
+        //    }
 
-            for (int iRow = 0; iRow < nrRows; iRow++)
-            {
-                DataRow dRow = dt.Rows[iRow];
-                row = worksheet.CreateRow(iRow+1);
+        //    for (int iRow = 0; iRow < nrRows; iRow++)
+        //    {
+        //        DataRow dRow = dt.Rows[iRow];
+        //        row = worksheet.CreateRow(iRow+1);
 
-                for (int i = 0; i < nrCols; i++)
-                {
+        //        for (int i = 0; i < nrCols; i++)
+        //        {
 
-                    row.CreateCell(i).SetCellValue((dRow[i]?.ToString()??""));
-                }
-            }
+        //            row.CreateCell(i).SetCellValue((dRow[i]?.ToString()??""));
+        //        }
+        //    }
 
-            using (FileStream fileWriter = System.IO.File.Create(excelFileName))
-            {
-                workbook.Write(fileWriter);
-                fileWriter.Close();
-            }
-            //workbook.Close();
-            worksheet = null;
-            workbook = null;
-            return true;
-        }
+        //    using (FileStream fileWriter = System.IO.File.Create(excelFileName))
+        //    {
+        //        workbook.Write(fileWriter);
+        //        fileWriter.Close();
+        //    }
+        //    //workbook.Close();
+        //    worksheet = null;
+        //    workbook = null;
+        //    return true;
+        //}
 
         public string GenerateExcelFromPathFile(string path)
         {
