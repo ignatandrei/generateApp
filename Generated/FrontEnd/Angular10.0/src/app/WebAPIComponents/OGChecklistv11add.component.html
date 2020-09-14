@@ -1,0 +1,101 @@
+
+Add  new OG Checklist v1.1
+
+<table>
+	<thead>
+		<tr>
+			<th>Name</th>
+			<th>Value</th>
+		</tr>
+	</thead>
+	
+
+	<tr>
+	<td>Ref</td>
+	<td>
+		<input type="text"  [(ngModel)]="dataToAdd.ref" />
+	</td>
+	</tr>
+
+	
+	
+	<tr>
+	<td>Checklist Question</td>
+	<td>
+		<input type="text"  [(ngModel)]="dataToAdd.checklistquestion" />
+	</td>
+	</tr>
+
+	
+	
+	<tr>
+	<td>FCA Notes</td>
+	<td>
+		<input type="text"  [(ngModel)]="dataToAdd.fcanotes" />
+	</td>
+	</tr>
+
+	
+	
+	<tr>
+	<td>OBIE Notes</td>
+	<td>
+		<input type="text"  [(ngModel)]="dataToAdd.obienotes" />
+	</td>
+	</tr>
+
+	
+	
+	<tr>
+	<td>OBIE</td>
+	<td>
+		<input type="text"  [(ngModel)]="dataToAdd.obie" />
+	</td>
+	</tr>
+
+	
+	
+	<tr>
+	<td>PSD2</td>
+	<td>
+		<input type="text"  [(ngModel)]="dataToAdd.psd2" />
+	</td>
+	</tr>
+
+	
+	
+	<tr>
+	<td>CMA Order</td>
+	<td>
+		<input type="text"  [(ngModel)]="dataToAdd.cmaorder" />
+	</td>
+	</tr>
+
+	
+	
+	<tr>
+	<td>Reg. reference(s)</td>
+	<td>
+		<input type="text"  [(ngModel)]="dataToAdd.generated_reg.references" />
+	</td>
+	</tr>
+
+	
+				
+			<tr>
+				<td>&nbsp;</td>
+				<td>
+				  &nbsp;
+				</td>
+			  </tr>
+			
+			  <tr>
+				<td align="left">
+				  <button (click)="add()">Add</button>
+				</td>
+				<td align="left">
+				  <button (click)="cancel()">Back to list of OG Checklist v1.1</button>
+				</td>
+			  </tr>
+			
+</table>

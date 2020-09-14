@@ -1,0 +1,91 @@
+
+
+<br />
+<h1>
+List of OG Checklist v1.1
+</h1>
+
+<mat-form-field>
+	<mat-label>Filter</mat-label>
+	<input matInput (keyup)="applyFilter($event)" placeholder="filter text" #input>
+  </mat-form-field>
+  
+  <div class="mat-elevation-z8">
+	<table mat-table [dataSource]="dataSource" matSort>
+		<ng-container matColumnDef="rowIndex">
+			<th mat-header-cell *matHeaderCellDef> Index </th>
+			<td mat-cell *matCellDef="let row;index as i;"> {{ i+1   + (paginator.pageIndex * paginator.pageSize) }} </td>
+		</ng-container>
+	
+
+
+	  <ng-container matColumnDef="ref">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> Ref </th>
+		<td mat-cell *matCellDef="let row"> {{row.ref}} </td>
+	  </ng-container>
+		  
+
+	  <ng-container matColumnDef="checklistquestion">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> Checklist Question </th>
+		<td mat-cell *matCellDef="let row"> {{row.checklistquestion}} </td>
+	  </ng-container>
+		  
+
+	  <ng-container matColumnDef="fcanotes">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> FCA Notes </th>
+		<td mat-cell *matCellDef="let row"> {{row.fcanotes}} </td>
+	  </ng-container>
+		  
+
+	  <ng-container matColumnDef="obienotes">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> OBIE Notes </th>
+		<td mat-cell *matCellDef="let row"> {{row.obienotes}} </td>
+	  </ng-container>
+		  
+
+	  <ng-container matColumnDef="obie">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> OBIE </th>
+		<td mat-cell *matCellDef="let row"> {{row.obie}} </td>
+	  </ng-container>
+		  
+
+	  <ng-container matColumnDef="psd2">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> PSD2 </th>
+		<td mat-cell *matCellDef="let row"> {{row.psd2}} </td>
+	  </ng-container>
+		  
+
+	  <ng-container matColumnDef="cmaorder">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> CMA Order </th>
+		<td mat-cell *matCellDef="let row"> {{row.cmaorder}} </td>
+	  </ng-container>
+		  
+
+	  <ng-container matColumnDef="generated_reg.references">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> Reg. reference(s) </th>
+		<td mat-cell *matCellDef="let row"> {{row.generated_reg.references}} </td>
+	  </ng-container>
+		    
+	  <ng-container matColumnDef="operations">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header> Operations </th>
+		<td mat-cell *matCellDef="let row" > <a routerLink="/ogchecklistv11/edit/{{row.id20200914033604}}" >Edit</a>
+		
+			&nbsp;
+			<button (click)="deleteData(row.id20200914033604)">Delete</button>
+			
+		</td>
+	  </ng-container>
+  
+	  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+	  <tr mat-row *matRowDef="let row;let index = renderIndex; columns: displayedColumns;"></tr>
+  
+	  <!-- Row shown when there is no matching data. -->
+	  <tr class="mat-row" *matNoDataRow>
+		<td class="mat-cell" colspan="4">No data in OG Checklist v1.1 matching the filter "{{input.value}}"</td>
+	  </tr>
+	</table>
+  
+	<mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+  </div>
+
+  <button (click)="add()">Add new OG Checklist v1.1</button>
