@@ -13,7 +13,7 @@
     var idType = dtOptions.Rows.Find(dt.TableName +"_PK_Type")[1].ToString();  
 	var nrCols =dt.Columns.Count;
 	string nameProperty(string original){
-		var name = original.Replace(" ","").Replace("<","").Replace(">","").Replace("(","").Replace(")","").ToLower();
+		var name = original.Replace(" ","").Replace("<","").Replace("/","").Replace(">","").Replace("(","").Replace(")","").ToLower();
 		if(!IsIdentifier(name))
 			name = "generated_"+name;
 		

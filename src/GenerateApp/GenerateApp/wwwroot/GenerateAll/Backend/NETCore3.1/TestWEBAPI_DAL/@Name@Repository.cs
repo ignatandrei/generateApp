@@ -4,7 +4,7 @@
 		return tableName.Replace(" ","").Replace(".","").Replace("(","").Replace(")","");
 	}
     string nameProperty(string original){
-		var name = original.Replace(" ","").Replace("<","").Replace(">","").Replace("(","").Replace(")","").ToLower();
+		var name = original.Replace(" ","").Replace("<","").Replace("/","").Replace(">","").Replace("(","").Replace(")","").ToLower();
 		if(!IsIdentifier(name))
 			name = "generated_"+name;
 		
