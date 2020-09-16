@@ -144,6 +144,7 @@ namespace TestWebAPI
         }
              
                 endpoints.MapControllers();
+                endpoints.MapFallbackToFile("{**slug}", "/index.html");
             });
             CreateDatabase(app);
             

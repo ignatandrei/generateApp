@@ -22,6 +22,7 @@
     }
 
 }
+import { UrlSerializer } from '@angular/router';
 
 import { BrowserModule } from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
@@ -79,6 +80,7 @@ import { APP_BASE_HREF, PlatformLocation } from '@angular/common';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { FormsModule } from '@angular/forms';
 import { httpInterceptorProviders } from './interceptors/barrelInterceptors';
+import { LowerCaseUrlSerializer } from './routeHelper/lowercase';
 
 @foreach(var nameTable in nameTablesToRender){
 	string nameClass=ClassNameFromTableName(nameTable);
@@ -165,7 +167,11 @@ import { @(nameClass)EditComponent } from './WebAPIComponents/@(nameClass)edit.c
     useFactory: (s: PlatformLocation) => s.getBaseHrefFromDOM(),
     deps: [PlatformLocation]
   },
-  ...httpInterceptorProviders
+  ...httpInterceptorProviders,
+  {
+    provide: UrlSerializer,
+    useClass: LowerCaseUrlSerializer
+  } 
   ],
   bootstrap: [AppComponent]
 })
