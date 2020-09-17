@@ -1,3 +1,6 @@
+@{
+	var angular="@angular";
+}
 import { DefaultUrlSerializer, UrlTree } from '@angular/router';
 /*
 use with
