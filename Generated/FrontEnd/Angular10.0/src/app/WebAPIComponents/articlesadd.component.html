@@ -1,0 +1,74 @@
+
+Add  new articles
+
+<table>
+	<thead>
+		<tr>
+			<th>Name</th>
+			<th>Value</th>
+		</tr>
+	</thead>
+	
+
+	<tr>
+	<td>id</td>
+	<td>
+		<input type="text"  [(ngModel)]="dataToAdd.id" />
+	</td>
+	</tr>
+
+	
+	
+	<tr>
+	<td>title</td>
+	<td>
+		<input type="text"  [(ngModel)]="dataToAdd.title" />
+	</td>
+	</tr>
+
+	
+	
+	<tr>
+	<td>description</td>
+	<td>
+		<input type="text"  [(ngModel)]="dataToAdd.description" />
+	</td>
+	</tr>
+
+	
+	
+	<tr>
+	<td>created_at</td>
+	<td>
+		<input type="text"  [(ngModel)]="dataToAdd.created_at" />
+	</td>
+	</tr>
+
+	
+	
+	<tr>
+	<td>updated_at</td>
+	<td>
+		<input type="text"  [(ngModel)]="dataToAdd.updated_at" />
+	</td>
+	</tr>
+
+	
+				
+			<tr>
+				<td>&nbsp;</td>
+				<td>
+				  &nbsp;
+				</td>
+			  </tr>
+			
+			  <tr>
+				<td align="left">
+				  <button (click)="add()">Add</button>
+				</td>
+				<td align="left">
+				  <button (click)="cancel()">Back to list of articles</button>
+				</td>
+			  </tr>
+			
+</table>
