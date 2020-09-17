@@ -15,11 +15,22 @@ namespace GenerateAppTool
             app.HelpOption("-h|--help");
             var optionType = app.Option("-t|--type <importdata>", "import data type - now excel", CommandOptionType.SingleValue);
             var optionFileName = app.Option("-f|--file <filename>", "import data file name", CommandOptionType.SingleOrNoValue);
+            var optionConnectionString = app.Option("-cn|--connectionstring <connectionstring>", "connection string", CommandOptionType.SingleOrNoValue);
+            
             app.OnExecuteAsync(async cancellationToken =>  
             {
                 switch (optionType.Value()?.ToLower())
                 {
                     case null:
+                        return;
+                    case "sqlserver":
+                        Console.WriteLine("start sql server");
+                        if (!optionConnectionString.HasValue())
+                        {
+                            Console.WriteLine("please add connection string");
+                        }
+                        string cn = optionConnectionString.Value();
+                        Console.WriteLine($"start import {cn}");
                         return;
                     case "excel":
                         Console.WriteLine("start excel");
