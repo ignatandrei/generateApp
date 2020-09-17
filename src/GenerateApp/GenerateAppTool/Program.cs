@@ -12,41 +12,56 @@ namespace GenerateAppTool
         {
             
             var app = new CommandLineApplication();
-            app.HelpOption("-h|--help");
-            var optionType = app.Option("-t|--type <importdata>", "import data type - now excel", CommandOptionType.SingleValue);
-            var optionFileName = app.Option("-f|--file <filename>", "import data file name", CommandOptionType.SingleOrNoValue);
-            var optionConnectionString = app.Option("-cn|--connectionstring <connectionstring>", "connection string", CommandOptionType.SingleOrNoValue);
-            
-            app.OnExecuteAsync(async cancellationToken =>  
+            app.HelpOption("-h|--help", inherited:true);
+
+            app.Command("excel", async cmd =>
             {
-                switch (optionType.Value()?.ToLower())
+                var optionFileName = cmd.Option("-f|--file <filename>", "import data file name", CommandOptionType.SingleOrNoValue);
+                cmd.OnExecute( () => 
                 {
-                    case null:
-                        return;
-                    case "sqlserver":
-                        Console.WriteLine("start sql server");
-                        if (!optionConnectionString.HasValue())
-                        {
-                            Console.WriteLine("please add connection string");
-                        }
-                        string cn = optionConnectionString.Value();
-                        Console.WriteLine($"start import {cn}");
-                        return;
-                    case "excel":
-                        Console.WriteLine("start excel");
-                        if (!optionFileName.HasValue())
-                        {
-                            Console.WriteLine("please add file name");
-                        }
-                        string fileName = optionFileName.Value();
-                        Console.WriteLine($"start import {fileName}");
-                        await ImportExcel(fileName);
-                        break;
-                    default:
-                        throw new ArgumentException($"not found {optionType.Value()}");
-                }
+                    if (!optionFileName.HasValue())
+                    {
+                        Console.WriteLine("please add file path");
+                        cmd.ShowHelp();
+                        return 1;
+                    }
+                    string fileName = optionFileName.Value();
+                    Console.WriteLine($"start import {fileName}");
+                    //await ImportExcel(fileName);
+                    return 0;
+                });
+
+
             });
 
+            app.Command("sqlserver", async cmd =>
+             {
+                 var optionConnectionString = cmd.Option<string>("-cn|--connectionstring <connectionstring>", "connection string", CommandOptionType.SingleValue);
+
+                 cmd.OnExecute(() =>
+                 {
+
+
+                     Console.WriteLine("start sql server");
+                     if (!optionConnectionString.HasValue())
+                     {
+                         Console.WriteLine("Specify a subcommand");
+                         cmd.ShowHelp();
+                         return 1;
+                     }
+                     string cn = optionConnectionString.Value();
+                     Console.WriteLine($"start import {cn}");
+                     return 0;
+                 });
+
+
+             });
+            app.OnExecute(() =>
+            {
+                Console.WriteLine("Specify a subcommand");
+                app.ShowHelp();
+                return 1;
+            });
             return app.Execute(args);
         }
 
