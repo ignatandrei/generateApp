@@ -47,12 +47,24 @@
 		string nameType = "";
 		switch(colTypeName.ToLower()){
 				case "string":
+                case "guid":
 					nameType="string";
-					break;
-				case "decimal":
-        case "int32":
-        case "int64":
-        case "long":
+                    break;
+                case "boolean":
+                    nameType= "boolean";
+                    break;
+                case "byte[]"://https://developer.mozilla.org/en-US/docs/Web/JavaScript/Typed_arrays
+                    nameType="Uint8Array";
+                    break;
+                case "datetime":
+                    nameType = "Date";
+                    break;
+                case "single":
+                case "double":
+			        	case "decimal":
+                case "int32":
+                case "int64":
+                case "long":
 					nameType="number";
 					break;
 				default:
@@ -61,6 +73,7 @@
 			}
 		return nameType;
 	}
+
 
 }
 import {Component, OnInit, ViewChild} from '@angular/core';
