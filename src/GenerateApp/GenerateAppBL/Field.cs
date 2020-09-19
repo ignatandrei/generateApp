@@ -7,7 +7,10 @@ namespace GenerateApp.Controllers
 {
     public class Field:IValidatableObject
     {
-
+        public Field()
+        {
+            IsNullable = false;
+        }
         public string name { get; set; }
         public string type
         {
@@ -28,7 +31,18 @@ namespace GenerateApp.Controllers
 
                 _ => $"not found {originalType}"
             };
-        public Type DotNetType() =>
+        public Type DotNetType()
+        {
+            var t = DotNetTypeOriginal();
+            if (!IsNullable)
+                return t;
+            if (t.FullName == typeof(string).FullName)
+                return t;
+            if (!t.IsValueType)
+                return t;
+            return typeof(Nullable<>).MakeGenericType(t);
+        }
+        private Type DotNetTypeOriginal() =>
             originalType?.ToLower() switch
             {
                 null => null,

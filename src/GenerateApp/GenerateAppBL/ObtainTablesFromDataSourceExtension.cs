@@ -84,6 +84,7 @@ namespace GenerateApp.Controllers
                         var f = new Field();
                         f.name = col["name"].ToString();
                         f.originalType = col["type"].ToString();
+                        f.IsNullable = (col["is_nullable"].ToString() == "1");
                         foreach (DataRow row in keys.Rows)
                         {
                             if (row["type_desc"].ToString() != "PRIMARY_KEY_CONSTRAINT")
@@ -147,7 +148,8 @@ namespace GenerateApp.Controllers
                             var f = new Field();
                             f.name = col["name"].ToString();
                             f.originalType = col["type"].ToString();
-                            foreach(DataRow row in keys.Rows)
+                            f.IsNullable = (col["is_nullable"].ToString() == "1");
+                            foreach (DataRow row in keys.Rows)
                             {
                                 if(col["id"] + ".PRIMARY" == row["id"].ToString())
                                 {
