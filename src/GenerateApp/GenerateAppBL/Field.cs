@@ -7,6 +7,7 @@ namespace GenerateApp.Controllers
 {
     public class Field:IValidatableObject
     {
+
         public string name { get; set; }
         public string type
         {
@@ -69,6 +70,6 @@ namespace GenerateApp.Controllers
         }
 
         public string originalType;
-
+        public bool IsNullable;
     }
 }
