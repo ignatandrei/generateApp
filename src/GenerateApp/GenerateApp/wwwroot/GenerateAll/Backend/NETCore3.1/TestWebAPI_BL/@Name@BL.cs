@@ -79,12 +79,15 @@ namespace TestWebAPI_BL
             
         @for(int iCol = 0;iCol < nrCols; iCol++){
             var col = dt.Columns[iCol];
+            bool nullable=(col.AllowDBNull);
             var colName= nameProperty(col.ColumnName) ;
             var colType = col.DataType;
+            if(colType.FullName == typeof(string).FullName)
+                nullable=false;
              if(colName.ToLower() == idTable.ToLower())
                 continue;
             <text>
-            public @(colType.Name) @(colName) { get; set; }
+            public @(colType.Name)@(nullable?"?":"") @(colName) { get; set; }
             </text>
 
         }

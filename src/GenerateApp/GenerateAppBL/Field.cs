@@ -31,18 +31,18 @@ namespace GenerateApp.Controllers
 
                 _ => $"not found {originalType}"
             };
-        public Type DotNetType()
-        {
-            var t = DotNetTypeOriginal();
-            if (!IsNullable)
-                return t;
-            if (t.FullName == typeof(string).FullName)
-                return t;
-            if (!t.IsValueType)
-                return t;
-            return typeof(Nullable<>).MakeGenericType(t);
-        }
-        private Type DotNetTypeOriginal() =>
+        //public Type DotNetType()
+        //{
+        //    var t = DotNetTypeOriginal();
+        //    if (!IsNullable)
+        //        return t;
+        //    if (t.FullName == typeof(string).FullName)
+        //        return t;
+        //    if (!t.IsValueType)
+        //        return t;
+        //    return typeof(Nullable<>).MakeGenericType(t);
+        //}
+        public Type DotNetType() =>
             originalType?.ToLower() switch
             {
                 null => null,

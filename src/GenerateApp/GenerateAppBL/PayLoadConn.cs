@@ -35,7 +35,9 @@ namespace GenerateApp.Controllers
                     //make the real field type
                    var dc= dtSheet.Columns.Add(field.name, field.DotNetType());
                     if (field.IsPK)
-                        dcPK.Add(dc);    
+                        dcPK.Add(dc);
+                    if (field.IsNullable)
+                        dc.AllowDBNull = true;
                 }
                 if(dcPK.Count>0)
                     dtSheet.PrimaryKey = dcPK.ToArray();
