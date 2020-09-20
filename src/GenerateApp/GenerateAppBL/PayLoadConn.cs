@@ -36,8 +36,11 @@ namespace GenerateApp.Controllers
                    var dc= dtSheet.Columns.Add(field.name, field.DotNetType());
                     if (field.IsPK)
                         dcPK.Add(dc);
-                    if (field.IsNullable)
-                        dc.AllowDBNull = true;
+
+                    
+                    dc.AllowDBNull = field.IsNullable;
+                    
+                
                 }
                 if(dcPK.Count>0)
                     dtSheet.PrimaryKey = dcPK.ToArray();
