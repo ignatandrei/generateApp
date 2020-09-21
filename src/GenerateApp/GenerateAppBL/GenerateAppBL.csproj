@@ -11,14 +11,14 @@
     <PackageReference Include="Microsoft.Data.SqlClient" Version="2.0.1" />
     <PackageReference Include="Microsoft.Web.Administration" Version="11.1.0" />
     <PackageReference Include="Octokit" Version="0.48.0" />
-    <PackageReference Include="Stankins.Excel" Version="2020.9.18-beta293" />
-    <PackageReference Include="Stankins.FileOps" Version="2020.9.18-beta293" />
-    <PackageReference Include="Stankins.Interfaces" Version="2020.9.18-beta293" />
-    <PackageReference Include="Stankins.MariaDB" Version="2020.9.18-beta293" />
-    <PackageReference Include="Stankins.Razor" Version="2020.9.18-beta293" />
+    <PackageReference Include="Stankins.Excel" Version="2020.9.21-beta294" />
+    <PackageReference Include="Stankins.FileOps" Version="2020.9.21-beta294" />
+    <PackageReference Include="Stankins.Interfaces" Version="2020.9.21-beta294" />
+    <PackageReference Include="Stankins.MariaDB" Version="2020.9.21-beta294" />
+    <PackageReference Include="Stankins.Razor" Version="2020.9.21-beta294" />
     <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="3.7.0" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="3.7.0" />
-    <PackageReference Include="Stankins.SqlServer" Version="2020.9.18-beta293" />
+    <PackageReference Include="Stankins.SqlServer" Version="2020.9.21-beta294" />
 
 
   </ItemGroup>
