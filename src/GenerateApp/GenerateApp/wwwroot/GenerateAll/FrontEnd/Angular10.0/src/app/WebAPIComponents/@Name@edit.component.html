@@ -5,6 +5,10 @@
 	var dt= Model.FindAfterName("@Name@").Value;
 	var nameTable =dt.TableName;
 	var nrCols= dt.Columns.Count;
+	var dtOptions= Model.FindAfterName("@@Options@@").Value;
+	var idTable = dtOptions.Rows.Find(dt.TableName +"_PK")[1].ToString();
+	
+
 	string lowerCaseFirst(string s){
 		return char.ToLower(s[0]) + s.Substring(1);
 	}
@@ -42,14 +46,17 @@
 	</thead>
 	
 		@for(int iCol = 0;iCol < nrCols; iCol++){
-                var col = dt.Columns[iCol];
-                var colName= col.ColumnName ;
+				var col = dt.Columns[iCol];
+				string disabled = "";
+				var colName= col.ColumnName ;
+                if(colName == idTable)
+					disabled= "disabled='disabled'";
                 
 	<text>
 	<tr>
 	<td>@colName</td>
 	<td>
-		<input type="text"  [(ngModel)]="dataToEdit.@(lowerCaseFirst(nameProperty(colName)))" />
+		<input type="text" @Raw(disabled)  [(ngModel)]="dataToEdit.@(lowerCaseFirst(nameProperty(colName)))" />
 	</td>
 	</tr>
 

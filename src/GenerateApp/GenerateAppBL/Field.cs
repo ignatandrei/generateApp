@@ -51,8 +51,8 @@ namespace GenerateApp.Controllers
                 string s when s.Contains("decimal", StringComparison.InvariantCultureIgnoreCase) => typeof(decimal),
                 string s when s.Contains("numeric", StringComparison.InvariantCultureIgnoreCase) => typeof(double),
                 string s when s.Contains("money", StringComparison.InvariantCultureIgnoreCase) => typeof(decimal),
-                string s when s.Contains("float", StringComparison.InvariantCultureIgnoreCase) => typeof(float),
-                string s when s.Contains("real", StringComparison.InvariantCultureIgnoreCase) => typeof(decimal),
+                string s when s.Contains("float", StringComparison.InvariantCultureIgnoreCase) => typeof(double),
+                string s when s.Contains("real", StringComparison.InvariantCultureIgnoreCase) => typeof(Single),
                 string s when s.Contains("timestamp", StringComparison.InvariantCultureIgnoreCase) => typeof(byte[]),
 
                 string s when s.Contains("time", StringComparison.InvariantCultureIgnoreCase) => typeof(DateTime),
