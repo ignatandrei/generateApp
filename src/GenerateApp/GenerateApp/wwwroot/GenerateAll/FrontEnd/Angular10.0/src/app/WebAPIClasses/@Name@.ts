@@ -45,6 +45,9 @@ string ClassNameFromTableName(string tableName){
                 case "byte[]"://https://developer.mozilla.org/en-US/docs/Web/JavaScript/Typed_arrays
                     nameType="Uint8Array";
                     break;
+                case "byte":
+                    nameType="number";
+                    break;
                 case "datetime":
                     nameType = "Date";
                     break;
@@ -52,6 +55,7 @@ string ClassNameFromTableName(string tableName){
                 case "double":
 				case "decimal":
                 case "int32":
+                case "int16":
                 case "int64":
                 case "long":
 					nameType="number";
