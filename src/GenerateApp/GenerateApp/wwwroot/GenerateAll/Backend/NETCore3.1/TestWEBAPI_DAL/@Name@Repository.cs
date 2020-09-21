@@ -78,7 +78,7 @@ namespace TestWEBAPI_DAL
             var original = await FindAfterId(p.@(nameProperty(idTable)));
             if(original == null)
             {
-                throw new ArgumentException("cannot found @(nameClass)  with id = {p.@(nameProperty(idTable))} ", nameof(p.@(nameProperty(idTable))));
+                throw new ArgumentException($"cannot found @(nameClass)  with id = {p.@(nameProperty(idTable))} ", nameof(p.@(nameProperty(idTable))));
             }
             original.CopyPropertiesFrom(other: p, withID: true);                        
             await databaseContext.SaveChangesAsync();
