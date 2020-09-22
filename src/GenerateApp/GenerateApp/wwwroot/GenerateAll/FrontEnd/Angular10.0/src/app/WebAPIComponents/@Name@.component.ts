@@ -88,6 +88,8 @@ import {MatTableDataSource} from '@angular/material/table';
 
 import { tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { Title } from '@angular/platform-browser';
+
 import{ @(nameClass) } from './../WebAPIClasses/@(nameClass)';
 import {@(nameClass)Service} from './../services/@(nameClass).service';
 
@@ -107,7 +109,10 @@ export class @(nameClass)Component implements OnInit {
   
 
   public rows:@(nameClass)[]=[];
-  constructor(private mainService: @(nameClass)Service, private router: Router ) { }
+  constructor(private mainService: @(nameClass)Service, private router: Router,private titleService: Title  ) {
+      this.titleService.setTitle('List of @(nameTable)');
+
+   }
 
   ngOnInit(): void {
 	  this.mainService.GetAll().subscribe(it=>{

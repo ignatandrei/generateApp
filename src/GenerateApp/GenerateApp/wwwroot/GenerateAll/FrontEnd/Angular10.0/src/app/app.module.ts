@@ -24,7 +24,7 @@
 }
 import { UrlSerializer } from '@angular/router';
 
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, Title } from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 import {A11yModule} from '@angular/cdk/a11y';
 import {ClipboardModule} from '@angular/cdk/clipboard';
@@ -171,7 +171,8 @@ import { @(nameClass)EditComponent } from './WebAPIComponents/@(nameClass)edit.c
   {
     provide: UrlSerializer,
     useClass: LowerCaseUrlSerializer
-  } 
+  } ,
+  Title,
   ],
   bootstrap: [AppComponent]
 })
