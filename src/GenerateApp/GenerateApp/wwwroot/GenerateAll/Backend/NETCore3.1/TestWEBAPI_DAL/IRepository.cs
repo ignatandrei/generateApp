@@ -12,5 +12,6 @@ namespace TestWEBAPI_DAL
         Task<T[]> GetAll();
         Task<T> Insert(T p);
         Task<T> Update(T p);
+        Task<long> Count();
     }
 }

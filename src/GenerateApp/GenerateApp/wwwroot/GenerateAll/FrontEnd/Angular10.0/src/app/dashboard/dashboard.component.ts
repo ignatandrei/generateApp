@@ -11,9 +11,11 @@ import { Component, OnInit } from '@(angular)/core';
 })
 export class DashboardComponent implements OnInit {
 
-  constructor() { }
+  public numberRecordsDep: number;
+  constructor(private dep: dboDepartmentService) { }
 
   ngOnInit(): void {
+    this.dep.Count().subscribe(it=> this.numberRecordsDep=it);
   }
 
 }

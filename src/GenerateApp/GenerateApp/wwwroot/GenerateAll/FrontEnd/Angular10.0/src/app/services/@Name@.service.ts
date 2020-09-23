@@ -92,7 +92,11 @@ export class @(nameClass)Service {
     
 
   }
-
+  public Count() : Observable<number>{
+    const url = this.baseUrl+'api/@nameClass/Count';
+    
+    return this.client.get<number>(url);
+  }
   public GetAll() : Observable<@(nameClass)[]>{
     const url = this.baseUrl+'api/@nameClass/GetAll';
     

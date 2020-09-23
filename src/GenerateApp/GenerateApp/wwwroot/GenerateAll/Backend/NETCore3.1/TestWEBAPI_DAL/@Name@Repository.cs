@@ -91,6 +91,9 @@ namespace TestWEBAPI_DAL
             await databaseContext.SaveChangesAsync();
             return p;
         }
-
+        public Task<long> Count()
+        {
+            return databaseContext.@(nameClass).LongCountAsync();
+        }
     }
 }

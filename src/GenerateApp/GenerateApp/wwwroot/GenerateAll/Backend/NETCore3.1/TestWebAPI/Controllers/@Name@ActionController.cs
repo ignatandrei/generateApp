@@ -56,7 +56,11 @@ namespace TestWebAPI.Controllers
         {
             _repository = repository;
         }
-
+        [HttpGet]
+        public async Task<long> Count()
+        {
+            return await _repository.Count();
+        }
         // GET: api/@(nameClass)
         [HttpGet]
         public async Task<ActionResult<IEnumerable<@(nameClass)>>> GetAll()
