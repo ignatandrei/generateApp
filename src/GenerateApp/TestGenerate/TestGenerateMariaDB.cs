@@ -74,7 +74,7 @@ namespace TestGenerate
             }
 
             Assert.Equal(0,errors );
-            var info = app.GenerateInfoData();
+            var info = await app.GenerateInfoData();
             info.folderGenerator = pathGenerate;
             info.pathFile = @"E:\test\a.txt";
             var data = await info.GenerateApp();

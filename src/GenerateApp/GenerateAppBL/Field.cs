@@ -16,10 +16,12 @@ namespace GenerateApp.Controllers
     }
     public class Field:IValidatableObject
     {
+
         public Field()
         {
             IsNullable = false;
         }
+        public string ID { get; set; }
         public string name { get; set; }
         public string type
         {

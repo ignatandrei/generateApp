@@ -67,7 +67,7 @@ namespace GenerateAppTool
                          connType = connTypes.MSSQL.ToString()
                      };
                      g.input = await g.ReadAllFromDB();
-                     var info = g.GenerateInfoData();
+                     var info =await g.GenerateInfoData();
                      info.folderGenerator = @"E:\generateApp\src\GenerateApp\GenerateApp\wwwroot\GenerateAll";
                      info.pathFile = @"E:\test\a.txt";
                      var data = await info.GenerateApp();

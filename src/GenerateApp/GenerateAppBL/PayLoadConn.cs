@@ -13,7 +13,7 @@ namespace GenerateApp.Controllers
     public class GenerateAppV1 : IValidatableObject
     {
         public DataToSentTable receiveData;
-        public InfoData GenerateInfoData()
+        public async Task<InfoData> GenerateInfoData()
         {
             receiveData = new DataToSentTable();
             var dt = new DataTable("DataSource");
@@ -53,8 +53,36 @@ namespace GenerateApp.Controllers
                 
 
             }
+
+
+            var dtRels = new DataTable("@@Relations@@");
+            dtRels.Columns.Add("parent_object", typeof(string));
+            dtRels.Columns.Add("parent_column", typeof(string));
+            dtRels.Columns.Add("referenced_object", typeof(string));
+            dtRels.Columns.Add("referenced_column", typeof(string));
             
-            
+            int idRel = receiveData.AddNewTable(dtRels);
+            receiveData.Metadata.AddTable(dtRels, idRel);
+
+            var all = await payLoadConn.FromPayloadConn();
+
+            var ds = all.relations;
+            foreach (var item in ds)
+            {
+                var idParent = all.input.FirstOrDefault(it => it.ID == item.TableParentId);
+                var idRef = all.input.FirstOrDefault(it => it.ID == item.TableRefID);
+                if (idParent == null || idRef == null)
+                    continue;
+
+                var idFieldParent = idParent.fields.FirstOrDefault(it => it.ID == item.FieldParentId);
+                var idFieldRef = idRef.fields.FirstOrDefault(it => it.ID == item.FieldRefId);
+                if (idFieldParent == null || idFieldRef == null)
+                    continue;
+
+                dtRels.Rows.Add(idParent.name, idFieldParent.name, idRef.name, idFieldRef.name);
+
+
+            }
 
 
             var con = Enum.Parse<SourceData>(this.payLoadConn.connType, true);
@@ -120,7 +148,7 @@ namespace GenerateApp.Controllers
                     sent.originalType = fieldFromDb.originalType;
                     sent.IsPK = fieldFromDb.IsPK;
                     sent.IsNullable = fieldFromDb.IsNullable;
-
+                    sent.ID = fieldFromDb.ID;
                 }
             }
         }

@@ -201,6 +201,8 @@ namespace GenerateApp.Controllers
             int id=  data.AddNewTable(dtOptions);
             data.Metadata.AddTable(dtOptions, id);
 
+
+
             var folderWithTemplates = Path.Combine(outputFolder, g);
             Directory.CreateDirectory(folderWithTemplates);
             try
@@ -291,6 +293,7 @@ namespace GenerateApp.Controllers
                 var razorTables = nameTablesToRender
                     .Union(new[] { "DataSource" })
                     .Union(new[] { "@@Options@@" })
+                    .Union(new[] { "@@Relations@@" })
                     .ToArray();
                 logs.AddLog(this.name,"razoring files - it will take some time");
                 var t = new TransformerOneTableToMulti<SenderToRazorFromFile>("InputTemplate", "FullFileName", razorTables, new CtorDictionary());

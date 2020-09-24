@@ -84,6 +84,7 @@ namespace GenerateApp.Controllers
 
                         var f = new Field();
                         f.name = col["name"].ToString();
+                        f.ID = col["id"].ToString();
                         if (t.fields.Exists(f1 => f1.name == f.name))
                             continue;//repair this in stankins
                         f.originalType = col["type"].ToString();

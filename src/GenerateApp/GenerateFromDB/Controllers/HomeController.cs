@@ -38,7 +38,7 @@ namespace GenerateFromDB.Controllers
             {
                 throw new ArgumentException("validation error:" + item.ErrorMessage, string.Join("m", item.MemberNames));
             }
-            var info = app.GenerateInfoData();
+            var info = await app.GenerateInfoData();
             info.folderGenerator = Path.Combine(environment.WebRootPath, "GenerateAll");
             string dateNow = DateTime.Now.ToString("yyyyMMddHHmmss");
             info.pathFile = Path.Combine(environment.WebRootPath, dateNow, "conection.txt");
