@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace GenerateApp.Controllers
 {
@@ -21,7 +22,7 @@ namespace GenerateApp.Controllers
 
             int id = receiveData.AddNewTable(dt);
             receiveData.Metadata.AddTable(dt, id);
-
+            
 
             for (int iTable = 0; iTable < (input?.Length??0); iTable++)
             {
@@ -61,9 +62,33 @@ namespace GenerateApp.Controllers
 
             return i;
         }
+
+        public async Task<TableGenerator[]> ReadAllFromDB()
+        {
+            var t = new List<TableGenerator>();
+            var all = await payLoadConn.FromPayloadConn();
+            foreach(var item in all.input)
+            {
+                var tg = new TableGenerator();
+                tg.table = new Table();
+                tg.table.name = item.name;
+                tg.table.fields = new List<Field>();
+                foreach (var f in item.fields)
+                {
+                    tg.table.fields.Add(new Field()
+                    {
+                        name = f.name
+                    });
+                }
+                t.Add(tg);
+            }
+            return t.ToArray();
+
+        }
+
         public PayLoadConn payLoadConn { get; set; }
         public TableGenerator[] input { get; set; }
-
+        
         public async IAsyncEnumerable<ValidationResult> Validate()
         {
             var validOrig = Validate(null);

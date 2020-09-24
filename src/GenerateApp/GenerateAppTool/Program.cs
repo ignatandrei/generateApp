@@ -56,6 +56,7 @@ namespace GenerateAppTool
 
                      Console.WriteLine($"start import {cn}");
                      var g = new GenerateAppV1();
+                     
                      g.payLoadConn = new PayLoadConn()
                      {
                          connDatabase = scsb.InitialCatalog,
@@ -65,6 +66,7 @@ namespace GenerateAppTool
                          connUser = scsb.UserID,
                          connType = connTypes.MSSQL.ToString()
                      };
+                     g.input = await g.ReadAllFromDB();
                      var info = g.GenerateInfoData();
                      info.folderGenerator = @"E:\generateApp\src\GenerateApp\GenerateApp\wwwroot\GenerateAll";
                      info.pathFile = @"E:\test\a.txt";
@@ -87,6 +89,7 @@ namespace GenerateAppTool
         {
             var i = new InfoData(SourceData.Excel);
             i.name = "andrei";
+           
             i.pathFile = fileName;
             // replace this
             i.folderGenerator = @"E:\generateApp\src\GenerateApp\GenerateApp\wwwroot\GenerateAll";
