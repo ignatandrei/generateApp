@@ -187,6 +187,8 @@ namespace GenerateApp.Controllers
                             dtOptions.Rows.Add($"{nameTable}_PK", nameColumnPK);
                             dtOptions.Rows.Add($"{nameTable}_PK_Type", typeColumnPK.Name);
                         }
+
+                        
                     }
                     break;
                 default:

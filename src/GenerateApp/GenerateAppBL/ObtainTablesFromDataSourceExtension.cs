@@ -74,6 +74,7 @@ namespace GenerateApp.Controllers
                     var t = new Table();
                     t.name = dr["name"].ToString();
                     var id = dr["id"].ToString();
+                    t.ID = id;
                     bool HasPK = false;
                     foreach (DataRow col in columns)
                     {
@@ -89,13 +90,14 @@ namespace GenerateApp.Controllers
                         f.IsNullable = (col["is_nullable"].ToString() == "1");
                         foreach (DataRow row in keys.Rows)
                         {
-                            if (row["type_desc"].ToString() != "PRIMARY_KEY_CONSTRAINT")
-                                continue;
-
+                           
                             if (row["tableId"].ToString() != id.ToString())
                                 continue;
-
+                           
                             if (row["column_id"].ToString() != col["id"].ToString())
+                                continue;
+
+                            if (row["type_desc"].ToString() != "PRIMARY_KEY_CONSTRAINT")
                                 continue;
 
                             f.IsPK = true;
@@ -110,8 +112,21 @@ namespace GenerateApp.Controllers
                     if (HasPK)
                         nameTables.Add(t);
                 }
+                var rels = new List<Relations>();
+                var relTable= data.FindAfterName("relations").Value;
+                foreach (DataRow dr in relTable.Rows)
+                {
+                    var r = new Relations();
+                    r.TableParentId= dr["parent_object_id"].ToString();
+                    r.TableRefID = dr["referenced_object_id"].ToString();
+                    r.FieldParentId = dr["parent_column_id"].ToString();
+                    r.FieldRefId= dr["referenced_column_id"].ToString();
+                    rels.Add(r);
+                }
+
                 var res = new TablesFromDataSource();
                 res.Success = true;
+                res.relations = rels.ToArray();
                 res.input = nameTables.ToArray();
 
                 return res;

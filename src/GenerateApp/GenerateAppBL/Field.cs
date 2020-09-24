@@ -5,6 +5,15 @@ using System.Configuration;
 
 namespace GenerateApp.Controllers
 {
+    public class Relations
+    {
+        public string Name { get; set; }
+        public string TableParentId { get; set; }
+        public string FieldParentId { get; set; }
+        public string TableRefID { get; set; }
+        public string FieldRefId { get; set; }
+
+    }
     public class Field:IValidatableObject
     {
         public Field()

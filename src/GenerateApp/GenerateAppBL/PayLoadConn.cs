@@ -50,7 +50,13 @@ namespace GenerateApp.Controllers
                 receiveData.Metadata.AddTable(dtSheet, idSheet);
 
 
+                
+
             }
+            
+            
+
+
             var con = Enum.Parse<SourceData>(this.payLoadConn.connType, true);
             var i = new InfoData(con)
             {

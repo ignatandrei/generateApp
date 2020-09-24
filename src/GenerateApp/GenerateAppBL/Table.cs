@@ -9,9 +9,11 @@ namespace GenerateApp.Controllers
         {
             this.fields = new List<Field>();
         }
+        public string ID { get; set; }
         public string name { get; set; }
         public List<Field> fields { get; set; }
 
+        
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             if (string.IsNullOrWhiteSpace(name))
