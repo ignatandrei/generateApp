@@ -23,7 +23,7 @@ namespace GenerateApp.Controllers
             receiveData.Metadata.AddTable(dt, id);
 
 
-            for (int iTable = 0; iTable < input.Length; iTable++)
+            for (int iTable = 0; iTable < (input?.Length??0); iTable++)
             {
                 var table = input[iTable];
                 dt.Rows.Add(new object[2] { iTable, table.table.name });
@@ -181,7 +181,7 @@ namespace GenerateApp.Controllers
         public string connPassword { get; set; }
         public string connDatabase { get; set; }
         public string connPort { get; set; }
-
+        public bool IntegratedSecurity { get; set; }
     }
     public enum connTypes
     {

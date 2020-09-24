@@ -2,6 +2,7 @@
 using McMaster.Extensions.CommandLineUtils;
 using McMaster.Extensions.CommandLineUtils.HelpText;
 using System;
+using System.Data.SqlClient;
 using System.Threading.Tasks;
 
 namespace GenerateAppTool
@@ -17,7 +18,7 @@ namespace GenerateAppTool
             app.Command("excel", async cmd =>
             {
                 var optionFileName = cmd.Option("-f|--file <filename>", "import data file name", CommandOptionType.SingleOrNoValue);
-                cmd.OnExecute( () => 
+                cmd.OnExecuteAsync(async ct => 
                 {
                     if (!optionFileName.HasValue())
                     {
@@ -27,7 +28,7 @@ namespace GenerateAppTool
                     }
                     string fileName = optionFileName.Value();
                     Console.WriteLine($"start import {fileName}");
-                    //await ImportExcel(fileName);
+                    await ImportExcel(fileName);
                     return 0;
                 });
 
@@ -38,7 +39,7 @@ namespace GenerateAppTool
              {
                  var optionConnectionString = cmd.Option<string>("-cn|--connectionstring <connectionstring>", "connection string", CommandOptionType.SingleValue);
 
-                 cmd.OnExecute(() =>
+                 cmd.OnExecuteAsync( async ct =>
                  {
 
 
@@ -50,7 +51,24 @@ namespace GenerateAppTool
                          return 1;
                      }
                      string cn = optionConnectionString.Value();
+                     
+                     var scsb = new SqlConnectionStringBuilder(cn);
+
                      Console.WriteLine($"start import {cn}");
+                     var g = new GenerateAppV1();
+                     g.payLoadConn = new PayLoadConn()
+                     {
+                         connDatabase = scsb.InitialCatalog,
+                         connHost = scsb.DataSource,
+                         connPassword = scsb.Password,
+                         IntegratedSecurity = scsb.IntegratedSecurity,
+                         connUser = scsb.UserID,
+                         connType = connTypes.MSSQL.ToString()
+                     };
+                     var info = g.GenerateInfoData();
+                     info.folderGenerator = @"E:\generateApp\src\GenerateApp\GenerateApp\wwwroot\GenerateAll";
+                     info.pathFile = @"E:\test\a.txt";
+                     var data = await info.GenerateApp();
                      return 0;
                  });
 

@@ -2,7 +2,7 @@
   "profiles": {
     "GenerateAppTool": {
       "commandName": "Project",
-      "commandLineArgs": "-t excel -f:E:\\KPI\\src\\data\\Client.xlsx"
+      "commandLineArgs": "sqlserver -cn \"Server=.;Database=tests;Trusted_Connection=True;\""
     }
   }
 }
