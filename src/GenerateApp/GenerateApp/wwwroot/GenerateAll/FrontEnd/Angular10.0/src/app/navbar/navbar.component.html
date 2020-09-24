@@ -54,7 +54,9 @@ string nameClass=ClassNameFromTableName(nameTable);
       >
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
-      <span>@(nameApp)</span> 
+      <a routerLink='/' >
+        <span>@(nameApp)</span> 
+      </a>
     </mat-toolbar>
     <mat-spinner *ngIf="isLoading"></mat-spinner>    
     <router-outlet></router-outlet>
