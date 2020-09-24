@@ -2,7 +2,7 @@
   "profiles": {
     "GenerateAppTool": {
       "commandName": "Project",
-      "commandLineArgs": "sqlserver -cn \"Server=.;Database=tests;Trusted_Connection=True;\""
+      "commandLineArgs": "sqlserver -cn  \"Server=.;Database=tests;Trusted_Connection=false;UID=sa;PWD=yourStrong(!)Password\""
     }
   }
 }

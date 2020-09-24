@@ -83,6 +83,8 @@ namespace GenerateApp.Controllers
 
                         var f = new Field();
                         f.name = col["name"].ToString();
+                        if (t.fields.Exists(f1 => f1.name == f.name))
+                            continue;//repair this in stankins
                         f.originalType = col["type"].ToString();
                         f.IsNullable = (col["is_nullable"].ToString() == "1");
                         foreach (DataRow row in keys.Rows)
@@ -210,7 +212,7 @@ namespace GenerateApp.Controllers
                         sqlConStr.InitialCatalog = payLoadConn.connDatabase;
                         sqlConStr.UserID = payLoadConn.connUser;
                         sqlConStr.Password = payLoadConn.connPassword;
-                        
+                        sqlConStr.IntegratedSecurity = payLoadConn.IntegratedSecurity;           
                         return sqlConStr.ConnectionString;
                     }
 

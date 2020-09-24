@@ -72,14 +72,7 @@ namespace GenerateApp.Controllers
                 var tg = new TableGenerator();
                 tg.table = new Table();
                 tg.table.name = item.name;
-                tg.table.fields = new List<Field>();
-                foreach (var f in item.fields)
-                {
-                    tg.table.fields.Add(new Field()
-                    {
-                        name = f.name
-                    });
-                }
+                tg.table.fields = item.fields;
                 t.Add(tg);
             }
             return t.ToArray();
