@@ -69,7 +69,7 @@ List of @(nameTable)
 			if(rowsRelParent.Length>0){
 				foreach(var row in rowsRelParent){
 					if(row["referenced_column"].ToString() == colName){
-						var refTableName =ClassNameFromTableName(row["parent_object"].ToString()).ToLower();
+						var refTableName =ClassNameFromTableName(row["referenced_object"].ToString()).ToLower();
 						display +="<a mat-list-item [routerLink]=\"['/" + refTableName + "/edit', row." + lowerCaseFirst(nameProperty(colName)) + "]\" routerLinkActive=\"active\">Go=></a>";
 					}
 				}
