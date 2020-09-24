@@ -157,7 +157,7 @@ namespace GenerateApp.Controllers
 
                         int idRel = data.AddNewTable(dtRels);
                         data.Metadata.AddTable(dtRels, idRel);
-
+                        //var x = "<a mat-list-item [routerLink]=\"['/dbocountry/edit', row.idcountry]\" routerLinkActive=\"active\">Go=></a>";
                         var dtNow = DateTime.Now.ToString("yyyyMMddHHmmss");
                         dtOptions = new DataTable("@@Options@@");
                         var dcName = dtOptions.Columns.Add("name", typeof(string));

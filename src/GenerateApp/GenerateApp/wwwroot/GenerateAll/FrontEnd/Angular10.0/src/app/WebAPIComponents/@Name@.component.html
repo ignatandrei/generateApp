@@ -6,6 +6,11 @@
 		return tableName.Replace(" ","").Replace(".","").Replace("(","").Replace(")","");
 	}
 
+	var dtRels= Model.FindAfterName("@@Relations@@").Value;
+	var rowsRelParent =dtRels.Select("parent_object='@Name@'" );
+	var rowsRelChild =dtRels.Select("referenced_object='@Name@'" );
+
+
 	var dt= Model.FindAfterName("@Name@").Value;
 	var nameTable =dt.TableName;
 	var dtOptions= Model.FindAfterName("@@Options@@").Value;
@@ -40,7 +45,7 @@
 
 <br />
 <h1>
-List of @(nameTable)
+List of @(nameTable) 
 </h1>
 
 <mat-form-field>
@@ -60,11 +65,21 @@ List of @(nameTable)
 			var colName= col.ColumnName ;
 			
 			string display="{{row." + lowerCaseFirst(nameProperty(colName))+"}}";
+
+			if(rowsRelParent.Length>0){
+				foreach(var row in rowsRelParent){
+					if(row["referenced_column"].ToString() == colName){
+						var refTableName =ClassNameFromTableName(row["parent_object"].ToString()).ToLower();
+						display +="<a mat-list-item [routerLink]=\"['/" + refTableName + "/edit', row." + lowerCaseFirst(nameProperty(colName)) + "]\" routerLinkActive=\"active\">Go=></a>";
+					}
+				}
+			}
+
 			<text>
 
 	  <ng-container matColumnDef="@(lowerCaseFirst(nameProperty(colName)))">
 		<th mat-header-cell *matHeaderCellDef mat-sort-header> @(colName) </th>
-		<td mat-cell *matCellDef="let row"> @(display) </td>
+		<td mat-cell *matCellDef="let row"> @Raw(display) </td>
 	  </ng-container>
 		  </text>
 		}
