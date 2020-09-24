@@ -7,7 +7,13 @@
 
 	var dt= Model.FindAfterName("@Name@").Value;
 	var nameTable =dt.TableName;
-	var nameClass = ClassNameFromTableName(nameTable);
+  var nameClass = ClassNameFromTableName(nameTable);
+  
+  var dtRels= Model.FindAfterName("@@Relations@@").Value;
+	var rowsRelParent =dtRels.Select("parent_object='@Name@'" );
+
+
+
 	string lowerCaseFirst(string s){
 		return char.ToLower(s[0]) + s.Substring(1);
   }
@@ -29,7 +35,7 @@
            return false;
      return true;
 	}
-	
+	string servicesRef="";
 	
 }
 
@@ -38,6 +44,21 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { tap, delay, switchMapTo, switchMap } from 'rxjs/operators';
 import { @(nameClass) } from '../WebAPIClasses/@(nameClass)';
 import { @(nameClass)Service } from '../services/@(nameClass).service';
+
+
+@if(rowsRelParent.Length>0){
+  foreach(var row in rowsRelParent){
+    var refTableName =ClassNameFromTableName(row["referenced_object"].ToString());
+    if(refTableName == nameClass)
+      continue;
+    <text>
+    import { @(refTableName)Service } from '../services/@(refTableName).service';
+    import{ @(refTableName) } from '../WebAPIClasses/@(refTableName)';
+    </text>
+  }
+}
+
+
 @(Component)({
   selector: 'app-@(nameClass)add',
   templateUrl: './@(nameClass)add.component.html',
@@ -45,15 +66,32 @@ import { @(nameClass)Service } from '../services/@(nameClass).service';
 })
 export class @(nameClass)AddComponent implements OnInit {
 
-  
+  @if(rowsRelParent.Length>0){
+			foreach(var row in rowsRelParent){
+        var refTableName =ClassNameFromTableName(row["referenced_object"].ToString());
+        servicesRef +=" private "+refTableName  +"SVC:" +refTableName +"Service,";
+        <text>
+        public @(refTableName)All: @(refTableName)[] = [];
+        </text>
+      }
+  }
   public dataToAdd: @(nameClass);
-  constructor( private router: Router, private mainService: @(nameClass)Service ) {
+  constructor(@Raw(servicesRef) private router: Router, private mainService: @(nameClass)Service ) {
 
       this.dataToAdd = new @(nameClass)();
    }
 
   ngOnInit(): void {
     
+  @if(rowsRelParent.Length>0){
+    foreach(var row in rowsRelParent){
+      var refTableName =ClassNameFromTableName(row["referenced_object"].ToString());
+      <text>
+      this.@(refTableName)SVC.GetAll().subscribe(it => this. @(refTableName)All = it );
+      
+      </text>
+    }
+}
   }
   public add(): void{
 	const data=new @(nameClass)(this.dataToAdd);

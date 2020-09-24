@@ -2,9 +2,18 @@
 @{
 	var angular="@angular";
 	var Injectable = "@Injectable";
+	string ClassNameFromTableName(string tableName){
+		return tableName.Replace(" ","").Replace(".","").Replace("(","").Replace(")","");
+	}
+	
 	var dt= Model.FindAfterName("@Name@").Value;
 	var nameTable =dt.TableName;
 	var nrCols= dt.Columns.Count;
+
+	var dtRels= Model.FindAfterName("@@Relations@@").Value;
+	var rowsRelParent =dtRels.Select("parent_object='@Name@'" );
+
+
 	string lowerCaseFirst(string s){
 		return char.ToLower(s[0]) + s.Substring(1);
 	}
@@ -46,7 +55,25 @@ Add  new @(nameTable)
 	<tr>
 	<td>@colName</td>
 	<td>
+
 		<input type="text"  [(ngModel)]="dataToAdd.@(lowerCaseFirst(nameProperty(colName)))" />
+
+		@if(rowsRelParent.Length>0){
+			foreach(var row in rowsRelParent){
+				if(row["referenced_column"].ToString() == colName){
+					var refTableName =ClassNameFromTableName(row["referenced_object"].ToString());
+
+					<mat-form-field appearance="fill">
+						<mat-select  [(ngModel)]="dataToAdd.@(lowerCaseFirst(nameProperty(colName)))" >
+							
+							<mat-option *ngFor="let item of @(refTableName)All" [value]="item.@(lowerCaseFirst(nameProperty(colName)))">
+							  {{item | json}}
+							</mat-option>
+						  </mat-select>
+						</mat-form-field>
+				}
+			}
+		}
 	</td>
 	</tr>
 
