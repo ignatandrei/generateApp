@@ -8,7 +8,9 @@
 	var dt= Model.FindAfterName("@Name@").Value;
 	var nameTable =dt.TableName;
   var nameClass = ClassNameFromTableName(nameTable);
-  
+  var dtOptions= Model.FindAfterName("@@Options@@").Value;
+
+  var havePK = (dtOptions.Rows.Find(dt.TableName +"_PK") != null);
   var dtRels= Model.FindAfterName("@@Relations@@").Value;
 	var rowsRelParent =dtRels.Select("parent_object='@Name@'" );
 
@@ -93,6 +95,15 @@ export class @(nameClass)AddComponent implements OnInit {
     }
 }
   }
+  @{
+    if(!havePK){
+      <text>
+    }
+    </text>
+    return;
+    }
+  }
+
   public add(): void{
 	const data=new @(nameClass)(this.dataToAdd);
     this.mainService.Insert(data).subscribe(

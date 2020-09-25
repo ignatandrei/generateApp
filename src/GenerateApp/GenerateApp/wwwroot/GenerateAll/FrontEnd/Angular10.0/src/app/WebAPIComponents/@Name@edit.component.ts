@@ -1,5 +1,5 @@
 @{
-  return;
+  
 	var angular="@angular";
 	var Component = "@Component";
 	
@@ -70,11 +70,15 @@
 	var nameTable =dt.TableName;
   var nameClass = ClassNameFromTableName(nameTable);
   var dtOptions= Model.FindAfterName("@@Options@@").Value;
-  var idTable = dtOptions.Rows.Find(dt.TableName +"_PK")[1].ToString();
-  idTable  =nameProperty(idTable);
-  var idType = dtOptions.Rows.Find(dt.TableName +"_PK_Type")[1].ToString();  
-  var nameType = nameTypeForJS(idType);
 
+  var havePK = (dtOptions.Rows.Find(dt.TableName +"_PK") != null);
+  string idTable ="", idType ="", nameType ="";
+  if(havePK){
+    idTable = dtOptions.Rows.Find(dt.TableName +"_PK")[1].ToString();
+    idTable  =nameProperty(idTable);
+    idType = dtOptions.Rows.Find(dt.TableName +"_PK_Type")[1].ToString();  
+    nameType = nameTypeForJS(idType);
+  }
   var dtRels= Model.FindAfterName("@@Relations@@").Value;
 	var rowsRelParent =dtRels.Select("parent_object='@Name@'" );
 
@@ -115,7 +119,12 @@ import { @(nameClass)Service } from '../services/@(nameClass).service';
 })
 export class @(nameClass)EditComponent implements OnInit {
 
-  public id: @(nameType);
+  @if(havePK){
+    <text>
+      public id: @(nameType);
+    </text>
+  }
+  
   public dataToEdit: @(nameClass);
 
   @if(rowsRelParent.Length>0){
@@ -134,6 +143,15 @@ export class @(nameClass)EditComponent implements OnInit {
     //   this.id = +params.get('id');
     // });
 
+   }
+   @{
+    if(!havePK){
+      <text>
+      ngOnInit(): void {}
+      }
+      </text>
+      return;
+    }
    }
 
   ngOnInit(): void {

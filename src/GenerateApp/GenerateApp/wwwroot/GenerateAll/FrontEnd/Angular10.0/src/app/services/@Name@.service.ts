@@ -1,6 +1,6 @@
 @model Stankins.Interfaces.IDataToSent
 @{
-  return;
+  
 	var angular="@angular";
 	var Injectable = "@Injectable";
 	string ClassNameFromTableName(string tableName){
@@ -66,10 +66,14 @@
 		var dt= Model.FindAfterName("@Name@").Value;
     var nameTable =dt.TableName;
     var dtOptions= Model.FindAfterName("@@Options@@").Value;
-    var idTable = dtOptions.Rows.Find(dt.TableName +"_PK")[1].ToString();
-    idTable  =nameProperty(idTable);
-    var idType = dtOptions.Rows.Find(dt.TableName +"_PK_Type")[1].ToString();  
-    idType = nameTypeForJS(idType);
+    var havePK = (dtOptions.Rows.Find(dt.TableName +"_PK") != null);
+    string idTable ="", idType = "";
+    if(havePK){
+      idTable = dtOptions.Rows.Find(dt.TableName +"_PK")[1].ToString();
+      idTable  =nameProperty(idTable);
+      idType = dtOptions.Rows.Find(dt.TableName +"_PK_Type")[1].ToString();  
+      idType = nameTypeForJS(idType);
+    }
 	var nameClass= ClassNameFromTableName(nameTable);
     var Inject=@"@Inject";
 }
@@ -102,6 +106,15 @@ export class @(nameClass)Service {
     const url = this.baseUrl+'api/@nameClass/GetAll';
     
     return this.client.get<@(nameClass)[]>(url);
+  }
+  @{
+    if(!havePK){
+      <text>
+      }
+    
+      </text>
+      return;
+    }
   }
   public Get(id:@(idType)):Observable<@(nameClass)>{
     const url = this.baseUrl+'api/@(nameClass)/Get/'+id;

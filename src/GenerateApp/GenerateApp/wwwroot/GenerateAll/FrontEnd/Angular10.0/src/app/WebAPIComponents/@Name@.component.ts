@@ -1,5 +1,5 @@
 @{
-  return;
+  
 	var angular="@angular";
   var Component = "@Component";
   var ViewChild="@ViewChild";
@@ -9,9 +9,14 @@
 	var dt= Model.FindAfterName("@Name@").Value;
   var nameTable =dt.TableName;
   var dtOptions= Model.FindAfterName("@@Options@@").Value;
-  var idTable = dtOptions.Rows.Find(dt.TableName +"_PK")[1].ToString();
-  var idType = dtOptions.Rows.Find(dt.TableName +"_PK_Type")[1].ToString();  
-  idTable = lowerCaseFirst(idTable);
+
+  var havePK = (dtOptions.Rows.Find(dt.TableName +"_PK") != null);
+  string idTable ="", idType = "";
+  if(havePK){
+    idTable = dtOptions.Rows.Find(dt.TableName +"_PK")[1].ToString();
+    idType = dtOptions.Rows.Find(dt.TableName +"_PK_Type")[1].ToString();  
+    idTable = lowerCaseFirst(idTable);
+  }
   var nameClass = ClassNameFromTableName(nameTable);
   var nrCols= dt.Columns.Count;
   
@@ -78,7 +83,11 @@
 					break;
 			}
 		return nameType;
-	}
+  }
+  string operations="";
+  if(havePK){
+    operations=",'operations'";
+  }
 
 
 }
@@ -101,7 +110,7 @@ import {@(nameClass)Service} from './../services/@(nameClass).service';
 })
 export class @(nameClass)Component implements OnInit {
 
-  displayedColumns: string[] = ['rowIndex' , @Raw(colNames) 'operations'];
+  displayedColumns: string[] = [ @Raw(colNames) 'rowIndex'   @Raw(operations)];
   dataSource: MatTableDataSource<@(nameClass)>;
 
   @(ViewChild)(MatPaginator, {static: true}) paginator: MatPaginator;
@@ -137,7 +146,15 @@ export class @(nameClass)Component implements OnInit {
       this.dataSource.paginator.firstPage();
     }
   }
-
+  @{
+    if(!havePK){
+      <text>
+      }
+      </text>
+      return;
+    }
+  }
+  
 
   public deleteData(id: @(nameTypeForJS(idType))): void{
 

@@ -1,6 +1,6 @@
 ﻿@model Stankins.Interfaces.IDataToSent
 @{
-    return;
+    
 string ClassNameFromTableName(string tableName){
 		return tableName.Replace(" ","").Replace(".","").Replace("(","").Replace(")","");
     }
@@ -8,9 +8,13 @@ string ClassNameFromTableName(string tableName){
    
     var dt= Model.FindAfterName("@Name@").Value;
     var dtOptions= Model.FindAfterName("@@Options@@").Value;
-    var idTable = dtOptions.Rows.Find(dt.TableName +"_PK")[1].ToString();
-    var idType = dtOptions.Rows.Find(dt.TableName +"_PK_Type")[1].ToString();  
-	idTable = nameProperty(idTable);
+    var havePK = (dtOptions.Rows.Find(dt.TableName +"_PK") != null);
+    string idTable ="", idType = "";
+    if(havePK){
+        idTable = dtOptions.Rows.Find(dt.TableName +"_PK")[1].ToString();
+        idType = dtOptions.Rows.Find(dt.TableName +"_PK_Type")[1].ToString();  
+        idTable = nameProperty(idTable);
+    }
     var nrCols =dt.Columns.Count;
 	string lowerCaseFirst(string s){
 		return char.ToLower(s[0]) + s.Substring(1);
@@ -84,8 +88,15 @@ export class @(nameClass)
                 
         }
         public CopyPropertiesFrom(other:@(nameClass), withID: boolean):void{
+            
+            @{
+                if(havePK){
+                    <text>
             if(withID){
                 this.@(idTable)= other.@(idTable);
+            }
+            </text>
+                }
             }
             @for(int iCol = 0;iCol < nrCols; iCol++){
                 var col = dt.Columns[iCol];
@@ -102,8 +113,14 @@ export class @(nameClass)
 
             
         }
+        @{
+            if(havePK){
+                <text>
         public  @(idTable): @(nameTypeForJS(idType));
-            
+            </text>
+            }
+        }
+        
         @for(int iCol = 0;iCol < nrCols; iCol++){
             var col = dt.Columns[iCol];
             var colName= nameProperty(col.ColumnName) ;

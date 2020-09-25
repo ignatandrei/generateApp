@@ -1,6 +1,6 @@
 @model Stankins.Interfaces.IDataToSent
 @{
-	return;
+	
 	var angular="@angular";
 	var Injectable = "@Injectable";
 	string ClassNameFromTableName(string tableName){
@@ -10,7 +10,12 @@
 	var nameTable =dt.TableName;
 	var nrCols= dt.Columns.Count;
 	var dtOptions= Model.FindAfterName("@@Options@@").Value;
-	var idTable = dtOptions.Rows.Find(dt.TableName +"_PK")[1].ToString();
+	var havePK = (dtOptions.Rows.Find(dt.TableName +"_PK") != null);
+	string idTable ="", idType = "";
+	if(havePK){
+
+		 idTable = dtOptions.Rows.Find(dt.TableName +"_PK")[1].ToString();
+	}
 	
 	var dtRels= Model.FindAfterName("@@Relations@@").Value;
 	var rowsRelParent =dtRels.Select("parent_object='@Name@'" );
@@ -95,7 +100,9 @@
 				  &nbsp;
 				</td>
 			  </tr>
-			
+			  @{
+				if(havePK){
+					<text>
 			  <tr>
 				<td align="left">
 				  <button (click)="save()">Save</button>
@@ -104,6 +111,9 @@
 				  <button (click)="cancel()">Back to list of @(nameTable)</button>
 				</td>
 			  </tr>
+			</text>
+		}
+	}
 			
 </table>
 </div>

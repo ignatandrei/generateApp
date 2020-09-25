@@ -13,6 +13,9 @@
 	var dtRels= Model.FindAfterName("@@Relations@@").Value;
 	var rowsRelParent =dtRels.Select("parent_object='@Name@'" );
 
+	var dtOptions= Model.FindAfterName("@@Options@@").Value;
+
+  	var havePK = (dtOptions.Rows.Find(dt.TableName +"_PK") != null);
 
 	string lowerCaseFirst(string s){
 		return char.ToLower(s[0]) + s.Substring(1);
@@ -88,14 +91,23 @@ Add  new @(nameTable)
 				  &nbsp;
 				</td>
 			  </tr>
-			
+			  @{
+				if(havePK){
+					<text>
 			  <tr>
+				 
 				<td align="left">
 				  <button (click)="add()">Add</button>
 				</td>
+											
+
 				<td align="left">
 				  <button (click)="cancel()">Back to list of @(nameTable)</button>
 				</td>
 			  </tr>
+			</text>
+		}
+	}
+
 			
 </table>
