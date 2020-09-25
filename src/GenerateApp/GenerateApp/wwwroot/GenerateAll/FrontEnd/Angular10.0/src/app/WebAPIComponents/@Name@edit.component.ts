@@ -74,9 +74,15 @@
   var idType = dtOptions.Rows.Find(dt.TableName +"_PK_Type")[1].ToString();  
   var nameType = nameTypeForJS(idType);
 
+  var dtRels= Model.FindAfterName("@@Relations@@").Value;
+	var rowsRelParent =dtRels.Select("parent_object='@Name@'" );
+
+
   string appender ="";
 				if(nameType == "number")
-					appender = "+";
+          appender = "+";
+          
+  string servicesRef="";
                 
 
 }
@@ -86,6 +92,21 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { tap, delay, switchMapTo, switchMap } from 'rxjs/operators';
 import { @(nameClass) } from '../WebAPIClasses/@(nameClass)';
 import { @(nameClass)Service } from '../services/@(nameClass).service';
+
+
+@if(rowsRelParent.Length>0){
+  foreach(var row in rowsRelParent){
+    var refTableName =ClassNameFromTableName(row["referenced_object"].ToString());
+    if(refTableName == nameClass)
+      continue;
+    <text>
+    import { @(refTableName)Service } from '../services/@(refTableName).service';
+    import{ @(refTableName) } from '../WebAPIClasses/@(refTableName)';
+    </text>
+  }
+}
+
+
 @(Component)({
   selector: 'app-@(nameClass)edit',
   templateUrl: './@(nameClass)edit.component.html',
@@ -95,7 +116,18 @@ export class @(nameClass)EditComponent implements OnInit {
 
   public id: @(nameType);
   public dataToEdit: @(nameClass);
-  constructor(private route: ActivatedRoute , private router: Router, private mainService: @(nameClass)Service ) {
+
+  @if(rowsRelParent.Length>0){
+    foreach(var row in rowsRelParent){
+      var refTableName =ClassNameFromTableName(row["referenced_object"].ToString());
+      servicesRef +=" private "+refTableName  +"SVC:" +refTableName +"Service,";
+      <text>
+      public @(refTableName)All: @(refTableName)[] = [];
+      </text>
+    }
+}
+
+  constructor(@Raw(servicesRef) private route: ActivatedRoute , private router: Router, private mainService: @(nameClass)Service ) {
 
     // route.paramMap.subscribe(params=>{
     //   this.id = +params.get('id');
@@ -112,6 +144,15 @@ export class @(nameClass)EditComponent implements OnInit {
       )
   .subscribe();
 
+    @if(rowsRelParent.Length>0){
+      foreach(var row in rowsRelParent){
+        var refTableName =ClassNameFromTableName(row["referenced_object"].ToString());
+        <text>
+        this.@(refTableName)SVC.GetAll().subscribe(it => this. @(refTableName)All = it );
+        
+        </text>
+      }
+    }
   }
   public save(): void{
 	const data=new @(nameClass)(this.dataToEdit);
