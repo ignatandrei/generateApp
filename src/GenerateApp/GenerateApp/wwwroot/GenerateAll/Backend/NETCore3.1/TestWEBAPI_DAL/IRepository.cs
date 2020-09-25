@@ -14,4 +14,10 @@ namespace TestWEBAPI_DAL
         Task<T> Update(T p);
         Task<long> Count();
     }
+
+    public interface IRepositoryView<T>
+    {
+        Task<T[]> GetAll();
+        Task<long> Count();
+    }
 }

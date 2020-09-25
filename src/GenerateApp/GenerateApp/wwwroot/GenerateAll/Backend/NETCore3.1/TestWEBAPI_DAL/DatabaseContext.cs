@@ -1,6 +1,6 @@
 ﻿@model Stankins.Interfaces.IDataToSent
 @{
-
+    
 	string ClassNameFromTableName(string tableName){
 		return tableName.Replace(" ","").Replace(".","").Replace("(","").Replace(")","");
 	}
@@ -79,12 +79,25 @@ namespace TestWEBAPI_DAL
             }
             System.Array.Reverse(arr);
             string  WithSchema =string.Join(",",arr);
-            var idTable = dtOptions.Rows.Find(nameTable +"_PK")[1].ToString();
+            var havePK = (dtOptions.Rows.Find(nameTable +"_PK") != null);
+            string idTable ="", idType = "";
+            if(havePK){
+                idTable = dtOptions.Rows.Find(nameTable +"_PK")[1].ToString();
+            }
+            if(havePK){
          <text>
             modelBuilder.Entity<@(nameClass)>()
                 .ToTable(@Raw(WithSchema))
                 .HasKey(it=>it.@(nameProperty(idTable)));
          </text>
+            }
+            else{
+                <text>
+            modelBuilder.Entity<@(nameClass)>()
+                .ToView(@Raw(WithSchema))
+                .HasNoKey();
+         </text>
+            }
         }            
 
             OnModelCreatingPartial(modelBuilder);
@@ -94,7 +107,12 @@ namespace TestWEBAPI_DAL
 
             @foreach(var dt in tables){
 				string nameClass= ClassNameFromTableName(dt.TableName);
-                var idTable = dtOptions.Rows.Find(dt.TableName +"_PK")[1].ToString();
+                var havePK = (dtOptions.Rows.Find(dt.TableName +"_PK") != null);
+                string idTable ="", idType = "";
+                if(havePK){
+                
+                     idTable = dtOptions.Rows.Find(dt.TableName +"_PK")[1].ToString();
+                }
                 var nrRows =dt.Rows.Count; 
                 if(nrRows > 200)
                     nrRows=200;
@@ -127,10 +145,12 @@ namespace TestWEBAPI_DAL
                         };
                         
                     }
+                    if(havePK){
                     <text>
                     modelBuilder.Entity<@(nameClass)>().HasData(
                         new @(nameClass)(){ @(idTable) = @(iRow+1) @Raw(text) });
                     </text>
+                    }
                 }
             }
 

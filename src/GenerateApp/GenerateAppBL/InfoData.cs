@@ -370,7 +370,7 @@ namespace GenerateApp.Controllers
                 try
                 {
                     Console.WriteLine($"Deleting {folderWithTemplates}");
-                    //Directory.Delete(folderWithTemplates, true);
+                    Directory.Delete(folderWithTemplates, true);
                 }
                 catch
                 {

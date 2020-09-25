@@ -108,14 +108,14 @@ namespace GenerateApp.Controllers
                 tg.table.fields = item.fields;
                 t.Add(tg);
             }
-            //foreach(var item in all.views)
-            //{
-            //    var tg = new TableGenerator();
-            //    tg.table = new Table();
-            //    tg.table.name = item.name;
-            //    tg.table.fields = item.fields;
-            //    t.Add(tg);
-            //}
+            foreach (var item in all.views)
+            {
+                var tg = new TableGenerator();
+                tg.table = new Table();
+                tg.table.name = item.name;
+                tg.table.fields = item.fields;
+                t.Add(tg);
+            }
 
             return t.ToArray();
 

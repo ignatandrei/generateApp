@@ -1,5 +1,6 @@
 ﻿@model Stankins.Interfaces.IDataToSent
 @{
+    
 	string ClassNameFromTableName(string tableName){
 		return tableName.Replace(" ","").Replace(".","").Replace("(","").Replace(")","");
 	}
@@ -24,10 +25,23 @@
 	}
     var dt= Model.FindAfterName("@Name@").Value;
     var dtOptions= Model.FindAfterName("@@Options@@").Value;
-    var idTable = dtOptions.Rows.Find(dt.TableName +"_PK")[1].ToString();
-    var idType = dtOptions.Rows.Find(dt.TableName +"_PK_Type")[1].ToString();  
-    string repo= ClassNameFromTableName(dt.TableName)  + "_Repository";
-	string nameClass= ClassNameFromTableName(dt.TableName);
+    var havePK = (dtOptions.Rows.Find(dt.TableName +"_PK") != null);
+    string idTable ="", idType = "";
+    if(havePK){
+        idTable = dtOptions.Rows.Find(dt.TableName +"_PK")[1].ToString();
+        idType = dtOptions.Rows.Find(dt.TableName +"_PK_Type")[1].ToString();  
+    }
+    string nameClass= ClassNameFromTableName(dt.TableName);
+    string repoName= ClassNameFromTableName(dt.TableName)  + "_Repository";
+    string repoInterface="";
+    if(havePK){
+        repoInterface+=":IRepository<"+(nameClass)+"," + (idType)+">";
+    }
+    else{
+        repoInterface+=":IRepositoryView<"+(nameClass)+">";
+    }
+
+	
 }
 using System;
 using System.Collections.Generic;
@@ -40,17 +54,29 @@ using TestWebAPI_BL;
 
 namespace TestWEBAPI_DAL
 {
-    public partial class @repo : IRepository<@(nameClass),@(idType)>
+    public partial class @repoName @Raw(repoInterface)
     {
         private readonly DatabaseContext databaseContext;
 
-        public @repo (DatabaseContext databaseContext)
+        public @repoName (DatabaseContext databaseContext)
         {
             this.databaseContext = databaseContext;
         }
         public Task<@(nameClass)[]> GetAll()
         {
             return databaseContext.@(nameClass).ToArrayAsync();
+        }
+        public Task<long> Count()
+        {
+            return databaseContext.@(nameClass).LongCountAsync();
+        }
+        @if(!havePK){
+            <text>
+            }
+        }
+
+            </text>
+            return;
         }
         public Task<@(nameClass)> FindAfterId(@(idType) id)
         {
@@ -91,9 +117,6 @@ namespace TestWEBAPI_DAL
             await databaseContext.SaveChangesAsync();
             return p;
         }
-        public Task<long> Count()
-        {
-            return databaseContext.@(nameClass).LongCountAsync();
-        }
+       
     }
 }

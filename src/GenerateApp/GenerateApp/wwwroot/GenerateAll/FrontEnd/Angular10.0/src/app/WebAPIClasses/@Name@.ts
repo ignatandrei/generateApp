@@ -1,5 +1,6 @@
 ﻿@model Stankins.Interfaces.IDataToSent
 @{
+    return;
 string ClassNameFromTableName(string tableName){
 		return tableName.Replace(" ","").Replace(".","").Replace("(","").Replace(")","");
     }

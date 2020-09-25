@@ -1,6 +1,6 @@
 @model Stankins.Interfaces.IDataToSent
 @{
-
+    
 
 string ClassNameFromTableName(string tableName){
 		return tableName.Replace(" ","").Replace(".","").Replace("(","").Replace(")","");
@@ -94,10 +94,19 @@ namespace TestWebAPI
             }
        @foreach(var nameTable in nameTablesToRender){
 		   string nameClass= ClassNameFromTableName(nameTable);
-            var idType = dtOptions.Rows.Find(nameTable +"_PK_Type")[1].ToString();      
-    
-            string textToRender="services.AddTransient<IRepository<"+nameClass+","+ idType +">, "+nameClass+"_Repository>();";
-            
+            var havePK = (dtOptions.Rows.Find(nameTable +"_PK_Type") != null);
+            string idTable ="", idType = "";
+            if(havePK){
+
+                idType = dtOptions.Rows.Find(nameTable +"_PK_Type")[1].ToString();      
+            }
+            string textToRender="";
+            if(havePK){
+                textToRender="services.AddTransient<IRepository<"+nameClass+","+ idType +">, "+nameClass+"_Repository>();";
+            }
+            else{
+                textToRender="services.AddTransient<IRepositoryView<"+nameClass +">, "+nameClass+"_Repository>();";
+            }
             <text>
 			@Raw(textToRender);
             </text>

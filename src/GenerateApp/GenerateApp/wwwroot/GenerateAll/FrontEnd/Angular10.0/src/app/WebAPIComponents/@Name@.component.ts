@@ -1,4 +1,5 @@
 @{
+  return;
 	var angular="@angular";
   var Component = "@Component";
   var ViewChild="@ViewChild";

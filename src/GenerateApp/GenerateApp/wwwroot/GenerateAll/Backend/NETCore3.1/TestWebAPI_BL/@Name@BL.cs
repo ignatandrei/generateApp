@@ -1,7 +1,7 @@
 ﻿@model Stankins.Interfaces.IDataToSent
 @{
 
-
+    
 	string ClassNameFromTableName(string tableName){
 		return tableName.Replace(" ","").Replace(".","").Replace("(","").Replace(")","");
 	}
@@ -9,8 +9,13 @@
     var dt= Model.FindAfterName("@Name@").Value;
     string nameClass= ClassNameFromTableName(dt.TableName);
     var dtOptions= Model.FindAfterName("@@Options@@").Value;
-    var idTable = dtOptions.Rows.Find(dt.TableName +"_PK")[1].ToString();  
-    var idType = dtOptions.Rows.Find(dt.TableName +"_PK_Type")[1].ToString();  
+
+    var havePK = (dtOptions.Rows.Find(dt.TableName +"_PK") != null);
+    string idTable ="", idType = "";
+    if(havePK){
+        idTable = dtOptions.Rows.Find(dt.TableName +"_PK")[1].ToString();  
+        idType = dtOptions.Rows.Find(dt.TableName +"_PK_Type")[1].ToString();  
+    }
 	var nrCols =dt.Columns.Count;
 	string nameProperty(string original){
 		var name = original.Replace(" ","").Replace("<","").Replace("/","").Replace(">","").Replace("(","").Replace(")","").ToLower();
@@ -54,8 +59,14 @@ namespace TestWebAPI_BL
                 
         }
         public void CopyPropertiesFrom(@(nameClass) other, bool withID){
+            @{
+                if(havePK){
+                <text>
             if(withID){
                 this.@(nameProperty(idTable))= other.@(nameProperty(idTable));
+            }
+                </text>
+                }
             }
             @for(int iCol = 0;iCol < nrCols; iCol++){
                 var col = dt.Columns[iCol];
@@ -75,8 +86,14 @@ namespace TestWebAPI_BL
         #endregion
         
         #region Properties
-        public @(idType) @(nameProperty(idTable)){get;set;}
-            
+        @{
+            if(havePK){
+                <text>
+                public @(idType) @(nameProperty(idTable)){get;set;}
+                </text>
+            }
+        }
+
         @for(int iCol = 0;iCol < nrCols; iCol++){
             var col = dt.Columns[iCol];
             bool nullable=(col.AllowDBNull);

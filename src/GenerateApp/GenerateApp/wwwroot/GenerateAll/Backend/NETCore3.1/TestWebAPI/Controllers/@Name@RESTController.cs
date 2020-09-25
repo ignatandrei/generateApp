@@ -1,11 +1,10 @@
 ﻿@model Stankins.Interfaces.IDataToSent
 @{
-
 string ClassNameFromTableName(string tableName){
 		return tableName.Replace(" ","").Replace(".","").Replace("(","").Replace(")","");
 	}
 string nameProperty(string original){
-		var name = original.Replace(" ","").Replace("<","").Replace("/","").Replace(">","").Replace("(","").Replace(")","").ToLower();
+    	var name = original.Replace(" ","").Replace("<","").Replace("/","").Replace(">","").Replace("(","").Replace(")","").ToLower();
 		if(!IsIdentifier(name))
 			name = "generated_"+name;
 		
@@ -26,12 +25,19 @@ string nameProperty(string original){
     var dt= Model.FindAfterName("@Name@").Value;
 
     var dtOptions= Model.FindAfterName("@@Options@@").Value;
-    var idTable = dtOptions.Rows.Find(dt.TableName +"_PK")[1].ToString();
-    var idType = dtOptions.Rows.Find(dt.TableName +"_PK_Type")[1].ToString();  
-
+    var havePK = (dtOptions.Rows.Find(dt.TableName +"_PK") != null);
+    string idTable ="", idType = "";
+    if(havePK ){
+        idTable = dtOptions.Rows.Find(dt.TableName +"_PK")[1].ToString();
+        idType = dtOptions.Rows.Find(dt.TableName +"_PK_Type")[1].ToString();  
+    }
 	string nameClass= ClassNameFromTableName(dt.TableName);
     
     string repo= nameClass  + "_Repository";
+    string typeRepository = "IRepositoryView<"+ nameClass +">";
+    if(havePK){
+        typeRepository = "IRepository<" + (nameClass) + "," + (idType) + ">";
+    }
 
 }
 
@@ -51,9 +57,9 @@ namespace TestWebAPI.Controllers
     [ApiController]
     public class REST_@(nameClass)Controller : ControllerBase
     {
-        private readonly IRepository<@(nameClass),@(idType)> _repository;
+        private readonly @Raw(typeRepository) _repository;
 
-        public REST_@(nameClass)Controller(IRepository<@(nameClass),@(idType)> repository)
+        public REST_@(nameClass)Controller(@Raw(typeRepository) repository)
         {
             _repository = repository;
         }
@@ -64,7 +70,14 @@ namespace TestWebAPI.Controllers
         {
             return await _repository.GetAll();
         }
-
+        @if(!havePK) {
+            <text>
+                }
+            }
+            </text>
+            return;
+        }
+            
         // GET: api/@(nameClass)/5
         [HttpGet("{id}")]
         public async Task<ActionResult<@(nameClass)>> FindAfterId(@(idType) id)
