@@ -191,10 +191,13 @@ namespace GenerateApp.Controllers
                         {
                             var nameTable = ds.Rows[iRowDS]["TableName"].ToString();
                             var dtTable = data.FindAfterName(nameTable).Value;
-                            var nameColumnPK = dtTable.PrimaryKey.First().ColumnName;
-                            var typeColumnPK = dtTable.Columns[nameColumnPK].DataType;
-                            dtOptions.Rows.Add($"{nameTable}_PK", nameColumnPK);
-                            dtOptions.Rows.Add($"{nameTable}_PK_Type", typeColumnPK.Name);
+                            if (dtTable.PrimaryKey.Length > 0)
+                            {
+                                var nameColumnPK = dtTable.PrimaryKey.First().ColumnName;
+                                var typeColumnPK = dtTable.Columns[nameColumnPK].DataType;
+                                dtOptions.Rows.Add($"{nameTable}_PK", nameColumnPK);
+                                dtOptions.Rows.Add($"{nameTable}_PK_Type", typeColumnPK.Name);
+                            }
                         }
 
                         
@@ -367,7 +370,7 @@ namespace GenerateApp.Controllers
                 try
                 {
                     Console.WriteLine($"Deleting {folderWithTemplates}");
-                    Directory.Delete(folderWithTemplates, true);
+                    //Directory.Delete(folderWithTemplates, true);
                 }
                 catch
                 {

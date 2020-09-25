@@ -99,7 +99,7 @@ namespace TestGenerate
                 output.WriteLine(ass.error);
             }
             Assert.True(ass.Success);
-            Assert.True(ass.input?.Length>0);
+            Assert.True(ass.tables?.Length>0);
 
         }
 

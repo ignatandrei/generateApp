@@ -49,10 +49,9 @@ namespace GenerateApp.Controllers
                 int idSheet = receiveData.AddNewTable(dtSheet);
                 receiveData.Metadata.AddTable(dtSheet, idSheet);
 
-
-                
-
             }
+
+
 
 
             var dtRels = new DataTable("@@Relations@@");
@@ -69,8 +68,8 @@ namespace GenerateApp.Controllers
             var ds = all.relations;
             foreach (var item in ds)
             {
-                var idParent = all.input.FirstOrDefault(it => it.ID == item.TableParentId);
-                var idRef = all.input.FirstOrDefault(it => it.ID == item.TableRefID);
+                var idParent = all.tables.FirstOrDefault(it => it.ID == item.TableParentId);
+                var idRef = all.tables.FirstOrDefault(it => it.ID == item.TableRefID);
                 if (idParent == null || idRef == null)
                     continue;
 
@@ -101,7 +100,7 @@ namespace GenerateApp.Controllers
         {
             var t = new List<TableGenerator>();
             var all = await payLoadConn.FromPayloadConn();
-            foreach(var item in all.input)
+            foreach(var item in all.tables)
             {
                 var tg = new TableGenerator();
                 tg.table = new Table();
@@ -109,6 +108,15 @@ namespace GenerateApp.Controllers
                 tg.table.fields = item.fields;
                 t.Add(tg);
             }
+            //foreach(var item in all.views)
+            //{
+            //    var tg = new TableGenerator();
+            //    tg.table = new Table();
+            //    tg.table.name = item.name;
+            //    tg.table.fields = item.fields;
+            //    t.Add(tg);
+            //}
+
             return t.ToArray();
 
         }
@@ -130,7 +138,7 @@ namespace GenerateApp.Controllers
             foreach(var item in input)
             {
                 var name = item.table.name;
-                var tableFromDb = all.input.FirstOrDefault(it => it.name == name);
+                var tableFromDb = all.tables.FirstOrDefault(it => it.name == name);
                 if (tableFromDb == null)
                 {
                     yield return new ValidationResult($"cannot find table {name}");

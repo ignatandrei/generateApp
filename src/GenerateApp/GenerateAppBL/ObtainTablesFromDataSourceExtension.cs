@@ -44,7 +44,7 @@ namespace GenerateApp.Controllers
                 }
                 var res = new TablesFromDataSource();
                 res.Success = true;
-                res.input = nameTablesToRender;
+                res.tables = nameTablesToRender;
                 return res;
 
 
@@ -57,6 +57,7 @@ namespace GenerateApp.Controllers
                 return res;
             }
         }
+        
         public async static Task<TablesFromDataSource> FromMSSQL(this string connection)
         {
             try
@@ -67,52 +68,27 @@ namespace GenerateApp.Controllers
 
                 var tables = data.FindAfterName("tables").Value.Rows;
                 var columns = data.FindAfterName("columns").Value.Rows;
+                var views = data.FindAfterName("views").Value.Rows;
                 var keys = data.FindAfterName("keys").Value;
                 var nameTables = new List<Table>();
+                var nameViews = new List<View>();
                 foreach (DataRow dr in tables)
                 {
                     var t = new Table();
-                    t.name = dr["name"].ToString();
-                    var id = dr["id"].ToString();
-                    t.ID = id;
-                    bool HasPK = false;
-                    foreach (DataRow col in columns)
-                    {
-                        if (col["tableId"].ToString() != id)
-                            continue;
-
-
-                        var f = new Field();
-                        f.name = col["name"].ToString();
-                        f.ID = col["id"].ToString();
-                        if (t.fields.Exists(f1 => f1.name == f.name))
-                            continue;//repair this in stankins
-                        f.originalType = col["type"].ToString();
-                        f.IsNullable = (col["is_nullable"].ToString() == "1");
-                        foreach (DataRow row in keys.Rows)
-                        {
-                           
-                            if (row["tableId"].ToString() != id.ToString())
-                                continue;
-                           
-                            if (row["column_id"].ToString() != col["id"].ToString())
-                                continue;
-
-                            if (row["type_desc"].ToString() != "PRIMARY_KEY_CONSTRAINT")
-                                continue;
-
-                            f.IsPK = true;
-                            HasPK = true;
-                            continue;
-
-                        }
-                        t.fields.Add(f);
-
-                    }
+                    t.FillWithData(dr, columns, keys);
                     
-                    if (HasPK)
+                    if (t.HasPK())
                         nameTables.Add(t);
                 }
+
+                foreach (DataRow dr in views)
+                {
+                    var t = new View();
+                    t.FillWithData(dr, columns, keys);
+                    nameViews.Add(t);
+
+                }
+
                 var rels = new List<Relations>();
                 var relTable= data.FindAfterName("relations").Value;
                 foreach (DataRow dr in relTable.Rows)
@@ -128,8 +104,8 @@ namespace GenerateApp.Controllers
                 var res = new TablesFromDataSource();
                 res.Success = true;
                 res.relations = rels.ToArray();
-                res.input = nameTables.ToArray();
-
+                res.tables = nameTables.ToArray();
+                res.views = nameViews.ToArray();
                 return res;
             }
             catch (Exception ex)
@@ -185,7 +161,7 @@ namespace GenerateApp.Controllers
                 }
                 var res = new TablesFromDataSource();
                 res.Success = true;
-                res.input = nameTables.ToArray();
+                res.tables = nameTables.ToArray();
 
                 return res;
             }
