@@ -46,7 +46,7 @@
 	string colNames= "";
 	for(int iCol = 0;iCol < nrCols; iCol++){
     var col = dt.Columns[iCol];
-    colNames += "'"+ lowerCaseFirst(nameProperty(col.ColumnName)) +"',";
+    colNames += ",'"+ lowerCaseFirst(nameProperty(col.ColumnName)) +"'";
   }
 
   string nameTypeForJS(string colTypeName){
@@ -110,7 +110,7 @@ import {@(nameClass)Service} from './../services/@(nameClass).service';
 })
 export class @(nameClass)Component implements OnInit {
 
-  displayedColumns: string[] = [ @Raw(colNames) 'rowIndex'   @Raw(operations)];
+  displayedColumns: string[] = [ 'rowIndex' @Raw(colNames)    @Raw(operations)];
   dataSource: MatTableDataSource<@(nameClass)>;
 
   @(ViewChild)(MatPaginator, {static: true}) paginator: MatPaginator;
