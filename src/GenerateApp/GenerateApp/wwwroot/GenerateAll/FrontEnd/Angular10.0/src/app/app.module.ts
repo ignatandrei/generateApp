@@ -3,6 +3,7 @@
 @{
   var angular="@angular";
   var NgModule="@NgModule";
+  var swimlane = "@swimlane";
   string ClassNameFromTableName(string tableName){
 		return tableName.Replace(" ","").Replace(".","").Replace("(","").Replace(")","");
 	}
@@ -81,6 +82,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { FormsModule } from '@angular/forms';
 import { httpInterceptorProviders } from './interceptors/barrelInterceptors';
 import { LowerCaseUrlSerializer } from './routeHelper/lowercase';
+import { NgxChartsModule } from '@(swimlane)/ngx-charts';
 
 @foreach(var nameTable in nameTablesToRender){
 	string nameClass=ClassNameFromTableName(nameTable);
@@ -111,6 +113,7 @@ import { @(nameClass)EditComponent } from './WebAPIComponents/@(nameClass)edit.c
     DashboardComponent 
   ],
   imports: [
+    NgxChartsModule
     FormsModule,
     HttpClientModule,
     BrowserModule,

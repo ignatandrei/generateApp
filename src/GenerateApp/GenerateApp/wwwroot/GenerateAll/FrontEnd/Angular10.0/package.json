@@ -11,6 +11,7 @@
   var xtuc="@xtuc";
   var webassemblyjs="@webassemblyjs";
   var istanbuljs="@istanbuljs";
+  var swimlane = "@swimlane";
 }
 {
   "name": "test-web-api",
@@ -37,7 +38,9 @@
     "@angular/router": "~10.0.5",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",
-    "zone.js": "~0.10.3"
+    "zone.js": "~0.10.3",
+    "@(swimlane)/ngx-charts": "^16.0.0",
+    
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.1000.4",
