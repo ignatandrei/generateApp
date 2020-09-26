@@ -102,6 +102,9 @@ namespace GenerateApp.Controllers
             var all = await payLoadConn.FromPayloadConn();
             foreach(var item in all.tables)
             {
+                if (item.name == "dbo.sysdiagrams")
+                    continue;
+
                 var tg = new TableGenerator();
                 tg.table = new Table();
                 tg.table.name = item.name;
