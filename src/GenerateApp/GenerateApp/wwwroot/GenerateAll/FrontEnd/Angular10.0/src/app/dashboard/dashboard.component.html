@@ -21,8 +21,18 @@ var ds= Model.FindAfterName("DataSource").Value;
 }
 
 <br />
-<h1> Please choose data to vizualize</h1>
-
+<mat-accordion>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          CLICK 
+        </mat-panel-title>
+        <mat-panel-description>
+          CRUD
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+  
+  
  @foreach(var nameTable in nameTablesToRender){
 string nameClass=ClassNameFromTableName(nameTable);
 
@@ -35,3 +45,6 @@ string nameClass=ClassNameFromTableName(nameTable);
 	  <br />
       }
       
+
+    </mat-expansion-panel>
+</mat-accordion>

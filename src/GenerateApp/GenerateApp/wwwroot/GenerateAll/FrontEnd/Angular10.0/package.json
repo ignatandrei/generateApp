@@ -39,7 +39,7 @@
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",
     "zone.js": "~0.10.3",
-    "@(swimlane)/ngx-charts": "^16.0.0",
+    "@(swimlane)/ngx-charts": "^16.0.0"
     
   },
   "devDependencies": {

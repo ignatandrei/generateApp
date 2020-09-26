@@ -32,6 +32,17 @@ var ds= Model.FindAfterName("DataSource").Value;
     [opened]="(isHandset$ | async) === false"
   >
     <mat-toolbar>Menu</mat-toolbar>
+    <mat-accordion>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            CLICK 
+          </mat-panel-title>
+          <mat-panel-description>
+            CRUD
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+    
     <mat-nav-list>
       @foreach(var nameTable in nameTablesToRender){
 string nameClass=ClassNameFromTableName(nameTable);
@@ -42,6 +53,9 @@ string nameClass=ClassNameFromTableName(nameTable);
       <a mat-list-item routerLink="/about" routerLinkActive="active">About</a>
       
     </mat-nav-list>
+  </mat-expansion-panel>
+</mat-accordion>
+
   </mat-sidenav>
   <mat-sidenav-content>
     <mat-toolbar color="primary">

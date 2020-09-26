@@ -113,7 +113,7 @@ import { @(nameClass)EditComponent } from './WebAPIComponents/@(nameClass)edit.c
     DashboardComponent 
   ],
   imports: [
-    NgxChartsModule
+    NgxChartsModule,
     FormsModule,
     HttpClientModule,
     BrowserModule,
