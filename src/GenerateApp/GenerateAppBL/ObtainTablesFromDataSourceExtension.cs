@@ -77,7 +77,7 @@ namespace GenerateApp.Controllers
                     var t = new Table();
                     t.FillWithData(dr, columns, keys);
                     
-                    if (t.HasPK())
+                    //if (t.HasPK())
                         nameTables.Add(t);
                 }
 
@@ -156,7 +156,7 @@ namespace GenerateApp.Controllers
 
                         }
                     }
-                    if(HasPK)
+                    //if(HasPK)
                         nameTables.Add(t);
                 }
                 var res = new TablesFromDataSource();
