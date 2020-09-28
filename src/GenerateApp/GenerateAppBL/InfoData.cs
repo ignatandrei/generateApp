@@ -144,11 +144,17 @@ namespace GenerateApp.Controllers
                 }
 
             }
-            DataTable dtOptions;
+            DataTable dtOptions = new DataTable("@@Options@@");
+            var dcName = dtOptions.Columns.Add("name", typeof(string));
+            dtOptions.Columns.Add("value", typeof(string));
+            dtOptions.PrimaryKey = new[] { dcName };
+
             switch (sourceData)
             {
                 case SourceData.Excel:
                     {
+                        dtOptions.Rows.Add("GeneratedBy", "http://demo.adces.ro:8080");
+
                         var dtRels = new DataTable("@@Relations@@");
                         dtRels.Columns.Add("parent_object", typeof(string));
                         dtRels.Columns.Add("parent_column", typeof(string));
@@ -159,10 +165,7 @@ namespace GenerateApp.Controllers
                         data.Metadata.AddTable(dtRels, idRel);
                         //var x = "<a mat-list-item [routerLink]=\"['/dbocountry/edit', row.idcountry]\" routerLinkActive=\"active\">Go=></a>";
                         var dtNow = DateTime.Now.ToString("yyyyMMddHHmmss");
-                        dtOptions = new DataTable("@@Options@@");
-                        var dcName = dtOptions.Columns.Add("name", typeof(string));
-                        dtOptions.Columns.Add("value", typeof(string));
-                        dtOptions.PrimaryKey = new[] { dcName };
+                        
                         dtOptions.Rows.Add("ApplicationName",Path.GetFileNameWithoutExtension( pathFile));
                         dtOptions.Rows.Add("DataSource", "SqlServerInMemory");
                         dtOptions.Rows.Add("DataSourceConnectionString", "");
@@ -178,10 +181,8 @@ namespace GenerateApp.Controllers
                 case SourceData.MariaDB:
                 case SourceData.MSSQL:
                     {
-                        dtOptions = new DataTable("@@Options@@");
-                        var dcName = dtOptions.Columns.Add("name", typeof(string));
-                        dtOptions.Columns.Add("value", typeof(string));
-                        dtOptions.PrimaryKey = new[] { dcName };
+                        dtOptions.Rows.Add("GeneratedBy", "http://data-to-code.eu/");
+
                         dtOptions.Rows.Add("ApplicationName", this.GenerateAppV1.payLoadConn.connDatabase );
                         dtOptions.Rows.Add("DataSource", sourceData.ToString());
                         dtOptions.Rows.Add("DataSourceConnectionString", this.GenerateAppV1.payLoadConn.ConnectionString());
