@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Configuration;
+using System.Diagnostics;
 
 namespace GenerateApp.Controllers
 {
@@ -40,8 +41,13 @@ namespace GenerateApp.Controllers
                 string s when s.Contains("bool", StringComparison.InvariantCultureIgnoreCase) => "boolean",
                 string s when s.Contains("date", StringComparison.InvariantCultureIgnoreCase) => "date",
 
-                _ => $"not found {originalType}"
+                _ => notFoundType(originalType)
             };
+        private string notFoundType(string t)
+        {
+            Debug.Assert(false, $"cannot find {t}");
+            return $"not found {t}";
+        }
         //public Type DotNetType()
         //{
         //    var t = DotNetTypeOriginal();
@@ -83,12 +89,14 @@ namespace GenerateApp.Controllers
 
                 string s when s.Contains("bool", StringComparison.InvariantCultureIgnoreCase) => typeof(bool),
                 string s when s.Contains("date", StringComparison.InvariantCultureIgnoreCase) => typeof(DateTime),
+                string s when s.Contains("double", StringComparison.InvariantCultureIgnoreCase) => typeof(double),
+                string s when s.Contains("blob", StringComparison.InvariantCultureIgnoreCase) => typeof(byte[]),
 
                 _ => DefaultType(originalType?.ToLower())
             };
         public Type DefaultType(string name)
         {
-            System.Diagnostics.Debug.Assert(false, $"cannot find {name}");
+            Debug.Assert(false, $"cannot find {name}");
             return typeof(string);
         }
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

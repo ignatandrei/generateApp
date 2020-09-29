@@ -59,10 +59,17 @@ namespace TestGenerate
             }
             Assert.True(ass.Success);
             Assert.True(ass.tables?.Length > 0);
+            foreach(var t in ass.tables)
+            {
+                foreach(var q in t.fields)
+                {
+                    Console.WriteLine(q.DotNetType());
+                }
+            }
 
         }
         [Theory]
-        [InlineData(@"E:\ignatandrei\generateApp\src\GenerateApp\GenerateApp\wwwroot\GenerateAll")]
+        [InlineData(@"E:\generateApp\src\GenerateApp\GenerateApp\wwwroot\GenerateAll")]
         public async void TestGenerate(string pathGenerate)
         {
             var app = gen();

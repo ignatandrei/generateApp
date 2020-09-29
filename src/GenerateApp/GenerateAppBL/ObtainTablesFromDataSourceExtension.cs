@@ -132,32 +132,10 @@ namespace GenerateApp.Controllers
                 foreach (DataRow dr in tables)
                 {
                     var t = new Table();
-                    t.name = dr["name"].ToString();
-                    var id = dr["id"].ToString();
-                    bool HasPK = false;
-                    foreach (DataRow col in columns)
-                    {
-                        if (col["tableId"].ToString() == id)
-                        {
-                            var f = new Field();
-                            f.name = col["name"].ToString();
-                            f.originalType = col["type"].ToString();
-                            f.IsNullable = (col["is_nullable"].ToString() == "1");
-                            foreach (DataRow row in keys.Rows)
-                            {
-                                if(col["id"] + ".PRIMARY" == row["id"].ToString())
-                                {
-                                    f.IsPK = true;
-                                    HasPK = true;
-                                    continue;
-                                }
-                            }
-                            t.fields.Add(f);
 
-                        }
-                    }
+                    t.FillWithData(dr, columns, keys);
                     //if(HasPK)
-                        nameTables.Add(t);
+                    nameTables.Add(t);
                 }
                 var res = new TablesFromDataSource();
                 res.Success = true;
