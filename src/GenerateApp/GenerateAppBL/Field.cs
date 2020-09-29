@@ -37,9 +37,17 @@ namespace GenerateApp.Controllers
             {
                 null => "does not exist ",
                 string s when s.Contains("int",StringComparison.InvariantCultureIgnoreCase) => "number",
+                string s when s.Contains("double", StringComparison.InvariantCultureIgnoreCase) => "number",
                 string s when s.Contains("varchar", StringComparison.InvariantCultureIgnoreCase) => "string",
+                string s when s.Contains("text", StringComparison.InvariantCultureIgnoreCase) => "string",
+                string s when s.Contains("mediumtext", StringComparison.InvariantCultureIgnoreCase) => "string",
                 string s when s.Contains("bool", StringComparison.InvariantCultureIgnoreCase) => "boolean",
+                string s when s.Contains("bit", StringComparison.InvariantCultureIgnoreCase) => "boolean",
                 string s when s.Contains("date", StringComparison.InvariantCultureIgnoreCase) => "date",
+                string s when s.Contains("varbinary", StringComparison.InvariantCultureIgnoreCase) => "byte[]",
+                string s when s.Contains("blob", StringComparison.InvariantCultureIgnoreCase) => "byte[]",
+                string s when s.Contains("timestamp", StringComparison.InvariantCultureIgnoreCase) => "date",
+                string s when s.Contains("decimal", StringComparison.InvariantCultureIgnoreCase) => "number",
 
                 _ => notFoundType(originalType)
             };
