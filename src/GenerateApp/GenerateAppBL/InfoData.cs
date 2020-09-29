@@ -450,7 +450,9 @@ namespace GenerateApp.Controllers
         {
 
             ServerManager manager = new ServerManager();
-            Site defaultSite = manager.Sites["AppGenerator"];
+            //if(manager.Sites.Contains(s=>s. ))
+            //Site defaultSite = manager.Sites["AppGenerator"];
+            Site defaultSite = manager.Sites.First();
             var appCreated = defaultSite.Applications.Add($"/{name}", folder);
             appCreated.ApplicationPoolName = "NETCore";
             manager.CommitChanges();
