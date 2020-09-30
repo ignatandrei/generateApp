@@ -1,8 +1,12 @@
 {
   "profiles": {
-    "GenerateAppTool": {
+    "GenerateAppToolSqlServer": {
       "commandName": "Project",
       "commandLineArgs": "sqlserver -cn  \"Server=.;Database=tests;Trusted_Connection=false;UID=sa;PWD=yourStrong(!)Password\""
+    },
+    "GenerateAppToolMariaDB": {
+      "commandName": "Project",
+      "commandLineArgs": "mariadb -cn  \"Server=alex360.go.ro;User Id=root;Password=datatocode;Database=test_schema;Port=85\""
     }
   }
 }

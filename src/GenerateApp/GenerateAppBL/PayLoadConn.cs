@@ -66,6 +66,7 @@ namespace GenerateApp.Controllers
             var all = await payLoadConn.FromPayloadConn();
 
             var ds = all.relations;
+            if(ds?.Length>0)
             foreach (var item in ds)
             {
                 var idParent = all.tables.FirstOrDefault(it => it.ID == item.TableParentId);
@@ -111,6 +112,8 @@ namespace GenerateApp.Controllers
                 tg.table.fields = item.fields;
                 t.Add(tg);
             }
+            
+            if(all.views?.Length>0)
             foreach (var item in all.views)
             {
                 var tg = new TableGenerator();

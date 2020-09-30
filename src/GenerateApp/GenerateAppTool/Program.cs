@@ -108,7 +108,7 @@ namespace GenerateAppTool
                         connPort =scsb.Port.ToString(),
                         connPassword = scsb.Password,
                         connUser = scsb.UserID,
-                        connType = connTypes.MSSQL.ToString()
+                        connType = connTypes.MARIADB.ToString()
                     };
                     g.input = await g.ReadAllFromDB();
                     var info = await g.GenerateInfoData();
