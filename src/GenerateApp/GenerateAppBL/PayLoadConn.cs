@@ -101,6 +101,12 @@ namespace GenerateApp.Controllers
         {
             var t = new List<TableGenerator>();
             var all = await payLoadConn.FromPayloadConn();
+            if (!all.Success)
+            {
+                Console.WriteLine("cannot generate data " + all.error);
+                return null;
+            }
+            if (all.tables?.Length>0)
             foreach(var item in all.tables)
             {
                 if (item.name == "dbo.sysdiagrams")
