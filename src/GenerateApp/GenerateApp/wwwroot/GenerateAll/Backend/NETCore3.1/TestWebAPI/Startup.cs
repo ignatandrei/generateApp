@@ -108,7 +108,7 @@ namespace TestWebAPI
                 textToRender="services.AddTransient<IRepositoryView<"+nameClass +">, "+nameClass+"_Repository>();";
             }
             <text>
-			@Raw(textToRender);
+			@Raw(textToRender)
             </text>
         }
  

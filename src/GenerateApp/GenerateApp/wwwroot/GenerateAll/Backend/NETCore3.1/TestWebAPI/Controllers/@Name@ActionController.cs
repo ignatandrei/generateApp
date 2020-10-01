@@ -4,11 +4,12 @@
 string ClassNameFromTableName(string tableName){
 		return tableName.Replace(" ","").Replace(".","").Replace("(","").Replace(")","");
 	}
-	string nameProperty(string original){
+	string nameProperty(string original, string nameClass){
 		var name = original.ToLower().Replace(" ","").Replace("event","event1").Replace("class","class1").Replace("object","object1").Replace("<","").Replace("/","").Replace(">","").Replace("(","").Replace(")","").ToLower();
 		if(!IsIdentifier(name))
 			name = "generated_"+name;
-		
+		if(nameClass.ToLower() == name)
+            name= "generated_"+name;
 		return name;
 	}
 	//https://docs.microsoft.com/en-us/dotnet/api/microsoft.codeanalysis.csharp.syntaxfacts?view=roslyn-dotnet
@@ -101,7 +102,7 @@ namespace TestWebAPI.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult<@(nameClass)>> Put(@(idType) id, @(nameClass) record)
         {
-            if (id != record.@(nameProperty(idTable)))
+            if (id != record.@(nameProperty(idTable,nameClass)))
             {
                 return BadRequest();
             }
@@ -128,7 +129,7 @@ namespace TestWebAPI.Controllers
         {
             
             await _repository.Delete( new @(nameClass)(){
-                @(nameProperty(idTable))=id
+                @(nameProperty(idTable,nameClass))=id
             });
 
 

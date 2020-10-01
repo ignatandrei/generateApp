@@ -19,11 +19,12 @@
         nameTablesToRender[iRowDS] = nameTable;
         tables[iRowDS]=renderTable;
     }
-	string nameProperty(string original){
+	string nameProperty(string original, string nameClass){
 		var name = original.ToLower().Replace(" ","").Replace("event","event1").Replace("class","class1").Replace("object","object1").Replace("<","").Replace("/","").Replace(">","").Replace("(","").Replace(")","").ToLower();
 		if(!IsIdentifier(name))
 			name = "generated_"+name;
-		
+		if(nameClass.ToLower() == name)
+            name= "generated_"+name;
 		return name;
 	}
 	//https://docs.microsoft.com/en-us/dotnet/api/microsoft.codeanalysis.csharp.syntaxfacts?view=roslyn-dotnet
@@ -88,7 +89,7 @@ namespace TestWEBAPI_DAL
          <text>
             modelBuilder.Entity<@(nameClass)>()
                 .ToTable(@Raw(WithSchema))
-                .HasKey(it=>it.@(nameProperty(idTable)));
+                .HasKey(it=>it.@(nameProperty(idTable,nameClass)));
          </text>
             }
             else{
@@ -122,7 +123,7 @@ namespace TestWEBAPI_DAL
                     string text="";
                     for(var iCol=0;iCol<nrColumns;iCol++){
                         var column=dt.Columns[iCol];
-                        string nameColumn = nameProperty(column.ColumnName);
+                        string nameColumn = nameProperty(column.ColumnName,nameClass);
                         var val =dt.Rows[iRow][iCol];
                         if(val == System.DBNull.Value)
                             val=null;

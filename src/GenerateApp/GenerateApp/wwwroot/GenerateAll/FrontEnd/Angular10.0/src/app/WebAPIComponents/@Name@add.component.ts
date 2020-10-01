@@ -19,11 +19,12 @@
 	string lowerCaseFirst(string s){
 		return char.ToLower(s[0]) + s.Substring(1);
   }
-  string nameProperty(string original){
+  string nameProperty(string original, string nameClass){
 		var name = original.ToLower().Replace(" ","").Replace("event","event1").Replace("class","class1").Replace("object","object1").Replace("<","").Replace("/","").Replace(">","").Replace("(","").Replace(")","").ToLower();
 		if(!IsIdentifier(name))
 			name = "generated_"+name;
-		
+      if(nameClass.ToLower() == name)
+      name= "generated_"+name;
 		return name;
 	}
 	bool IsIdentifier(string text)
