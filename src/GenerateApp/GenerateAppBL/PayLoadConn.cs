@@ -13,7 +13,7 @@ namespace GenerateApp.Controllers
     public class GenerateAppV1 : IValidatableObject
     {
         public DataToSentTable receiveData;
-        public async Task<InfoData> GenerateInfoData()
+        public async Task<InfoData> GenerateInfoData(connTypes connectionType)
         {
             receiveData = new DataToSentTable();
             var dt = new DataTable("DataSource");
@@ -34,7 +34,7 @@ namespace GenerateApp.Controllers
                 foreach (var field in table.table.fields)
                 {
                     //make the real field type
-                   var dc= dtSheet.Columns.Add(field.name, field.DotNetType());
+                   var dc= dtSheet.Columns.Add(field.name, field.DotNetType(connectionType));
                     if (field.IsPK)
                         dcPK.Add(dc);
 

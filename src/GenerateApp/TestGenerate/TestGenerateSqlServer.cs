@@ -116,7 +116,9 @@ namespace TestGenerate
             }
 
             Assert.Equal(0,errors );
-            var info = await app.GenerateInfoData();
+            var typeToLoad = Enum.Parse<connTypes>(app.payLoadConn.connType, true);
+
+            var info = await app.GenerateInfoData(typeToLoad);
             info.folderGenerator = pathGenerate;
             info.pathFile = @"E:\test\a.txt";
             var data = await info.GenerateApp();
