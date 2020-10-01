@@ -18,7 +18,7 @@
     }
 	var nrCols =dt.Columns.Count;
 	string nameProperty(string original){
-		var name = original.Replace(" ","").Replace("<","").Replace("/","").Replace(">","").Replace("(","").Replace(")","").ToLower();
+		var name = original.ToLower().Replace(" ","").Replace("event","event1").Replace("class","class1").Replace("object","object1").Replace("<","").Replace("/","").Replace(">","").Replace("(","").Replace(")","").ToLower();
 		if(!IsIdentifier(name))
 			name = "generated_"+name;
 		
@@ -66,6 +66,9 @@ namespace TestWebAPI_BL
                 this.@(nameProperty(idTable))= other.@(nameProperty(idTable));
             }
                 </text>
+                <text>
+                var x="";
+                </text>
                 }
             }
             @for(int iCol = 0;iCol < nrCols; iCol++){
@@ -75,9 +78,8 @@ namespace TestWebAPI_BL
                         continue;
                 
                 <text>
-            this.@colName = other.@colName;
+            this.@colName = other.@colName;            
                 </text>
-
             }
 
             OnCopyConstructor(other,withID);

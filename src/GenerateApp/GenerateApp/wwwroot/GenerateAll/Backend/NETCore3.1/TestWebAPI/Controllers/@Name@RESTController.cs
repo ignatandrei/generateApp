@@ -4,7 +4,7 @@ string ClassNameFromTableName(string tableName){
 		return tableName.Replace(" ","").Replace(".","").Replace("(","").Replace(")","");
 	}
 string nameProperty(string original){
-    	var name = original.Replace(" ","").Replace("<","").Replace("/","").Replace(">","").Replace("(","").Replace(")","").ToLower();
+    	var name = original.ToLower().Replace(" ","").Replace("event","event1").Replace("class","class1").Replace("object","object1").Replace("<","").Replace("/","").Replace(">","").Replace("(","").Replace(")","").ToLower();
 		if(!IsIdentifier(name))
 			name = "generated_"+name;
 		
