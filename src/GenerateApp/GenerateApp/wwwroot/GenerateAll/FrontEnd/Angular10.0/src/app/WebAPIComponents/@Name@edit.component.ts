@@ -101,10 +101,15 @@ import { @(nameClass)Service } from '../services/@(nameClass).service';
 
 
 @if(rowsRelParent.Length>0){
+  var h=new System.Collections.Generic.HashSet<string>(rowsRelParent.Length);
   foreach(var row in rowsRelParent){
+
     var refTableName =ClassNameFromTableName(row["referenced_object"].ToString());
     if(refTableName == nameClass)
       continue;
+    if(!h.Add(refTableName)){
+        continue;
+        }
     <text>
     import { @(refTableName)Service } from '../services/@(refTableName).service';
     import{ @(refTableName) } from '../WebAPIClasses/@(refTableName)';
@@ -129,8 +134,12 @@ export class @(nameClass)EditComponent implements OnInit {
   public dataToEdit: @(nameClass);
 
   @if(rowsRelParent.Length>0){
+    var h=new System.Collections.Generic.HashSet<string>(rowsRelParent.Length);
     foreach(var row in rowsRelParent){
       var refTableName =ClassNameFromTableName(row["referenced_object"].ToString());
+      if(!h.Add(refTableName)){
+        continue;
+        }
       servicesRef +=" private "+refTableName  +"SVC:" +refTableName +"Service,";
       <text>
       public @(refTableName)All: @(refTableName)[] = [];
@@ -166,7 +175,12 @@ export class @(nameClass)EditComponent implements OnInit {
 
     @if(rowsRelParent.Length>0){
       foreach(var row in rowsRelParent){
+        var h=new System.Collections.Generic.HashSet<string>(rowsRelParent.Length);
         var refTableName =ClassNameFromTableName(row["referenced_object"].ToString());
+        if(!h.Add(refTableName)){
+          continue;
+          }
+        
         <text>
         this.@(refTableName)SVC.GetAll().subscribe(it => this. @(refTableName)All = it );
         

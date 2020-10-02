@@ -146,7 +146,8 @@ namespace GenerateApp.Controllers
             }
             DataTable dtOptions = new DataTable("@@Options@@");
             var dcName = dtOptions.Columns.Add("name", typeof(string));
-            dtOptions.Columns.Add("value", typeof(string));
+            dcName.MaxLength = 300;
+            dtOptions.Columns.Add("value", typeof(string)).MaxLength=300;
             dtOptions.PrimaryKey = new[] { dcName };
 
             switch (sourceData)
@@ -156,10 +157,10 @@ namespace GenerateApp.Controllers
                         dtOptions.Rows.Add("GeneratedBy", "http://demo.adces.ro:8080");
 
                         var dtRels = new DataTable("@@Relations@@");
-                        dtRels.Columns.Add("parent_object", typeof(string));
-                        dtRels.Columns.Add("parent_column", typeof(string));
-                        dtRels.Columns.Add("referenced_object", typeof(string));
-                        dtRels.Columns.Add("referenced_column", typeof(string));
+                        dtRels.Columns.Add("parent_object", typeof(string)).MaxLength = 300;
+                        dtRels.Columns.Add("parent_column", typeof(string)).MaxLength = 300;
+                        dtRels.Columns.Add("referenced_object", typeof(string)).MaxLength = 300;
+                        dtRels.Columns.Add("referenced_column", typeof(string)).MaxLength = 300;
 
                         int idRel = data.AddNewTable(dtRels);
                         data.Metadata.AddTable(dtRels, idRel);

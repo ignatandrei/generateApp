@@ -18,7 +18,7 @@ namespace GenerateApp.Controllers
             receiveData = new DataToSentTable();
             var dt = new DataTable("DataSource");
             dt.Columns.Add("Number", typeof(int));
-            dt.Columns.Add("TableName", typeof(string));
+            dt.Columns.Add("TableName", typeof(string)).MaxLength = 300;
 
             int id = receiveData.AddNewTable(dt);
             receiveData.Metadata.AddTable(dt, id);
@@ -55,10 +55,10 @@ namespace GenerateApp.Controllers
 
 
             var dtRels = new DataTable("@@Relations@@");
-            dtRels.Columns.Add("parent_object", typeof(string));
-            dtRels.Columns.Add("parent_column", typeof(string));
-            dtRels.Columns.Add("referenced_object", typeof(string));
-            dtRels.Columns.Add("referenced_column", typeof(string));
+            dtRels.Columns.Add("parent_object", typeof(string)).MaxLength = 300;
+            dtRels.Columns.Add("parent_column", typeof(string)).MaxLength = 300;
+            dtRels.Columns.Add("referenced_object", typeof(string)).MaxLength = 300;
+            dtRels.Columns.Add("referenced_column", typeof(string)).MaxLength = 300;
             
             int idRel = receiveData.AddNewTable(dtRels);
             receiveData.Metadata.AddTable(dtRels, idRel);
