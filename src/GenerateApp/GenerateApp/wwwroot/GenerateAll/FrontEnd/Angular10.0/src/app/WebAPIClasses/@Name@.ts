@@ -134,7 +134,7 @@ export class @(nameClass)
 			
 
             <text>
-            public @nameProperty(colName,nameClass) : @nameType;
+            public @(colName) : @(nameType);
             </text>
 
         }
