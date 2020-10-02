@@ -91,6 +91,7 @@ namespace GenerateApp.Controllers
                 string s when s.Contains("varchar", StringComparison.InvariantCultureIgnoreCase) => typeof(string),
                 string s when s.Contains("sql_variant", StringComparison.InvariantCultureIgnoreCase) => typeof(string),
                 string s when s.Contains("char", StringComparison.InvariantCultureIgnoreCase) => typeof(string),
+                string s when connTypes.MARIADB == connectionTypes  && s.Contains("varbinary") => typeof(byte[]),
                 string s when s.Contains("binary", StringComparison.InvariantCultureIgnoreCase) => typeof(string),
                 string s when s.Contains("text", StringComparison.InvariantCultureIgnoreCase) => typeof(string),
                 string s when s.Contains("xml", StringComparison.InvariantCultureIgnoreCase) => typeof(string),

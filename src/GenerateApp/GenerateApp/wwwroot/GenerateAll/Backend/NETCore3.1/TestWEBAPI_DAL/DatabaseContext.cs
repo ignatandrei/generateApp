@@ -99,8 +99,26 @@ namespace TestWEBAPI_DAL
                 .HasNoKey();
          </text>
             }
-        }            
 
+            
+
+        }   
+            //mapping columns if have spaces
+
+        @{
+            foreach(var dt in tables){
+                string nameClass= ClassNameFromTableName(dt.TableName);
+                var nrColumns = dt.Columns.Count;
+                for(var iCol=0;iCol<nrColumns;iCol++){
+                    var column=dt.Columns[iCol];
+                    string nameColumn = nameProperty(column.ColumnName,nameClass);
+                    <text>
+                        modelBuilder.Entity<@(nameClass)>().Property(it => it.@(nameColumn)).HasColumnName("@(column.ColumnName)");
+                    </text>
+                }
+            
+            }
+        }
             OnModelCreatingPartial(modelBuilder);
             Seed(modelBuilder);
         }
