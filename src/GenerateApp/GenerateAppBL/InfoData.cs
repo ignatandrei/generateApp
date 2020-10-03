@@ -335,7 +335,7 @@ namespace GenerateApp.Controllers
                 var sep = Path.DirectorySeparatorChar;
                 logs.AddLog(this.name,"getting file names");
 
-                var up = new TransformerUpdateColumn("FullFileName_origin", "OutputString", "'Generated" + sep + $"'+SUBSTRING(FullFileName_origin,{lenTemplateFolder + 2},100)");
+                var up = new TransformerUpdateColumn("FullFileName_origin", "OutputString", "'Generated" + sep + $"'+SUBSTRING(FullFileName_origin,{lenTemplateFolder + 2},1000)");
                 data = await up.TransformData(data);
                 var x = data.DataToBeSentFurther;
                 logs.AddLog(this.name,"change column name=>key");
