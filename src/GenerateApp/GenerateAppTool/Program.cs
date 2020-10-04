@@ -60,8 +60,20 @@ namespace GenerateAppTool
                 cmd.OnExecute(()=>
                 {
                     Console.WriteLine("please see www.data-to-code.eu for updates");
+                    Console.WriteLine("Generates code from databases");
+                    var dbs = string.Join(Environment.NewLine,Enum.GetNames(typeof(connTypes)));
+                    dbs = dbs.Replace(connTypes.None.ToString(), "");
+                    Console.WriteLine(dbs);
+                    Console.WriteLine("");
+                    Console.WriteLine("see below about how to generate");
+                    Console.WriteLine("");
+
+                    app.ShowHelp();
+
+                    Console.WriteLine("");
                     Console.WriteLine("Made by Andrei Ignat, ignatandrei@yahoo.com");
                     Console.WriteLine("Made by Alexandru Badita, alexandru360@gmail.com");
+                    
                     return 0;
                 });
             });

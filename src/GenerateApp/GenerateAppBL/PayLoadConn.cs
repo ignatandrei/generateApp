@@ -259,11 +259,8 @@ namespace GenerateApp.Controllers
     {
         None = 0,
         Excel= 1,
-        SQLITE,
-        SQLITEMEMO,
         MSSQL,
         MYSQL,
         MariaDB
-
     }
 }
