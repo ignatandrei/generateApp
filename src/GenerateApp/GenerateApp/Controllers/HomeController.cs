@@ -93,7 +93,7 @@ namespace GenerateApp.Controllers
         //to be deleted
 
         //[HttpGet]
-        //public GenerateAppV1 GenerateApp()
+        //public GenerateAppV1 GenerateApp("NETCore3.1", "Angular10.0")
         //{
         //    var v = new GenerateAppV1();
         //    v.payLoadConn = new PayLoadConn();
@@ -286,7 +286,7 @@ namespace GenerateApp.Controllers
                 }
                 i.logs.AddLog(i.name,"Start generating app");
 
-                var result = await i.GenerateApp();
+                var result = await i.GenerateApp("NETCore3.1", "Angular10.0");
 
                 i.logs.AddLog(i.name,$"Done with result {result}");
                 return result;

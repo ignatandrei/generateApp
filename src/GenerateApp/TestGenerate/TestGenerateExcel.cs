@@ -26,7 +26,7 @@ namespace TestGenerate
                 pathFile =  file
             };
 
-            var res = await i.GenerateApp();
+            var res = await i.GenerateApp("NETCore3.1", "Angular10.0");
             output.WriteLine(i.logs[i.logs.Count - 2]);
             output.WriteLine(i.logs[i.logs.Count - 1]);
             Assert.True(res);

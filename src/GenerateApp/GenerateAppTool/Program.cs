@@ -3,10 +3,12 @@ using McMaster.Extensions.CommandLineUtils;
 using McMaster.Extensions.CommandLineUtils.HelpText;
 using MySqlConnector;
 using Newtonsoft.Json;
+using StankinsObjects;
 using System;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace GenerateAppTool
@@ -14,7 +16,7 @@ namespace GenerateAppTool
     class Program
     {
 
-        static async Task<int> MariaDBOrMySql(connTypes typeToLoad, CommandLineApplication cmd)
+        static async Task<int> MariaDBOrMySql(connTypes typeToLoad, CommandLineApplication cmd, string folderWithTemplates, string outputFolder)
         {
             const string cnOpt = "cn";
             var optionConnectionString = cmd.GetOptions().First(it=>it.ShortName==cnOpt);
@@ -46,23 +48,33 @@ namespace GenerateAppTool
 
             g.input = await g.ReadAllFromDB();
             var info = await g.GenerateInfoData(typeToLoad);
-            info.folderGenerator = @"E:\generateApp\src\GenerateApp\GenerateApp\wwwroot\GenerateAll";
-            info.pathFile = @"E:\test\a.txt";
-            var data = await info.GenerateApp();
+            info.folderGenerator = folderWithTemplates;
+            info.pathFile = Path.Combine(outputFolder,"a.txt");
+            var data = await info.GenerateApp("NETCore3.1", "Angular10.0");
             return 0;
 
         }
         static int Main(string[] args)
         {
 
-            string folderWithTemplates = @"E:\generateApp\src\GenerateApp\GenerateApp\wwwroot\GenerateAll";
+            var pathDll = Assembly.GetEntryAssembly().Location;
+            var folderWithTemplates = Path.GetDirectoryName(pathDll);
+            folderWithTemplates = Path.Combine(folderWithTemplates, "GenerateAll");
+            folderWithTemplates = @"E:\generateApp\src\GenerateApp\GenerateApp\wwwroot\GenerateAll";
 
+            string outputFolder = Environment.CurrentDirectory;
             var app = new CommandLineApplication();
             app.HelpOption("-h|--help", inherited:true);
             var tf = app.Option<string>("-tf|--templateFolder <folder>", "template Folder", CommandOptionType.SingleOrNoValue);
             if (tf.HasValue())
             {
                 folderWithTemplates = tf.Value();
+            }
+
+            var of= app.Option<string>("-of|--outputFolder <folder>", "output Folder", CommandOptionType.SingleOrNoValue);
+            if (of.HasValue())
+            {
+                outputFolder = of.Value();
             }
             app.Command("templates", cmd =>
             {
@@ -176,8 +188,8 @@ namespace GenerateAppTool
 
                      var info =await g.GenerateInfoData(typeToLoad);
                      info.folderGenerator = folderWithTemplates;
-                     info.pathFile = @"E:\test\a.txt";
-                     var data = await info.GenerateApp();
+                     info.pathFile = Path.Combine(outputFolder,"a.txt");
+                     var data = await info.GenerateApp("NETCore3.1", "Angular10.0");
                      return 0;
                  });
 
@@ -191,7 +203,7 @@ namespace GenerateAppTool
                 var optionConnectionString = cmd.Option<string>("-cn|--connectionstring <connectionstring>", "connection string", CommandOptionType.SingleValue);
                 cmd.OnExecuteAsync(async ct =>
                 {
-                    return await MariaDBOrMySql(connTypes.MariaDB, cmd);
+                    return await MariaDBOrMySql(connTypes.MariaDB, cmd, folderWithTemplates, outputFolder);
 
                 });
 
@@ -203,7 +215,7 @@ namespace GenerateAppTool
 
                 cmd.OnExecuteAsync(async ct =>
                 {
-                    return await MariaDBOrMySql(connTypes.MYSQL, cmd);
+                    return await MariaDBOrMySql(connTypes.MYSQL, cmd,folderWithTemplates, outputFolder);
                 });
 
 
@@ -225,7 +237,8 @@ namespace GenerateAppTool
             i.pathFile = fileName;
             // replace this
             i.folderGenerator = folderWithTemplates;
-            var ret= await i.GenerateApp();
+            
+            var ret= await i.GenerateApp("NETCore3.1", "Angular10.0");
             if(!ret)
             {
                 foreach (var l in i.logs)

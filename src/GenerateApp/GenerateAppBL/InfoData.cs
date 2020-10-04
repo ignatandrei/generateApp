@@ -82,13 +82,11 @@ namespace GenerateApp.Controllers
 
         }
 
-        public async Task<bool> GenerateApp()
+        public async Task<bool> GenerateApp(string backendFolderName, string frontendFolderName)
         {
             string folderGenerator = this.folderGenerator;
             string generator = Path.Combine(folderGenerator, "describe.txt");
             var stData = JsonConvert.DeserializeObject<StankinsGenerator>(File.ReadAllText(generator));
-            var backendFolderName = @"NETCore3.1";
-            var frontendFolderName = @"Angular10.0";
             //frontendFolderName = @"Angular10.0Full";
             var backend = stData.backend.First(it => it.folder == backendFolderName);
             var frontEnd = stData.frontend.First(it => it.folder == frontendFolderName);
