@@ -56,11 +56,46 @@ namespace GenerateAppTool
         {
 
             string folderWithTemplates = @"E:\generateApp\src\GenerateApp\GenerateApp\wwwroot\GenerateAll";
-            string generator = Path.Combine(folderWithTemplates, "describe.txt");
-            var stData = JsonConvert.DeserializeObject<StankinsGenerator>(File.ReadAllText(generator));
 
             var app = new CommandLineApplication();
             app.HelpOption("-h|--help", inherited:true);
+            var tf = app.Option<string>("-tf|--templateFolder <folder>", "template Folder", CommandOptionType.SingleOrNoValue);
+            if (tf.HasValue())
+            {
+                folderWithTemplates = tf.Value();
+            }
+            app.Command("templates", cmd =>
+            {
+                var cmdList = new CommandLineApplication()
+                {
+                    Name = "list"
+                };
+                cmdList.OnExecute(() =>
+                {
+                    string generator = Path.Combine(folderWithTemplates, "describe.txt");
+                    if (!File.Exists(generator))
+                    {
+                        Console.WriteLine($"cannot find file {generator}");
+                        return 1;
+                    }
+                    var stData = JsonConvert.DeserializeObject<StankinsGenerator>(File.ReadAllText(generator));
+                    foreach (var item in stData.backend)
+                    {
+                        Console.WriteLine("backend :" + item.name);
+
+                    }
+
+                    foreach (var item in stData.frontend)
+                    {
+                        Console.WriteLine("frontend :" + item.name);
+
+                    }
+                    return 0;
+                });
+                cmd.AddSubcommand(cmdList);
+                cmd.ShowHelp();
+
+            });
             app.Command("about", cmd =>
             {
                 cmd.OnExecute(()=>
