@@ -90,6 +90,8 @@ namespace GenerateAppTool
             info.folderGenerator = data.folderWithTemplates;
             info.pathFile = Path.Combine(data.outputFolder,"a.txt");
             var res = await info.GenerateApp(data.backEnd, data.frontEnd);
+            Console.WriteLine($"generated in folder {res}");
+
             return 0;
 
         }
@@ -98,8 +100,21 @@ namespace GenerateAppTool
         {
             data = new DataToGenerateOptions();
             
-           
+
             var app = new CommandLineApplication();
+            app.UnrecognizedArgumentHandling = UnrecognizedArgumentHandling.CollectAndContinue;
+
+            string moreHelp = "";
+
+            moreHelp += $"{Environment.NewLine}{Environment.NewLine} ";
+            moreHelp += " Generates code from database ";
+            moreHelp += $"{Environment.NewLine}{Environment.NewLine} ";
+            moreHelp +=$"EXECUTE with {Environment.NewLine}{Environment.NewLine} generateApptool sqlserver -cn <your connection string here> ...";
+            moreHelp += $"{Environment.NewLine}{Environment.NewLine} ";
+            moreHelp += $"EXECUTE with {Environment.NewLine}{Environment.NewLine} generateApptool mysql -cn <your connection string here> ...";
+
+            moreHelp += $"To modify how it is generated, see options above ";
+            app.ExtendedHelpText = moreHelp;
             app.HelpOption("-h|--help", inherited:true);
             var tf = app.Option<string>("-tf|--templateFolder <folder>", "template Folder", CommandOptionType.SingleOrNoValue);
             if (tf.HasValue())
@@ -126,7 +141,7 @@ namespace GenerateAppTool
             {
                 data.outputFolder = of.Value();
             }
-            app.Command("templates", cmd =>
+            app.Command("_templates", cmd =>
             {
                 var cmdList = new CommandLineApplication()
                 {
@@ -160,10 +175,12 @@ namespace GenerateAppTool
                     cmd.ShowHelp(); 
                 });
             });
-            app.Command("about", cmd =>
+            app.Command("_about", cmd =>
             {
                 cmd.OnExecute(()=>
                 {
+                    app.ShowVersion();
+                    
                     Console.WriteLine("please see www.data-to-code.eu for updates");
                     Console.WriteLine("Generates code from databases");
                     var dbs = string.Join(Environment.NewLine,Enum.GetNames(typeof(connTypes)));
@@ -197,7 +214,8 @@ namespace GenerateAppTool
                     string fileName = optionFileName.Value();
                     Console.WriteLine($"start import {fileName}");
                     data.OutputToConsole();
-                    await ImportExcel(fileName);
+                    var folder = await ImportExcel(fileName);
+                    Console.WriteLine($"generated in folder {data}");
                     return 0;
                 });
 
@@ -242,6 +260,8 @@ namespace GenerateAppTool
                      info.folderGenerator = data.folderWithTemplates;
                      info.pathFile = Path.Combine(data.outputFolder,"a.txt");
                      var res = await info.GenerateApp(data.backEnd, data.frontEnd);
+                     Console.WriteLine($"generated in folder {res}");
+
                      return 0;
                  });
 
@@ -272,16 +292,18 @@ namespace GenerateAppTool
 
 
             });
+            
             app.OnExecute(() =>
             {
                 Console.WriteLine("Specify a subcommand");
+                app.ShowVersion();
                 app.ShowHelp();
                 return 1;
             });
             return app.Execute(args);
         }
 
-        private static async Task<bool> ImportExcel(string fileName)
+        private static async Task<string> ImportExcel(string fileName)
         {
             var i = new InfoData(connTypes.Excel);
             i.name = "andrei";
@@ -291,12 +313,12 @@ namespace GenerateAppTool
             i.folderGenerator = data.folderWithTemplates;
             
             var ret= await i.GenerateApp(data.backEnd, data.frontEnd);
-            if(!ret)
+            if(string.IsNullOrEmpty(ret))
             {
                 foreach (var l in i.logs)
                     Console.WriteLine(l);
             }
-            return ret;
+            return (ret);
         }
     }
 }

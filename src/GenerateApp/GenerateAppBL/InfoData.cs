@@ -82,7 +82,7 @@ namespace GenerateApp.Controllers
 
         }
 
-        public async Task<bool> GenerateApp(string backendFolderName, string frontendFolderName)
+        public async Task<string> GenerateApp(string backendFolderName, string frontendFolderName)
         {
             string folderGenerator = this.folderGenerator;
             string generator = Path.Combine(folderGenerator, "describe.txt");
@@ -360,17 +360,17 @@ namespace GenerateApp.Controllers
                 var save = new SenderOutputToFolder(outputFolder, false, "OutputString");
                 data = await save.TransformData(data);
                 if (!string.IsNullOrWhiteSpace(GitOps.CredentialsToken))
-                    return await CreateFromGit(g, outputFolder);
+                    return (await CreateFromGit(g, outputFolder)?outputFolder: null);
 
 
-                return true;
+                return outputFolder;
             }
             catch (Exception ex)
             {
 
                 logs.AddLog(this.name,"ERROR!" + ex.Message);
                 logs.AddLog(this.name,"ERROR!" + ex.StackTrace);
-                return false;
+               return null;
             }
             finally
             {

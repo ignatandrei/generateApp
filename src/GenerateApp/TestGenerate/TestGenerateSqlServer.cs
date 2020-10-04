@@ -122,12 +122,12 @@ namespace TestGenerate
             info.folderGenerator = pathGenerate;
             info.pathFile = @"E:\test\a.txt";
             var data = await info.GenerateApp("NETCore3.1", "Angular10.0");
-            if (!data)
+            if (string.IsNullOrWhiteSpace(data))
             {
                 output.WriteLine(info.logs[info.logs.Count - 2]);
                 output.WriteLine(info.logs[info.logs.Count - 1]);
             }
-            Assert.True(data);
+            Assert.NotNull(data);
         }
     }
 }

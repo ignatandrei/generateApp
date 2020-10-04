@@ -249,7 +249,7 @@ namespace GenerateApp.Controllers
             Task t = new Task(async i =>
             {
                 var info = i as InfoData;
-                info.result = await GenerateApp(i as InfoData);
+                info.result = !string.IsNullOrWhiteSpace(await GenerateApp(i as InfoData));
             }
             , i);
             t.Start();
@@ -275,7 +275,7 @@ namespace GenerateApp.Controllers
             
             return RedirectToAction("Info",new { id = name });
         }
-        public async Task<bool> GenerateApp(InfoData i)
+        public async Task<string> GenerateApp(InfoData i)
         {
             try
             {
@@ -302,7 +302,7 @@ namespace GenerateApp.Controllers
                 catch
                 {
                 }
-                return false;
+                return null;
             }
         }
         public ActionResult Info(string id)
