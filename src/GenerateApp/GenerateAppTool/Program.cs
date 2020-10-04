@@ -13,10 +13,49 @@ using System.Threading.Tasks;
 
 namespace GenerateAppTool
 {
+    class DataToGenerateOptions
+    {
+        public DataToGenerateOptions()
+        {
+            var pathDll = Assembly.GetEntryAssembly().Location;
+
+            folderWithTemplates = Path.GetDirectoryName(pathDll);
+            folderWithTemplates = Path.Combine(folderWithTemplates, "GenerateAll");
+            folderWithTemplates = @"E:\generateApp\src\GenerateApp\GenerateApp\wwwroot\GenerateAll";
+
+            outputFolder = Environment.CurrentDirectory;
+            backEnd = "NETCore3.1";
+            frontEnd = "Angular10.0";
+        }
+        public string folderWithTemplates { get; set; }
+        public string outputFolder { get; set; }
+        public string backEnd { get; set; }
+        public string frontEnd { get; set; }
+
+        public void OutputToConsole()
+        {
+            var str = "current options";
+            str += $"{nameof(folderWithTemplates)}:{folderWithTemplates} {Environment.NewLine}";
+            str += $"{nameof(outputFolder)}:{folderWithTemplates}{Environment.NewLine}";
+            str += $"{nameof(frontEnd)}:{frontEnd}{Environment.NewLine}";
+            str += $"{nameof(backEnd)}:{backEnd}{Environment.NewLine}";
+
+            Console.WriteLine(str);
+        }
+        //public string ToString(FormattableString formattable)
+        //{
+        //    var arguments = formattable.GetArguments()
+        //                       .Select(arg => $"{arg.ToString()}").ToArray();
+
+        //    return string.Format(formattable.Format, arguments);
+        //}
+        
+
+    }
     class Program
     {
 
-        static async Task<int> MariaDBOrMySql(connTypes typeToLoad, CommandLineApplication cmd, string folderWithTemplates, string outputFolder)
+        static async Task<int> MariaDBOrMySql(connTypes typeToLoad, CommandLineApplication cmd)
         {
             const string cnOpt = "cn";
             var optionConnectionString = cmd.GetOptions().First(it=>it.ShortName==cnOpt);
@@ -48,33 +87,44 @@ namespace GenerateAppTool
 
             g.input = await g.ReadAllFromDB();
             var info = await g.GenerateInfoData(typeToLoad);
-            info.folderGenerator = folderWithTemplates;
-            info.pathFile = Path.Combine(outputFolder,"a.txt");
-            var data = await info.GenerateApp("NETCore3.1", "Angular10.0");
+            info.folderGenerator = data.folderWithTemplates;
+            info.pathFile = Path.Combine(data.outputFolder,"a.txt");
+            var res = await info.GenerateApp(data.backEnd, data.frontEnd);
             return 0;
 
         }
+        static DataToGenerateOptions data;
         static int Main(string[] args)
         {
-
-            var pathDll = Assembly.GetEntryAssembly().Location;
-            var folderWithTemplates = Path.GetDirectoryName(pathDll);
-            folderWithTemplates = Path.Combine(folderWithTemplates, "GenerateAll");
-            folderWithTemplates = @"E:\generateApp\src\GenerateApp\GenerateApp\wwwroot\GenerateAll";
-
-            string outputFolder = Environment.CurrentDirectory;
+            data = new DataToGenerateOptions();
+            
+           
             var app = new CommandLineApplication();
             app.HelpOption("-h|--help", inherited:true);
             var tf = app.Option<string>("-tf|--templateFolder <folder>", "template Folder", CommandOptionType.SingleOrNoValue);
             if (tf.HasValue())
             {
-                folderWithTemplates = tf.Value();
+                data.folderWithTemplates = tf.Value();
+            }
+            
+            
+            var bE = app.Option<string>("-be|--backEnd <name>", "backend name", CommandOptionType.SingleOrNoValue);
+            if (bE.HasValue())
+            {
+                data.backEnd = bE.Value();
+            }
+            
+            
+            var fE = app.Option<string>("-fe|--frontEnd <name>", "frontEnd name", CommandOptionType.SingleOrNoValue);
+            if (fE.HasValue())
+            {
+                data.frontEnd = fE.Value();
             }
 
-            var of= app.Option<string>("-of|--outputFolder <folder>", "output Folder", CommandOptionType.SingleOrNoValue);
+            var of = app.Option<string>("-of|--outputFolder <folder>", "output Folder", CommandOptionType.SingleOrNoValue);
             if (of.HasValue())
             {
-                outputFolder = of.Value();
+                data.outputFolder = of.Value();
             }
             app.Command("templates", cmd =>
             {
@@ -84,7 +134,7 @@ namespace GenerateAppTool
                 };
                 cmdList.OnExecute(() =>
                 {
-                    string generator = Path.Combine(folderWithTemplates, "describe.txt");
+                    string generator = Path.Combine(data.folderWithTemplates, "describe.txt");
                     if (!File.Exists(generator))
                     {
                         Console.WriteLine($"cannot find file {generator}");
@@ -105,8 +155,10 @@ namespace GenerateAppTool
                     return 0;
                 });
                 cmd.AddSubcommand(cmdList);
-                cmd.ShowHelp();
-
+                cmd.OnExecute(() =>
+                {
+                    cmd.ShowHelp(); 
+                });
             });
             app.Command("about", cmd =>
             {
@@ -118,8 +170,7 @@ namespace GenerateAppTool
                     dbs = dbs.Replace(connTypes.None.ToString(), "");
                     Console.WriteLine(dbs);
                     Console.WriteLine("");
-                    Console.WriteLine($"templates folder = {folderWithTemplates}");
-
+                    data.OutputToConsole();        
                     Console.WriteLine("see below about how to generate");
                     Console.WriteLine("");
 
@@ -145,7 +196,8 @@ namespace GenerateAppTool
                     }
                     string fileName = optionFileName.Value();
                     Console.WriteLine($"start import {fileName}");
-                    await ImportExcel(fileName, folderWithTemplates);
+                    data.OutputToConsole();
+                    await ImportExcel(fileName);
                     return 0;
                 });
 
@@ -187,9 +239,9 @@ namespace GenerateAppTool
                      var typeToLoad = Enum.Parse<connTypes>(g.payLoadConn.connType, true);
 
                      var info =await g.GenerateInfoData(typeToLoad);
-                     info.folderGenerator = folderWithTemplates;
-                     info.pathFile = Path.Combine(outputFolder,"a.txt");
-                     var data = await info.GenerateApp("NETCore3.1", "Angular10.0");
+                     info.folderGenerator = data.folderWithTemplates;
+                     info.pathFile = Path.Combine(data.outputFolder,"a.txt");
+                     var res = await info.GenerateApp(data.backEnd, data.frontEnd);
                      return 0;
                  });
 
@@ -203,7 +255,7 @@ namespace GenerateAppTool
                 var optionConnectionString = cmd.Option<string>("-cn|--connectionstring <connectionstring>", "connection string", CommandOptionType.SingleValue);
                 cmd.OnExecuteAsync(async ct =>
                 {
-                    return await MariaDBOrMySql(connTypes.MariaDB, cmd, folderWithTemplates, outputFolder);
+                    return await MariaDBOrMySql(connTypes.MariaDB, cmd);
 
                 });
 
@@ -215,7 +267,7 @@ namespace GenerateAppTool
 
                 cmd.OnExecuteAsync(async ct =>
                 {
-                    return await MariaDBOrMySql(connTypes.MYSQL, cmd,folderWithTemplates, outputFolder);
+                    return await MariaDBOrMySql(connTypes.MYSQL, cmd);
                 });
 
 
@@ -229,16 +281,16 @@ namespace GenerateAppTool
             return app.Execute(args);
         }
 
-        private static async Task<bool> ImportExcel(string fileName, string folderWithTemplates)
+        private static async Task<bool> ImportExcel(string fileName)
         {
             var i = new InfoData(connTypes.Excel);
             i.name = "andrei";
            
             i.pathFile = fileName;
             // replace this
-            i.folderGenerator = folderWithTemplates;
+            i.folderGenerator = data.folderWithTemplates;
             
-            var ret= await i.GenerateApp("NETCore3.1", "Angular10.0");
+            var ret= await i.GenerateApp(data.backEnd, data.frontEnd);
             if(!ret)
             {
                 foreach (var l in i.logs)
