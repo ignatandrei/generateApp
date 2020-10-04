@@ -14,12 +14,13 @@ namespace GenerateAppTool
 
         static async Task<int> MariaDBOrMySql(connTypes typeToLoad, CommandLineApplication cmd)
         {
-            var optionConnectionString = cmd.GetOptions().First(it=>it.ShortName=="cn");
+            const string cnOpt = "cn";
+            var optionConnectionString = cmd.GetOptions().First(it=>it.ShortName==cnOpt);
 
             Console.WriteLine("start "+typeToLoad);
             if (!optionConnectionString.HasValue())
             {
-                Console.WriteLine("Specify a subcommand");
+                Console.WriteLine($"Specify -{cnOpt}");
                 cmd.ShowHelp();
                 return 1;
             }
