@@ -2,8 +2,10 @@
 using McMaster.Extensions.CommandLineUtils;
 using McMaster.Extensions.CommandLineUtils.HelpText;
 using MySqlConnector;
+using Newtonsoft.Json;
 using System;
 using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -52,7 +54,11 @@ namespace GenerateAppTool
         }
         static int Main(string[] args)
         {
-            
+
+            string folderWithTemplates = @"E:\generateApp\src\GenerateApp\GenerateApp\wwwroot\GenerateAll";
+            string generator = Path.Combine(folderWithTemplates, "describe.txt");
+            var stData = JsonConvert.DeserializeObject<StankinsGenerator>(File.ReadAllText(generator));
+
             var app = new CommandLineApplication();
             app.HelpOption("-h|--help", inherited:true);
             app.Command("about", cmd =>
@@ -65,6 +71,8 @@ namespace GenerateAppTool
                     dbs = dbs.Replace(connTypes.None.ToString(), "");
                     Console.WriteLine(dbs);
                     Console.WriteLine("");
+                    Console.WriteLine($"templates folder = {folderWithTemplates}");
+
                     Console.WriteLine("see below about how to generate");
                     Console.WriteLine("");
 
@@ -90,7 +98,7 @@ namespace GenerateAppTool
                     }
                     string fileName = optionFileName.Value();
                     Console.WriteLine($"start import {fileName}");
-                    await ImportExcel(fileName);
+                    await ImportExcel(fileName, folderWithTemplates);
                     return 0;
                 });
 
@@ -132,7 +140,7 @@ namespace GenerateAppTool
                      var typeToLoad = Enum.Parse<connTypes>(g.payLoadConn.connType, true);
 
                      var info =await g.GenerateInfoData(typeToLoad);
-                     info.folderGenerator = @"E:\generateApp\src\GenerateApp\GenerateApp\wwwroot\GenerateAll";
+                     info.folderGenerator = folderWithTemplates;
                      info.pathFile = @"E:\test\a.txt";
                      var data = await info.GenerateApp();
                      return 0;
@@ -174,14 +182,14 @@ namespace GenerateAppTool
             return app.Execute(args);
         }
 
-        private static async Task<bool> ImportExcel(string fileName)
+        private static async Task<bool> ImportExcel(string fileName, string folderWithTemplates)
         {
             var i = new InfoData(connTypes.Excel);
             i.name = "andrei";
            
             i.pathFile = fileName;
             // replace this
-            i.folderGenerator = @"E:\generateApp\src\GenerateApp\GenerateApp\wwwroot\GenerateAll";
+            i.folderGenerator = folderWithTemplates;
             var ret= await i.GenerateApp();
             if(!ret)
             {
