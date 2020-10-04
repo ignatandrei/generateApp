@@ -28,7 +28,7 @@
         dir $currentDir\out          
         Write-Host "!!!"
         &"docker" cp ${nameDockerContainer}:/app/out  $currentDir\out\$nameDockerImage
-        pause
+        #pause
 		&"docker" container kill ${nameDockerContainer}
         dir $currentDir\out
         # pause

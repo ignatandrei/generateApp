@@ -36,7 +36,7 @@ namespace GenerateAppTool
         {
             var str = "current options";
             str += $"{nameof(folderWithTemplates)}:{folderWithTemplates} {Environment.NewLine}";
-            str += $"{nameof(outputFolder)}:{folderWithTemplates}{Environment.NewLine}";
+            str += $"{nameof(outputFolder)}:{outputFolder}{Environment.NewLine}";
             str += $"{nameof(frontEnd)}:{frontEnd}{Environment.NewLine}";
             str += $"{nameof(backEnd)}:{backEnd}{Environment.NewLine}";
 
