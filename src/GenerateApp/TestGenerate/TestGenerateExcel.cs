@@ -18,7 +18,7 @@ namespace TestGenerate
         //[InlineData(@"C:\Users\ignat\Desktop\Daily work list Greyline 20.03.xlsx")]
         public async void TestData(string file)
         {
-            var i = new InfoData(SourceData.Excel)
+            var i = new InfoData(connTypes.Excel)
             {
                 logs = new Logs(),
                 name = "testAndrei",

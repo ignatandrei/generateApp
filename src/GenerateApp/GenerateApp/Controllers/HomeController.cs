@@ -229,7 +229,7 @@ namespace GenerateApp.Controllers
         {
             string name = Path.GetFileName(path);
             name = new String(name.Where(it=> it == '.' || Char.IsLetterOrDigit(it)).ToArray());
-            var i = new InfoData(SourceData.Excel)
+            var i = new InfoData(connTypes.Excel)
             {
                 logs = new Logs(),
                 name = name,

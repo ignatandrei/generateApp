@@ -54,7 +54,16 @@ namespace GenerateAppTool
             
             var app = new CommandLineApplication();
             app.HelpOption("-h|--help", inherited:true);
-
+            app.Command("about", cmd =>
+            {
+                cmd.OnExecute(()=>
+                {
+                    Console.WriteLine("please see www.data-to-code.eu for updates");
+                    Console.WriteLine("Made by Andrei Ignat, ignatandrei@yahoo.com");
+                    Console.WriteLine("Made by Alexandru Badita, alexandru360@gmail.com");
+                    return 0;
+                });
+            });
             app.Command("excel", async cmd =>
             {
                 var optionFileName = cmd.Option("-f|--file <filename>", "import data file name", CommandOptionType.SingleOrNoValue);
