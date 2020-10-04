@@ -29,9 +29,9 @@ namespace GenerateApp.Controllers
             InsideIIS = !string.IsNullOrWhiteSpace(str);
         }
         public readonly DateTime startedDate;
-        private readonly SourceData sourceData;
+        private readonly connTypes sourceData;
 
-        public InfoData(SourceData sourceData)
+        public InfoData(connTypes sourceData)
         {
             startedDate = DateTime.UtcNow;
             this.sourceData = sourceData;
@@ -104,11 +104,12 @@ namespace GenerateApp.Controllers
             IDataToSent data;
             switch (sourceData)
             {
-                case SourceData.Excel:
+                case connTypes.Excel:
                     data = await ReadExcel();
                     break;
-                case SourceData.MariaDB:
-                case SourceData.MSSQL:
+                case connTypes.MariaDB:
+                case connTypes.MSSQL:
+                case connTypes.MYSQL:
                     data = ReadCustom();
                     break;
                 default:
@@ -125,7 +126,7 @@ namespace GenerateApp.Controllers
                 Console.WriteLine(dt.TableName +"=>" + dt.Rows.Count);
                 switch (this.sourceData)
                 {
-                    case SourceData.Excel:
+                    case connTypes.Excel:
                         if (dt.Rows.Count == 0)
                         {
                             ds.Rows.RemoveAt(iRowDS);
@@ -135,8 +136,10 @@ namespace GenerateApp.Controllers
                             nameTablesToRender.Add(dt.TableName);
                         }
                         break;
-                    case SourceData.MariaDB:
-                    case SourceData.MSSQL:
+                    case connTypes.MariaDB:
+                    case connTypes.MSSQL:
+                    case connTypes.MYSQL:
+
                         nameTablesToRender.Add(dt.TableName);
                         break;
                     default:
@@ -152,7 +155,7 @@ namespace GenerateApp.Controllers
 
             switch (sourceData)
             {
-                case SourceData.Excel:
+                case connTypes.Excel:
                     {
                         dtOptions.Rows.Add("GeneratedBy", "http://demo.adces.ro:8080");
 
@@ -179,8 +182,10 @@ namespace GenerateApp.Controllers
                         }
                     }
                     break;
-                case SourceData.MariaDB:
-                case SourceData.MSSQL:
+                case connTypes.MariaDB:
+                case connTypes.MSSQL:
+                case connTypes.MYSQL:
+
                     {
                         dtOptions.Rows.Add("GeneratedBy", "http://data-to-code.eu/");
 
@@ -245,12 +250,13 @@ namespace GenerateApp.Controllers
                         var data1 = data.FindAfterName(nameTable).Value;
                         switch (this.sourceData)
                         {
-                            case SourceData.Excel:
+                            case connTypes.Excel:
                                 if (data1.Rows.Count == 0)
                                     continue;
                                 break;
-                            case SourceData.MariaDB:
-                            case SourceData.MSSQL:
+                            case connTypes.MariaDB:
+                            case connTypes.MSSQL:
+                            case connTypes.MYSQL:
                                 break;
                             default:
                                 throw new ArgumentException($"not supported4 {nameof(sourceData)} {sourceData} ");
@@ -275,12 +281,13 @@ namespace GenerateApp.Controllers
                         var data1 = data.FindAfterName(nameTable).Value;
                         switch (this.sourceData)
                         {
-                            case SourceData.Excel:
+                            case connTypes.Excel:
                                 if (data1.Rows.Count == 0)
                                     continue;
                                 break;
-                            case SourceData.MariaDB:
-                            case SourceData.MSSQL:
+                            case connTypes.MariaDB:
+                            case connTypes.MSSQL:
+                            case connTypes.MYSQL:
                                 break;
                             default:
                                 throw new ArgumentException($"not supported5 {nameof(sourceData)} {sourceData} ");

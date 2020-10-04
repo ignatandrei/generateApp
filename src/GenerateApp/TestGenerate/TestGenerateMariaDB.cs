@@ -36,7 +36,7 @@ namespace TestGenerate
         static PayLoadConn payload()
         {
             var p = new PayLoadConn();
-            p.connType = connTypes.MARIADB.ToString();
+            p.connType = connTypes.MariaDB.ToString();
             p.connDatabase = "test_schema";
             p.connHost = "alex360.go.ro";
             p.connPort = "85";

@@ -4,12 +4,51 @@ using McMaster.Extensions.CommandLineUtils.HelpText;
 using MySqlConnector;
 using System;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace GenerateAppTool
 {
     class Program
     {
+
+        static async Task<int> MariaDBOrMySql(connTypes typeToLoad, CommandLineApplication cmd)
+        {
+            var optionConnectionString = cmd.GetOptions().First(it=>it.ShortName=="cn");
+
+            Console.WriteLine("start "+typeToLoad);
+            if (!optionConnectionString.HasValue())
+            {
+                Console.WriteLine("Specify a subcommand");
+                cmd.ShowHelp();
+                return 1;
+            }
+            string cn = optionConnectionString.Value();
+
+            var scsb = new MySqlConnectionStringBuilder(cn);
+
+            Console.WriteLine($"start import {cn}");
+            var g = new GenerateAppV1();
+
+            g.payLoadConn = new PayLoadConn()
+            {
+                connDatabase = scsb.Database,
+                connHost = scsb.Server,
+                connPort = scsb.Port.ToString(),
+                connPassword = scsb.Password,
+                connUser = scsb.UserID,
+                connType = typeToLoad.ToString()
+            };
+            //var typeToLoad = Enum.Parse<connTypes>(g.payLoadConn.connType, true);
+
+            g.input = await g.ReadAllFromDB();
+            var info = await g.GenerateInfoData(typeToLoad);
+            info.folderGenerator = @"E:\generateApp\src\GenerateApp\GenerateApp\wwwroot\GenerateAll";
+            info.pathFile = @"E:\test\a.txt";
+            var data = await info.GenerateApp();
+            return 0;
+
+        }
         static int Main(string[] args)
         {
             
@@ -36,7 +75,7 @@ namespace GenerateAppTool
 
             });
 
-            app.Command("sqlserver", async cmd =>
+            app.Command("sqlserver", cmd =>
              {
                  var optionConnectionString = cmd.Option<string>("-cn|--connectionstring <connectionstring>", "connection string", CommandOptionType.SingleValue);
 
@@ -81,45 +120,25 @@ namespace GenerateAppTool
              });
 
 
-            app.Command("mariadb", async cmd =>
+            app.Command("mariadb", cmd =>
+            {
+
+                var optionConnectionString = cmd.Option<string>("-cn|--connectionstring <connectionstring>", "connection string", CommandOptionType.SingleValue);
+                cmd.OnExecuteAsync(async ct =>
+                {
+                    return await MariaDBOrMySql(connTypes.MariaDB, cmd);
+
+                });
+
+
+            });
+            app.Command("mysql", cmd =>
             {
                 var optionConnectionString = cmd.Option<string>("-cn|--connectionstring <connectionstring>", "connection string", CommandOptionType.SingleValue);
 
                 cmd.OnExecuteAsync(async ct =>
                 {
-
-
-                    Console.WriteLine("start mariadb");
-                    if (!optionConnectionString.HasValue())
-                    {
-                        Console.WriteLine("Specify a subcommand");
-                        cmd.ShowHelp();
-                        return 1;
-                    }
-                    string cn = optionConnectionString.Value();
-
-                    var scsb = new MySqlConnectionStringBuilder(cn);
-
-                    Console.WriteLine($"start import {cn}");
-                    var g = new GenerateAppV1();
-
-                    g.payLoadConn = new PayLoadConn()
-                    {
-                        connDatabase = scsb.Database,
-                        connHost = scsb.Server,
-                        connPort =scsb.Port.ToString(),
-                        connPassword = scsb.Password,
-                        connUser = scsb.UserID,
-                        connType = connTypes.MARIADB.ToString()
-                    };
-                    var typeToLoad = Enum.Parse<connTypes>(g.payLoadConn.connType, true);
-
-                    g.input = await g.ReadAllFromDB();
-                    var info = await g.GenerateInfoData(typeToLoad);
-                    info.folderGenerator = @"E:\generateApp\src\GenerateApp\GenerateApp\wwwroot\GenerateAll";
-                    info.pathFile = @"E:\test\a.txt";
-                    var data = await info.GenerateApp();
-                    return 0;
+                    return await MariaDBOrMySql(connTypes.MYSQL, cmd);
                 });
 
 
@@ -135,7 +154,7 @@ namespace GenerateAppTool
 
         private static async Task<bool> ImportExcel(string fileName)
         {
-            var i = new InfoData(SourceData.Excel);
+            var i = new InfoData(connTypes.Excel);
             i.name = "andrei";
            
             i.pathFile = fileName;

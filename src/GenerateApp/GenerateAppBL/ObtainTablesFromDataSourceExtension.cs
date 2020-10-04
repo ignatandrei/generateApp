@@ -158,7 +158,8 @@ namespace GenerateApp.Controllers
             
             switch (typeToLoad)
             {
-                case connTypes.MARIADB:
+                case connTypes.MariaDB:
+                case connTypes.MYSQL:
                     {
                         var mariaDBConStr = new MySqlConnectionStringBuilder();
                         mariaDBConStr.Database = payLoadConn.connDatabase;
@@ -213,7 +214,8 @@ namespace GenerateApp.Controllers
                     connection = payLoadConn.ConnectionString();
                 switch (typeToLoad)
                 {
-                    case connTypes.MARIADB:
+                    case connTypes.MariaDB:
+                    case connTypes.MYSQL:
                         return await connection.FromMariaDB();
                     case connTypes.MSSQL:
                         return await connection.FromMSSQL();

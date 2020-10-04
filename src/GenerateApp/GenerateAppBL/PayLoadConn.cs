@@ -85,7 +85,7 @@ namespace GenerateApp.Controllers
             }
 
 
-            var con = Enum.Parse<SourceData>(this.payLoadConn.connType, true);
+            var con = Enum.Parse<connTypes>(this.payLoadConn.connType, true);
             var i = new InfoData(con)
             {
                 logs = new Logs(),
@@ -258,12 +258,12 @@ namespace GenerateApp.Controllers
     public enum connTypes
     {
         None = 0,
-        XLS=1,
+        Excel= 1,
         SQLITE,
         SQLITEMEMO,
         MSSQL,
         MYSQL,
-        MARIADB
-            
+        MariaDB
+
     }
 }

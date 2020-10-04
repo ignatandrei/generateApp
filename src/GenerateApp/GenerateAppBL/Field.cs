@@ -79,7 +79,8 @@ namespace GenerateApp.Controllers
                 string s when s.Contains("float", StringComparison.InvariantCultureIgnoreCase) => typeof(double),
                 string s when s.Contains("real", StringComparison.InvariantCultureIgnoreCase) => typeof(Single),
                 string s when connTypes.MSSQL == connectionTypes &&  s.Contains("timestamp", StringComparison.InvariantCultureIgnoreCase) => typeof(byte[]),
-                string s when connTypes.MARIADB == connectionTypes && s.Contains("timestamp", StringComparison.InvariantCultureIgnoreCase) => typeof(DateTime),
+                string s when connTypes.MariaDB == connectionTypes && s.Contains("timestamp", StringComparison.InvariantCultureIgnoreCase) => typeof(DateTime),
+                string s when connTypes.MYSQL == connectionTypes && s.Contains("timestamp", StringComparison.InvariantCultureIgnoreCase) => typeof(DateTime),
 
                 string s when s.Contains("time", StringComparison.InvariantCultureIgnoreCase) => typeof(DateTime),
 
@@ -91,7 +92,8 @@ namespace GenerateApp.Controllers
                 string s when s.Contains("varchar", StringComparison.InvariantCultureIgnoreCase) => typeof(string),
                 string s when s.Contains("sql_variant", StringComparison.InvariantCultureIgnoreCase) => typeof(string),
                 string s when s.Contains("char", StringComparison.InvariantCultureIgnoreCase) => typeof(string),
-                string s when connTypes.MARIADB == connectionTypes  && s.Contains("varbinary") => typeof(byte[]),
+                string s when connTypes.MariaDB == connectionTypes  && s.Contains("varbinary") => typeof(byte[]),
+                string s when connTypes.MYSQL == connectionTypes && s.Contains("varbinary") => typeof(byte[]),
                 string s when s.Contains("binary", StringComparison.InvariantCultureIgnoreCase) => typeof(string),
                 string s when s.Contains("text", StringComparison.InvariantCultureIgnoreCase) => typeof(string),
                 string s when s.Contains("xml", StringComparison.InvariantCultureIgnoreCase) => typeof(string),

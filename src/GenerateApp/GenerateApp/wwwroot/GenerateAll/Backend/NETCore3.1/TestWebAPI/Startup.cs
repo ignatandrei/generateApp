@@ -90,6 +90,7 @@ namespace TestWebAPI
                     </text>
                 break;
                 case "MariaDB":
+                case "MYSQL":
                     <text>
                            options.UseMySql(Configuration.GetConnectionString("DefaultConnection"))); 
                     </text>
