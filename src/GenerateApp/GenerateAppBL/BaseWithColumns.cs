@@ -48,7 +48,8 @@ namespace GenerateApp.Controllers
                     if (row["column_id"].ToString() != col["id"].ToString())
                         continue;
 
-                    if (row["type_desc"].ToString() != "PRIMARY_KEY_CONSTRAINT")
+                    string typeDesc = row["type_desc"].ToString();
+                    if(!typeDesc.ToLower().Contains("primary"))
                         continue;
 
                     f.IsPK = true;
