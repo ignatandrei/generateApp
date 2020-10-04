@@ -37,6 +37,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.OpenApi.Models;
 using NetCore2Blockly;
 using TestWebAPI_BL;
 using TestWEBAPI_DAL;
@@ -62,6 +63,13 @@ namespace TestWebAPI
             // add logging
             services.AddCors();
             services.AddControllers();
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "MyApplication", Version = "v1" });
+            });
+
+
             services.AddDbContext<DatabaseContext>(options => 
 
             @switch(dataSource){
@@ -120,6 +128,9 @@ namespace TestWebAPI
 			
 			app.UseBlockly();
             app.UseBlocklyUI();
+            app.UseSwagger();
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebApplication1 v1"));
+
             
             if (env.IsDevelopment())
             {
