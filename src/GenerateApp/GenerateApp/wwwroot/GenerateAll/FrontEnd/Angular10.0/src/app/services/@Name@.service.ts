@@ -16,7 +16,7 @@
     
       if(nameClass.ToLower() == name)
       name= "generated_"+name;
-		return name;
+		return name.Trim();
 	}
 	//https://docs.microsoft.com/en-us/dotnet/api/microsoft.codeanalysis.csharp.syntaxfacts?view=roslyn-dotnet
 	bool IsIdentifier(string text)
@@ -125,7 +125,7 @@ export class @(nameClass)Service {
     return this.client.get<@(nameClass)>(url);
   }
   public Update(data:@(nameClass)):Observable<@(nameClass)>{
-    const url = this.baseUrl+'api/@(nameClass)/Put/'+data.@(nameProperty(idTable,nameClass));
+    const url = this.baseUrl+'api/@(nameClass)/Put/'+data.@(idTable);
     
     return this.client.put<@(nameClass)>(url,data);
   }

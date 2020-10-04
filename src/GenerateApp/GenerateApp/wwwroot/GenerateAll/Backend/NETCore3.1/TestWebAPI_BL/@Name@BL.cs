@@ -23,7 +23,7 @@
 			name = "generated_"+name;
 		if(nameClass.ToLower() == name)
             name= "generated_"+name;
-		return name;
+		return name.Trim();
 	}
 	//https://docs.microsoft.com/en-us/dotnet/api/microsoft.codeanalysis.csharp.syntaxfacts?view=roslyn-dotnet
 	bool IsIdentifier(string text)
@@ -104,7 +104,7 @@ namespace TestWebAPI_BL
             var colType = col.DataType;
             if(colType.FullName == typeof(string).FullName)
                 nullable=false;
-             if(colName.ToLower() == idTable.ToLower())
+             if(colName.ToLower() == nameProperty(idTable,nameClass).ToLower())
                 continue;
             <text>
             public @(colType.Name)@(nullable?"?":"") @(colName) { get; set; }

@@ -27,7 +27,7 @@ string ClassNameFromTableName(string tableName){
 			name = "generated_"+name;
             if(nameClass.ToLower() == name)
             name= "generated_"+name;
-		return name;
+		return name.Trim();
 	}
 	bool IsIdentifier(string text)
 	{

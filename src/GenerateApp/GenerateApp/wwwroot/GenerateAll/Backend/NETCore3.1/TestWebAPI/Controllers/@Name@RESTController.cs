@@ -11,7 +11,7 @@ string nameProperty(string original, string nameClass){
         if(nameClass.ToLower() == name)
             name= "generated_"+name;
 		
-		return name;
+		return name.Trim();
 	}
 	//https://docs.microsoft.com/en-us/dotnet/api/microsoft.codeanalysis.csharp.syntaxfacts?view=roslyn-dotnet
 	bool IsIdentifier(string text)
