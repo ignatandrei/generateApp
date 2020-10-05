@@ -8,50 +8,10 @@ using System;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
 
 namespace GenerateAppTool
 {
-    class DataToGenerateOptions
-    {
-        public DataToGenerateOptions()
-        {
-            var pathDll = Assembly.GetEntryAssembly().Location;
-
-            folderWithTemplates = Path.GetDirectoryName(pathDll);
-            folderWithTemplates = Path.Combine(folderWithTemplates, "GenerateAll");
-            //folderWithTemplates = @"E:\ignatandrei\generateApp\src\GenerateApp\GenerateApp\wwwroot\GenerateAll";
-
-            outputFolder = Environment.CurrentDirectory;
-            backEnd = "NETCore3.1";
-            frontEnd = "Angular10.0";
-        }
-        public string folderWithTemplates { get; set; }
-        public string outputFolder { get; set; }
-        public string backEnd { get; set; }
-        public string frontEnd { get; set; }
-
-        public void OutputToConsole()
-        {
-            var str = $"current options {Environment.NewLine}";
-            str += $"{nameof(folderWithTemplates)}:{folderWithTemplates} {Environment.NewLine}";
-            str += $"{nameof(outputFolder)}:{outputFolder}{Environment.NewLine}";
-            str += $"{nameof(frontEnd)}:{frontEnd}{Environment.NewLine}";
-            str += $"{nameof(backEnd)}:{backEnd}{Environment.NewLine}";
-
-            Console.WriteLine(str);
-        }
-        //public string ToString(FormattableString formattable)
-        //{
-        //    var arguments = formattable.GetArguments()
-        //                       .Select(arg => $"{arg.ToString()}").ToArray();
-
-        //    return string.Format(formattable.Format, arguments);
-        //}
-        
-
-    }
     class Program
     {
 
@@ -103,7 +63,7 @@ namespace GenerateAppTool
             
 
             var app = new CommandLineApplication();
-            app.UnrecognizedArgumentHandling = UnrecognizedArgumentHandling.CollectAndContinue;
+            //app.UnrecognizedArgumentHandling = UnrecognizedArgumentHandling.CollectAndContinue;
 
             string moreHelp = "";
 
@@ -117,31 +77,35 @@ namespace GenerateAppTool
             moreHelp += $"To modify how it is generated, see options above ";
             app.ExtendedHelpText = moreHelp;
             app.HelpOption("-h|--help", inherited:true);
-            var tf = app.Option<string>("-tf|--templateFolder <folder>", "template Folder", CommandOptionType.SingleOrNoValue);
-            if (tf.HasValue())
-            {
-                data.folderWithTemplates = tf.Value();
-            }
-            
-            
+            var tf = app.Option<string>("-tf|--templateFolder <folder>", "template Folder", CommandOptionType.SingleOrNoValue);           
             var bE = app.Option<string>("-be|--backEnd <name>", "backend name", CommandOptionType.SingleOrNoValue);
-            if (bE.HasValue())
-            {
-                data.backEnd = bE.Value();
-            }
-            
-            
             var fE = app.Option<string>("-fe|--frontEnd <name>", "frontEnd name", CommandOptionType.SingleOrNoValue);
-            if (fE.HasValue())
-            {
-                data.frontEnd = fE.Value();
-            }
 
             var of = app.Option<string>("-of|--outputFolder <folder>", "output Folder", CommandOptionType.SingleOrNoValue);
-            if (of.HasValue())
+            
+            app.OnParsingComplete(p =>
             {
-                data.outputFolder = of.Value();
-            }
+                if (tf.HasValue())
+                {
+                    data.folderWithTemplates = tf.Value();
+                }
+                if (bE.HasValue())
+                {
+                    data.backEnd = bE.Value();
+                }
+                if (fE.HasValue())
+                {
+                    data.frontEnd = fE.Value();
+                }
+
+                if (of.HasValue())
+                {
+                    data.outputFolder = of.Value();
+                }
+
+            });
+
+
             app.Command("_templates", cmd =>
             {
                 var cmdList = new CommandLineApplication()
