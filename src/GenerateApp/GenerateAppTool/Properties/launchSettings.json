@@ -2,11 +2,11 @@
   "profiles": {
     "GenerateAppToolSqlServer": {
       "commandName": "Project",
-      "commandLineArgs": "sqlserver  -cn  \"Server=.;Database=tests;Trusted_Connection=false;UID=sa;PWD=yourStrong(!)Password\""
+      "commandLineArgs": "-of:\"E:\\test\" -tf:\"E:\\ignatandrei\\generateApp\\src\\GenerateApp\\GenerateApp\\wwwroot\\GenerateAll\"  sqlserver  -cn  \"Server=.;Database=tests;Trusted_Connection=false;UID=sa;PWD=yourStrong(!)Password\""
     },
     "GenerateAppToolMariaDB": {
       "commandName": "Project",
-      "commandLineArgs": "mariadb -cn  \"Server=alex360.go.ro;User Id=root;Password=datatocode;Database=test_schema;Port=85\""
+      "commandLineArgs": "-of:\"E:\\test\" -tf:\"E:\\ignatandrei\\generateApp\\src\\GenerateApp\\GenerateApp\\wwwroot\\GenerateAll\"  mariadb -cn  \"Server=alex360.go.ro;User Id=root;Password=datatocode;Database=test_schema;Port=85\""
     },
     "GenerateAppToolMySql": {
       "commandName": "Project",
