@@ -2,7 +2,7 @@
   "profiles": {
     "GenerateAppToolSqlServer": {
       "commandName": "Project",
-      "commandLineArgs": "sqlserver -cn  \"Server=.;Database=tests;Trusted_Connection=false;UID=sa;PWD=yourStrong(!)Password\""
+      "commandLineArgs": "sqlserver  -cn  \"Server=.;Database=tests;Trusted_Connection=false;UID=sa;PWD=yourStrong(!)Password\""
     },
     "GenerateAppToolMariaDB": {
       "commandName": "Project",
@@ -10,7 +10,7 @@
     },
     "GenerateAppToolMySql": {
       "commandName": "Project",
-      "commandLineArgs": "mysql -cn  \"Server=sql7.freemysqlhosting.net;User Id=sql7341223;Password=sSuvYBVdwu;Database=sql7341223;Port=3306\""
+      "commandLineArgs": "-of:\"E:\\test\" -tf:\"E:\\ignatandrei\\generateApp\\src\\GenerateApp\\GenerateApp\\wwwroot\" mysql  -cn  \"Server=sql7.freemysqlhosting.net;User Id=sql7341223;Password=sSuvYBVdwu;Database=sql7341223;Port=3306\""
     }
   }
 }

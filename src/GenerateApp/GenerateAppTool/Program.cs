@@ -21,7 +21,7 @@ namespace GenerateAppTool
 
             folderWithTemplates = Path.GetDirectoryName(pathDll);
             folderWithTemplates = Path.Combine(folderWithTemplates, "GenerateAll");
-            folderWithTemplates = @"E:\generateApp\src\GenerateApp\GenerateApp\wwwroot\GenerateAll";
+            //folderWithTemplates = @"E:\ignatandrei\generateApp\src\GenerateApp\GenerateApp\wwwroot\GenerateAll";
 
             outputFolder = Environment.CurrentDirectory;
             backEnd = "NETCore3.1";
@@ -34,7 +34,7 @@ namespace GenerateAppTool
 
         public void OutputToConsole()
         {
-            var str = "current options";
+            var str = $"current options {Environment.NewLine}";
             str += $"{nameof(folderWithTemplates)}:{folderWithTemplates} {Environment.NewLine}";
             str += $"{nameof(outputFolder)}:{outputFolder}{Environment.NewLine}";
             str += $"{nameof(frontEnd)}:{frontEnd}{Environment.NewLine}";
@@ -67,6 +67,7 @@ namespace GenerateAppTool
                 cmd.ShowHelp();
                 return 1;
             }
+            data.OutputToConsole();
             string cn = optionConnectionString.Value();
 
             var scsb = new MySqlConnectionStringBuilder(cn);
@@ -237,6 +238,7 @@ namespace GenerateAppTool
                          cmd.ShowHelp();
                          return 1;
                      }
+                     data.OutputToConsole();
                      string cn = optionConnectionString.Value();
                      
                      var scsb = new SqlConnectionStringBuilder(cn);
