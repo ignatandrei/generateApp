@@ -8,6 +8,20 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="DataToGenerateOptions.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="GenerateAll\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="DataToGenerateOptions.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="McMaster.Extensions.CommandLineUtils" Version="3.0.0" />
   </ItemGroup>
 
@@ -15,7 +29,12 @@
     <ProjectReference Include="..\GenerateAppBL\GenerateAppBL.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All"/>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="GenerateAll\**">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
   <PropertyGroup>
     <Description>Generate Application Tool</Description>
