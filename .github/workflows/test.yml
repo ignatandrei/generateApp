@@ -43,12 +43,14 @@ jobs:
       - name: Run version and build
         run: |
           cd src
-          cd Generate
+          cd GenerateApp
           dotnet tool restore
           dotnet tool list
           dotnet pwsh ./setVersion.ps1
           dotnet restore
           dotnet build
+          cd GenerateAppTool
+          dotnet pack
 
           
       - name: artifacts
