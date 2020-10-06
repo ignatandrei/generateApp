@@ -7,11 +7,18 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
- 
   <ItemGroup>
-    <None Remove="GenerateAll\**" />
+    <None Remove="GenerateAll\GenerateAll.zip" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Include="GenerateAll\GenerateAll.zip">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+ 
+  
  
   <ItemGroup>
     <PackageReference Include="McMaster.Extensions.CommandLineUtils" Version="3.0.0" />
@@ -22,11 +29,6 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="GenerateAll\**">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
   </ItemGroup>
   <PropertyGroup>
     <Description>Generate Application Tool</Description>
