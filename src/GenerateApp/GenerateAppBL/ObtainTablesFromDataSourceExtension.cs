@@ -2,13 +2,16 @@
 using Microsoft.Data.SqlClient;
 using MySqlConnector;
 using Stankins.Excel;
+using Stankins.Interfaces;
 using Stankins.MariaDB;
 using Stankins.SqlServer;
 using StankinsObjects;
+using StankinsReceiverDB;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace GenerateApp.Controllers
@@ -57,56 +60,71 @@ namespace GenerateApp.Controllers
                 return res;
             }
         }
-        
+        private static  DataTable FindTableOrNull(IDataToSent data, string nameTable)
+        {
+            if (data.Metadata.Tables.Count(item => item.Name.Equals(nameTable,StringComparison.InvariantCultureIgnoreCase)) == 0)
+                return null;
+
+            return data.FindAfterName(nameTable).Value;
+        } 
+        private async static Task<TablesFromDataSource> FromReceiver(DatabaseReceiver recData)
+
+        {
+            var data = await recData.TransformData(null);
+            var tables = FindTableOrNull( data,"tables")?.Rows;
+            var columns = FindTableOrNull(data,"columns")?.Rows;
+            
+            var views = FindTableOrNull(data,"views")?.Rows;
+            var keys = FindTableOrNull(data,"keys");
+            var nameTables = new List<Table>();
+            var nameViews = new List<View>();
+            if(tables?.Count>0)
+            foreach (DataRow dr in tables)
+            {
+                var t = new Table();
+                t.FillWithData(dr, columns, keys);
+
+                //if (t.HasPK())
+                nameTables.Add(t);
+            }
+            if(views?.Count>0)
+            foreach (DataRow dr in views)
+            {
+                var t = new View();
+                t.FillWithData(dr, columns, keys);
+                nameViews.Add(t);
+
+            }
+
+            var rels = new List<Relations>();
+            var relTable = FindTableOrNull(data,"relations");
+            if(relTable?.Rows?.Count>0)
+            foreach (DataRow dr in relTable.Rows)
+            {
+                var r = new Relations();
+                r.TableParentId = dr["parent_object_id"].ToString();
+                r.TableRefID = dr["referenced_object_id"].ToString();
+                r.FieldParentId = dr["parent_column_id"].ToString();
+                r.FieldRefId = dr["referenced_column_id"].ToString();
+                rels.Add(r);
+            }
+
+            var res = new TablesFromDataSource();
+            res.Success = true;
+            res.relations = rels?.ToArray();
+            res.tables = nameTables?.ToArray();
+            res.views = nameViews?.ToArray();
+            return res;
+        }
         public async static Task<TablesFromDataSource> FromMSSQL(this string connection)
         {
             try
             {
                 var recData = new ReceiveMetadataFromDatabaseSql(connection);
 
-                var data = await recData.TransformData(null);
+                return  await FromReceiver( recData);
 
-                var tables = data.FindAfterName("tables").Value.Rows;
-                var columns = data.FindAfterName("columns").Value.Rows;
-                var views = data.FindAfterName("views").Value.Rows;
-                var keys = data.FindAfterName("keys").Value;
-                var nameTables = new List<Table>();
-                var nameViews = new List<View>();
-                foreach (DataRow dr in tables)
-                {
-                    var t = new Table();
-                    t.FillWithData(dr, columns, keys);
-                    
-                    if (t.HasPK())
-                        nameTables.Add(t);
-                }
-
-                foreach (DataRow dr in views)
-                {
-                    var t = new View();
-                    t.FillWithData(dr, columns, keys);
-                    nameViews.Add(t);
-
-                }
-
-                var rels = new List<Relations>();
-                var relTable= data.FindAfterName("relations").Value;
-                foreach (DataRow dr in relTable.Rows)
-                {
-                    var r = new Relations();
-                    r.TableParentId= dr["parent_object_id"].ToString();
-                    r.TableRefID = dr["referenced_object_id"].ToString();
-                    r.FieldParentId = dr["parent_column_id"].ToString();
-                    r.FieldRefId= dr["referenced_column_id"].ToString();
-                    rels.Add(r);
-                }
-
-                var res = new TablesFromDataSource();
-                res.Success = true;
-                res.relations = rels.ToArray();
-                res.tables = nameTables.ToArray();
-                res.views = nameViews.ToArray();
-                return res;
+                
             }
             catch (Exception ex)
             {
@@ -123,47 +141,7 @@ namespace GenerateApp.Controllers
             {
                 var recData = new ReceiveMetadataFromDatabaseMariaDB(connection);
 
-                var data = await recData.TransformData(null);
-
-                var tables = data.FindAfterName("tables").Value.Rows;
-                var columns = data.FindAfterName("columns").Value.Rows;
-                var keys = data.FindAfterName("keys").Value;
-                var nameTables = new List<Table>();
-                foreach (DataRow dr in tables)
-                {
-                    var t = new Table();
-                    t.name = dr["name"].ToString();
-                    var id = dr["id"].ToString();
-                    bool HasPK = false;
-                    foreach (DataRow col in columns)
-                    {
-                        if (col["tableId"].ToString() == id)
-                        {
-                            var f = new Field();
-                            f.name = col["name"].ToString();
-                            f.originalType = col["type"].ToString();
-                            f.IsNullable = (col["is_nullable"].ToString() == "1");
-                            foreach (DataRow row in keys.Rows)
-                            {
-                                if(col["id"] + ".PRIMARY" == row["id"].ToString())
-                                {
-                                    f.IsPK = true;
-                                    HasPK = true;
-                                    continue;
-                                }
-                            }
-                            t.fields.Add(f);
-
-                        }
-                    }
-                    if(HasPK)
-                        nameTables.Add(t);
-                }
-                var res = new TablesFromDataSource();
-                res.Success = true;
-                res.tables = nameTables.ToArray();
-
-                return res;
+                return await FromReceiver(recData);
             }
             catch (Exception ex)
             {
@@ -180,7 +158,8 @@ namespace GenerateApp.Controllers
             
             switch (typeToLoad)
             {
-                case connTypes.MARIADB:
+                case connTypes.MariaDB:
+                case connTypes.MYSQL:
                     {
                         var mariaDBConStr = new MySqlConnectionStringBuilder();
                         mariaDBConStr.Database = payLoadConn.connDatabase;
@@ -235,7 +214,8 @@ namespace GenerateApp.Controllers
                     connection = payLoadConn.ConnectionString();
                 switch (typeToLoad)
                 {
-                    case connTypes.MARIADB:
+                    case connTypes.MariaDB:
+                    case connTypes.MYSQL:
                         return await connection.FromMariaDB();
                     case connTypes.MSSQL:
                         return await connection.FromMSSQL();

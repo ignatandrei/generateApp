@@ -19,12 +19,13 @@
         nameTablesToRender[iRowDS] = nameTable;
         tables[iRowDS]=renderTable;
     }
-	string nameProperty(string original){
-		var name = original.Replace(" ","").Replace("<","").Replace("/","").Replace(">","").Replace("(","").Replace(")","").ToLower();
+	string nameProperty(string original, string nameClass){
+		var name = original.ToLower().Replace(" ","").Replace("event","event1").Replace("class","class1").Replace("object","object1").Replace("<","").Replace("/","").Replace(">","").Replace("(","").Replace(")","").ToLower();
 		if(!IsIdentifier(name))
 			name = "generated_"+name;
-		
-		return name;
+		if(nameClass.ToLower() == name)
+            name= "generated_"+name;
+		return name.Trim();
 	}
 	//https://docs.microsoft.com/en-us/dotnet/api/microsoft.codeanalysis.csharp.syntaxfacts?view=roslyn-dotnet
 	bool IsIdentifier(string text)
@@ -88,7 +89,7 @@ namespace TestWEBAPI_DAL
          <text>
             modelBuilder.Entity<@(nameClass)>()
                 .ToTable(@Raw(WithSchema))
-                .HasKey(it=>it.@(nameProperty(idTable)));
+                .HasKey(it=>it.@(nameProperty(idTable,nameClass)));
          </text>
             }
             else{
@@ -98,8 +99,26 @@ namespace TestWEBAPI_DAL
                 .HasNoKey();
          </text>
             }
-        }            
 
+            
+
+        }   
+            //mapping columns if have spaces
+
+        @{
+            foreach(var dt in tables){
+                string nameClass= ClassNameFromTableName(dt.TableName);
+                var nrColumns = dt.Columns.Count;
+                for(var iCol=0;iCol<nrColumns;iCol++){
+                    var column=dt.Columns[iCol];
+                    string nameColumn = nameProperty(column.ColumnName,nameClass);
+                    <text>
+                        modelBuilder.Entity<@(nameClass)>().Property(it => it.@(nameColumn)).HasColumnName("@(column.ColumnName)");
+                    </text>
+                }
+            
+            }
+        }
             OnModelCreatingPartial(modelBuilder);
             Seed(modelBuilder);
         }
@@ -122,7 +141,7 @@ namespace TestWEBAPI_DAL
                     string text="";
                     for(var iCol=0;iCol<nrColumns;iCol++){
                         var column=dt.Columns[iCol];
-                        string nameColumn = nameProperty(column.ColumnName);
+                        string nameColumn = nameProperty(column.ColumnName,nameClass);
                         var val =dt.Rows[iRow][iCol];
                         if(val == System.DBNull.Value)
                             val=null;

@@ -4,12 +4,13 @@
 	string ClassNameFromTableName(string tableName){
 		return tableName.Replace(" ","").Replace(".","").Replace("(","").Replace(")","");
 	}
-    string nameProperty(string original){
-		var name = original.Replace(" ","").Replace("<","").Replace("/","").Replace(">","").Replace("(","").Replace(")","").ToLower();
+    string nameProperty(string original, string nameClass){
+		var name = original.ToLower().Replace(" ","").Replace("event","event1").Replace("class","class1").Replace("object","object1").Replace("<","").Replace("/","").Replace(">","").Replace("(","").Replace(")","").ToLower();
 		if(!IsIdentifier(name))
 			name = "generated_"+name;
-		
-		return name;
+		if(nameClass.ToLower() == name)
+            name= "generated_"+name;
+		return name.Trim();
 	}
 	//https://docs.microsoft.com/en-us/dotnet/api/microsoft.codeanalysis.csharp.syntaxfacts?view=roslyn-dotnet
 	bool IsIdentifier(string text)
@@ -80,7 +81,7 @@ namespace TestWEBAPI_DAL
         }
         public Task<@(nameClass)> FindAfterId(@(idType) id)
         {
-            var data = databaseContext.@(nameClass).FirstOrDefaultAsync(it => it.@(nameProperty(idTable)) == id);
+            var data = databaseContext.@(nameClass).FirstOrDefaultAsync(it => it.@(nameProperty(idTable,nameClass)) == id);
             return data;
         }
         public Task<@(nameClass)> FindSingle(Func<@(nameClass) ,bool> f)
@@ -101,10 +102,10 @@ namespace TestWEBAPI_DAL
         }
         public async Task<@(nameClass)> Update(@(nameClass) p)
         {
-            var original = await FindAfterId(p.@(nameProperty(idTable)));
+            var original = await FindAfterId(p.@(nameProperty(idTable,nameClass)));
             if(original == null)
             {
-                throw new ArgumentException($"cannot found @(nameClass)  with id = {p.@(nameProperty(idTable))} ", nameof(p.@(nameProperty(idTable))));
+                throw new ArgumentException($"cannot found @(nameClass)  with id = {p.@(nameProperty(idTable,nameClass))} ", nameof(p.@(nameProperty(idTable,nameClass))));
             }
             original.CopyPropertiesFrom(other: p, withID: true);                        
             await databaseContext.SaveChangesAsync();
@@ -112,7 +113,7 @@ namespace TestWEBAPI_DAL
         }
         public async Task<@(nameClass)> Delete(@(nameClass) p)
         {
-            var original = await FindAfterId(p.@(nameProperty(idTable)));
+            var original = await FindAfterId(p.@(nameProperty(idTable,nameClass)));
             databaseContext.@(nameClass).Remove(original);
             await databaseContext.SaveChangesAsync();
             return p;

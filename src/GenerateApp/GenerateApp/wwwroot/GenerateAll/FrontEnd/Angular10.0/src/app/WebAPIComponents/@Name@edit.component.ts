@@ -46,12 +46,13 @@
   string lowerCaseFirst(string s){
 		return char.ToLower(s[0]) + s.Substring(1);
   }
-  string nameProperty(string original){
-		var name = original.Replace(" ","").Replace("<","").Replace("/","").Replace(">","").Replace("(","").Replace(")","").ToLower();
+  string nameProperty(string original, string nameClass){
+		var name = original.ToLower().Replace(" ","").Replace("event","event1").Replace("class","class1").Replace("object","object1").Replace("<","").Replace("/","").Replace(">","").Replace("(","").Replace(")","").ToLower();
 		if(!IsIdentifier(name))
 			name = "generated_"+name;
-		
-		return name;
+		if(nameClass.ToLower() == name)
+      name= "generated_"+name;
+		return name.Trim();
 	}
 	bool IsIdentifier(string text)
 	{
@@ -75,7 +76,7 @@
   string idTable ="", idType ="", nameType ="";
   if(havePK){
     idTable = dtOptions.Rows.Find(dt.TableName +"_PK")[1].ToString();
-    idTable  =nameProperty(idTable);
+    idTable  =nameProperty(idTable, nameClass);
     idType = dtOptions.Rows.Find(dt.TableName +"_PK_Type")[1].ToString();  
     nameType = nameTypeForJS(idType);
   }
@@ -100,10 +101,15 @@ import { @(nameClass)Service } from '../services/@(nameClass).service';
 
 
 @if(rowsRelParent.Length>0){
+  var h=new System.Collections.Generic.HashSet<string>(rowsRelParent.Length);
   foreach(var row in rowsRelParent){
+
     var refTableName =ClassNameFromTableName(row["referenced_object"].ToString());
     if(refTableName == nameClass)
       continue;
+    if(!h.Add(refTableName)){
+        continue;
+        }
     <text>
     import { @(refTableName)Service } from '../services/@(refTableName).service';
     import{ @(refTableName) } from '../WebAPIClasses/@(refTableName)';
@@ -128,8 +134,12 @@ export class @(nameClass)EditComponent implements OnInit {
   public dataToEdit: @(nameClass);
 
   @if(rowsRelParent.Length>0){
+    var h=new System.Collections.Generic.HashSet<string>(rowsRelParent.Length);
     foreach(var row in rowsRelParent){
       var refTableName =ClassNameFromTableName(row["referenced_object"].ToString());
+      if(!h.Add(refTableName)){
+        continue;
+        }
       servicesRef +=" private "+refTableName  +"SVC:" +refTableName +"Service,";
       <text>
       public @(refTableName)All: @(refTableName)[] = [];
@@ -165,7 +175,12 @@ export class @(nameClass)EditComponent implements OnInit {
 
     @if(rowsRelParent.Length>0){
       foreach(var row in rowsRelParent){
+        var h=new System.Collections.Generic.HashSet<string>(rowsRelParent.Length);
         var refTableName =ClassNameFromTableName(row["referenced_object"].ToString());
+        if(!h.Add(refTableName)){
+          continue;
+          }
+        
         <text>
         this.@(refTableName)SVC.GetAll().subscribe(it => this. @(refTableName)All = it );
         

@@ -29,9 +29,9 @@ namespace GenerateApp.Controllers
             InsideIIS = !string.IsNullOrWhiteSpace(str);
         }
         public readonly DateTime startedDate;
-        private readonly SourceData sourceData;
+        private readonly connTypes sourceData;
 
-        public InfoData(SourceData sourceData)
+        public InfoData(connTypes sourceData)
         {
             startedDate = DateTime.UtcNow;
             this.sourceData = sourceData;
@@ -82,13 +82,11 @@ namespace GenerateApp.Controllers
 
         }
 
-        public async Task<bool> GenerateApp()
+        public async Task<string> GenerateApp(string backendFolderName, string frontendFolderName)
         {
             string folderGenerator = this.folderGenerator;
             string generator = Path.Combine(folderGenerator, "describe.txt");
             var stData = JsonConvert.DeserializeObject<StankinsGenerator>(File.ReadAllText(generator));
-            var backendFolderName = @"NETCore3.1";
-            var frontendFolderName = @"Angular10.0";
             //frontendFolderName = @"Angular10.0Full";
             var backend = stData.backend.First(it => it.folder == backendFolderName);
             var frontEnd = stData.frontend.First(it => it.folder == frontendFolderName);
@@ -104,11 +102,12 @@ namespace GenerateApp.Controllers
             IDataToSent data;
             switch (sourceData)
             {
-                case SourceData.Excel:
+                case connTypes.Excel:
                     data = await ReadExcel();
                     break;
-                case SourceData.MariaDB:
-                case SourceData.MSSQL:
+                case connTypes.MariaDB:
+                case connTypes.MSSQL:
+                case connTypes.MYSQL:
                     data = ReadCustom();
                     break;
                 default:
@@ -125,7 +124,7 @@ namespace GenerateApp.Controllers
                 Console.WriteLine(dt.TableName +"=>" + dt.Rows.Count);
                 switch (this.sourceData)
                 {
-                    case SourceData.Excel:
+                    case connTypes.Excel:
                         if (dt.Rows.Count == 0)
                         {
                             ds.Rows.RemoveAt(iRowDS);
@@ -135,8 +134,10 @@ namespace GenerateApp.Controllers
                             nameTablesToRender.Add(dt.TableName);
                         }
                         break;
-                    case SourceData.MariaDB:
-                    case SourceData.MSSQL:
+                    case connTypes.MariaDB:
+                    case connTypes.MSSQL:
+                    case connTypes.MYSQL:
+
                         nameTablesToRender.Add(dt.TableName);
                         break;
                     default:
@@ -144,25 +145,29 @@ namespace GenerateApp.Controllers
                 }
 
             }
-            DataTable dtOptions;
+            DataTable dtOptions = new DataTable("@@Options@@");
+            var dcName = dtOptions.Columns.Add("name", typeof(string));
+            dcName.MaxLength = 300;
+            dtOptions.Columns.Add("value", typeof(string)).MaxLength=300;
+            dtOptions.PrimaryKey = new[] { dcName };
+
             switch (sourceData)
             {
-                case SourceData.Excel:
+                case connTypes.Excel:
                     {
+                        dtOptions.Rows.Add("GeneratedBy", "http://demo.adces.ro:8080");
+
                         var dtRels = new DataTable("@@Relations@@");
-                        dtRels.Columns.Add("parent_object", typeof(string));
-                        dtRels.Columns.Add("parent_column", typeof(string));
-                        dtRels.Columns.Add("referenced_object", typeof(string));
-                        dtRels.Columns.Add("referenced_column", typeof(string));
+                        dtRels.Columns.Add("parent_object", typeof(string)).MaxLength = 300;
+                        dtRels.Columns.Add("parent_column", typeof(string)).MaxLength = 300;
+                        dtRels.Columns.Add("referenced_object", typeof(string)).MaxLength = 300;
+                        dtRels.Columns.Add("referenced_column", typeof(string)).MaxLength = 300;
 
                         int idRel = data.AddNewTable(dtRels);
                         data.Metadata.AddTable(dtRels, idRel);
                         //var x = "<a mat-list-item [routerLink]=\"['/dbocountry/edit', row.idcountry]\" routerLinkActive=\"active\">Go=></a>";
                         var dtNow = DateTime.Now.ToString("yyyyMMddHHmmss");
-                        dtOptions = new DataTable("@@Options@@");
-                        var dcName = dtOptions.Columns.Add("name", typeof(string));
-                        dtOptions.Columns.Add("value", typeof(string));
-                        dtOptions.PrimaryKey = new[] { dcName };
+                        
                         dtOptions.Rows.Add("ApplicationName",Path.GetFileNameWithoutExtension( pathFile));
                         dtOptions.Rows.Add("DataSource", "SqlServerInMemory");
                         dtOptions.Rows.Add("DataSourceConnectionString", "");
@@ -175,13 +180,13 @@ namespace GenerateApp.Controllers
                         }
                     }
                     break;
-                case SourceData.MariaDB:
-                case SourceData.MSSQL:
+                case connTypes.MariaDB:
+                case connTypes.MSSQL:
+                case connTypes.MYSQL:
+
                     {
-                        dtOptions = new DataTable("@@Options@@");
-                        var dcName = dtOptions.Columns.Add("name", typeof(string));
-                        dtOptions.Columns.Add("value", typeof(string));
-                        dtOptions.PrimaryKey = new[] { dcName };
+                        dtOptions.Rows.Add("GeneratedBy", "http://data-to-code.eu/");
+
                         dtOptions.Rows.Add("ApplicationName", this.GenerateAppV1.payLoadConn.connDatabase );
                         dtOptions.Rows.Add("DataSource", sourceData.ToString());
                         dtOptions.Rows.Add("DataSourceConnectionString", this.GenerateAppV1.payLoadConn.ConnectionString());
@@ -243,12 +248,13 @@ namespace GenerateApp.Controllers
                         var data1 = data.FindAfterName(nameTable).Value;
                         switch (this.sourceData)
                         {
-                            case SourceData.Excel:
+                            case connTypes.Excel:
                                 if (data1.Rows.Count == 0)
                                     continue;
                                 break;
-                            case SourceData.MariaDB:
-                            case SourceData.MSSQL:
+                            case connTypes.MariaDB:
+                            case connTypes.MSSQL:
+                            case connTypes.MYSQL:
                                 break;
                             default:
                                 throw new ArgumentException($"not supported4 {nameof(sourceData)} {sourceData} ");
@@ -273,12 +279,13 @@ namespace GenerateApp.Controllers
                         var data1 = data.FindAfterName(nameTable).Value;
                         switch (this.sourceData)
                         {
-                            case SourceData.Excel:
+                            case connTypes.Excel:
                                 if (data1.Rows.Count == 0)
                                     continue;
                                 break;
-                            case SourceData.MariaDB:
-                            case SourceData.MSSQL:
+                            case connTypes.MariaDB:
+                            case connTypes.MSSQL:
+                            case connTypes.MYSQL:
                                 break;
                             default:
                                 throw new ArgumentException($"not supported5 {nameof(sourceData)} {sourceData} ");
@@ -333,7 +340,7 @@ namespace GenerateApp.Controllers
                 var sep = Path.DirectorySeparatorChar;
                 logs.AddLog(this.name,"getting file names");
 
-                var up = new TransformerUpdateColumn("FullFileName_origin", "OutputString", "'Generated" + sep + $"'+SUBSTRING(FullFileName_origin,{lenTemplateFolder + 2},100)");
+                var up = new TransformerUpdateColumn("FullFileName_origin", "OutputString", "'Generated" + sep + $"'+SUBSTRING(FullFileName_origin,{lenTemplateFolder + 2},1000)");
                 data = await up.TransformData(data);
                 var x = data.DataToBeSentFurther;
                 logs.AddLog(this.name,"change column name=>key");
@@ -353,17 +360,17 @@ namespace GenerateApp.Controllers
                 var save = new SenderOutputToFolder(outputFolder, false, "OutputString");
                 data = await save.TransformData(data);
                 if (!string.IsNullOrWhiteSpace(GitOps.CredentialsToken))
-                    return await CreateFromGit(g, outputFolder);
+                    return (await CreateFromGit(g, outputFolder)?outputFolder: null);
 
 
-                return true;
+                return outputFolder;
             }
             catch (Exception ex)
             {
 
                 logs.AddLog(this.name,"ERROR!" + ex.Message);
                 logs.AddLog(this.name,"ERROR!" + ex.StackTrace);
-                return false;
+               return null;
             }
             finally
             {
@@ -449,7 +456,9 @@ namespace GenerateApp.Controllers
         {
 
             ServerManager manager = new ServerManager();
-            Site defaultSite = manager.Sites["AppGenerator"];
+            //if(manager.Sites.Contains(s=>s. ))
+            //Site defaultSite = manager.Sites["AppGenerator"];
+            Site defaultSite = manager.Sites.First();
             var appCreated = defaultSite.Applications.Add($"/{name}", folder);
             appCreated.ApplicationPoolName = "NETCore";
             manager.CommitChanges();

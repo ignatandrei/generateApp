@@ -12,10 +12,11 @@ namespace TestWebAPI.Controllers
     [ApiController]
     public class VersionController : ControllerBase
     {
-
+        [HttpGet]
         public string VersionGenerator(){
             return "1.2020.107.28";
         }
+        [HttpGet]
         public string VersionBackend(){
             return "NETCore3.1";
         }

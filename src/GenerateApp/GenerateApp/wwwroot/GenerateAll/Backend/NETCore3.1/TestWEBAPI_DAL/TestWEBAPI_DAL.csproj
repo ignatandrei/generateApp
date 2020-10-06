@@ -25,6 +25,7 @@
                     </text>
                 break;
                 case "MariaDB":
+                case "MYSQL":
                     <text>
   <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="3.1.2" />
   

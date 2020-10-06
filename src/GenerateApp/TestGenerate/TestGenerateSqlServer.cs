@@ -116,16 +116,18 @@ namespace TestGenerate
             }
 
             Assert.Equal(0,errors );
-            var info = await app.GenerateInfoData();
+            var typeToLoad = Enum.Parse<connTypes>(app.payLoadConn.connType, true);
+
+            var info = await app.GenerateInfoData(typeToLoad);
             info.folderGenerator = pathGenerate;
             info.pathFile = @"E:\test\a.txt";
-            var data = await info.GenerateApp();
-            if (!data)
+            var data = await info.GenerateApp("NETCore3.1", "Angular10.0");
+            if (string.IsNullOrWhiteSpace(data))
             {
                 output.WriteLine(info.logs[info.logs.Count - 2]);
                 output.WriteLine(info.logs[info.logs.Count - 1]);
             }
-            Assert.True(data);
+            Assert.NotNull(data);
         }
     }
 }

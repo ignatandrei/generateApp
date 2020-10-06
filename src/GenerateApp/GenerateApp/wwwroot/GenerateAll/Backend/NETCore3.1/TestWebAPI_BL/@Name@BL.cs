@@ -17,12 +17,13 @@
         idType = dtOptions.Rows.Find(dt.TableName +"_PK_Type")[1].ToString();  
     }
 	var nrCols =dt.Columns.Count;
-	string nameProperty(string original){
-		var name = original.Replace(" ","").Replace("<","").Replace("/","").Replace(">","").Replace("(","").Replace(")","").ToLower();
+	string nameProperty(string original, string nameClass){
+		var name = original.ToLower().Replace(" ","").Replace("event","event1").Replace("class","class1").Replace("object","object1").Replace("<","").Replace("/","").Replace(">","").Replace("(","").Replace(")","").ToLower();
 		if(!IsIdentifier(name))
 			name = "generated_"+name;
-		
-		return name;
+		if(nameClass.ToLower() == name)
+            name= "generated_"+name;
+		return name.Trim();
 	}
 	//https://docs.microsoft.com/en-us/dotnet/api/microsoft.codeanalysis.csharp.syntaxfacts?view=roslyn-dotnet
 	bool IsIdentifier(string text)
@@ -63,21 +64,23 @@ namespace TestWebAPI_BL
                 if(havePK){
                 <text>
             if(withID){
-                this.@(nameProperty(idTable))= other.@(nameProperty(idTable));
+                this.@(nameProperty(idTable,nameClass))= other.@(nameProperty(idTable,nameClass));
             }
+                </text>
+                <text>
+                var x="";
                 </text>
                 }
             }
             @for(int iCol = 0;iCol < nrCols; iCol++){
                 var col = dt.Columns[iCol];
-                var colName= nameProperty(col.ColumnName) ;
-                 if(colName == nameProperty(idTable))
+                var colName= nameProperty(col.ColumnName,nameClass) ;
+                 if(colName == nameProperty(idTable,nameClass))
                         continue;
                 
                 <text>
-            this.@colName = other.@colName;
+            this.@colName = other.@colName;            
                 </text>
-
             }
 
             OnCopyConstructor(other,withID);
@@ -89,7 +92,7 @@ namespace TestWebAPI_BL
         @{
             if(havePK){
                 <text>
-                public @(idType) @(nameProperty(idTable)){get;set;}
+                public @(idType) @(nameProperty(idTable,nameClass)){get;set;}
                 </text>
             }
         }
@@ -97,11 +100,11 @@ namespace TestWebAPI_BL
         @for(int iCol = 0;iCol < nrCols; iCol++){
             var col = dt.Columns[iCol];
             bool nullable=(col.AllowDBNull);
-            var colName= nameProperty(col.ColumnName) ;
+            var colName= nameProperty(col.ColumnName,nameClass) ;
             var colType = col.DataType;
             if(colType.FullName == typeof(string).FullName)
                 nullable=false;
-             if(colName.ToLower() == idTable.ToLower())
+             if(colName.ToLower() == nameProperty(idTable,nameClass).ToLower())
                 continue;
             <text>
             public @(colType.Name)@(nullable?"?":"") @(colName) { get; set; }

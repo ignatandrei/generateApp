@@ -7,24 +7,27 @@ string ClassNameFromTableName(string tableName){
     
    
     var dt= Model.FindAfterName("@Name@").Value;
+    var nameTable =dt.TableName;
+    var nameClass = ClassNameFromTableName(nameTable);
     var dtOptions= Model.FindAfterName("@@Options@@").Value;
     var havePK = (dtOptions.Rows.Find(dt.TableName +"_PK") != null);
     string idTable ="", idType = "";
     if(havePK){
         idTable = dtOptions.Rows.Find(dt.TableName +"_PK")[1].ToString();
         idType = dtOptions.Rows.Find(dt.TableName +"_PK_Type")[1].ToString();  
-        idTable = nameProperty(idTable);
+        idTable = nameProperty(idTable,nameClass);
     }
     var nrCols =dt.Columns.Count;
 	string lowerCaseFirst(string s){
 		return char.ToLower(s[0]) + s.Substring(1);
 	}
-	string nameProperty(string original){
-		var name = original.Replace(" ","").Replace("<","").Replace("/","").Replace(">","").Replace("(","").Replace(")","").ToLower();
+	string nameProperty(string original, string nameClass){
+		var name = original.ToLower().Replace(" ","").Replace("event","event1").Replace("class","class1").Replace("object","object1").Replace("<","").Replace("/","").Replace(">","").Replace("(","").Replace(")","").ToLower();
 		if(!IsIdentifier(name))
 			name = "generated_"+name;
-		
-		return name;
+            if(nameClass.ToLower() == name)
+            name= "generated_"+name;
+		return name.Trim();
 	}
 	bool IsIdentifier(string text)
 	{
@@ -72,7 +75,7 @@ string ClassNameFromTableName(string tableName){
 		return nameType;
 	}
 
-	var nameClass= ClassNameFromTableName(dt.TableName);
+	
 }
 
 
@@ -100,7 +103,7 @@ export class @(nameClass)
             }
             @for(int iCol = 0;iCol < nrCols; iCol++){
                 var col = dt.Columns[iCol];
-                var colName= nameProperty(col.ColumnName) ;
+                var colName= nameProperty(col.ColumnName,nameClass) ;
                 var nameType = nameTypeForJS(col.DataType.Name);
 				string appender ="";
 				if(nameType == "number")
@@ -123,7 +126,7 @@ export class @(nameClass)
         
         @for(int iCol = 0;iCol < nrCols; iCol++){
             var col = dt.Columns[iCol];
-            var colName= nameProperty(col.ColumnName) ;
+            var colName= nameProperty(col.ColumnName,nameClass) ;
             if(colName.ToLower() == idTable.ToLower())
                 continue;
             var colType = col.DataType;
@@ -131,7 +134,7 @@ export class @(nameClass)
 			
 
             <text>
-            public @nameProperty(colName) : @nameType;
+            public @(colName) : @(nameType);
             </text>
 
         }

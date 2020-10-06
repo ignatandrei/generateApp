@@ -38,14 +38,16 @@ namespace GenerateFromDB.Controllers
             {
                 throw new ArgumentException("validation error:" + item.ErrorMessage, string.Join("m", item.MemberNames));
             }
-            var info = await app.GenerateInfoData();
+            var typeToLoad = Enum.Parse<connTypes>(app.payLoadConn.connType, true);
+
+            var info = await app.GenerateInfoData(typeToLoad);
             info.folderGenerator = Path.Combine(environment.WebRootPath, "GenerateAll");
             string dateNow = DateTime.Now.ToString("yyyyMMddHHmmss");
             info.pathFile = Path.Combine(environment.WebRootPath, dateNow, "conection.txt");
             var di = Directory.CreateDirectory(Path.GetDirectoryName(info.pathFile));
             System.IO.File.WriteAllText(info.pathFile, app.payLoadConn.ConnectionString());
-            var data = await info.GenerateApp();
-            if (!data)
+            var data = await info.GenerateApp("NETCore3.1", "Angular10.0");
+            if (!string.IsNullOrWhiteSpace(data))
             {
                 Console.WriteLine(info.logs[info.logs.Count - 2]);
                 Console.WriteLine(info.logs[info.logs.Count - 1]);

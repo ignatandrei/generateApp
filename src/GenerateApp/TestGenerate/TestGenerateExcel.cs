@@ -18,7 +18,7 @@ namespace TestGenerate
         //[InlineData(@"C:\Users\ignat\Desktop\Daily work list Greyline 20.03.xlsx")]
         public async void TestData(string file)
         {
-            var i = new InfoData(SourceData.Excel)
+            var i = new InfoData(connTypes.Excel)
             {
                 logs = new Logs(),
                 name = "testAndrei",
@@ -26,10 +26,10 @@ namespace TestGenerate
                 pathFile =  file
             };
 
-            var res = await i.GenerateApp();
+            var res = await i.GenerateApp("NETCore3.1", "Angular10.0");
             output.WriteLine(i.logs[i.logs.Count - 2]);
             output.WriteLine(i.logs[i.logs.Count - 1]);
-            Assert.True(res);
+            Assert.NotNull(res);
 
         }
     }

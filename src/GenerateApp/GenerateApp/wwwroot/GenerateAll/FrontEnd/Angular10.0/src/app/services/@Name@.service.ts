@@ -9,12 +9,14 @@
   string lowerCaseFirst(string s){
 		return char.ToLower(s[0]) + s.Substring(1);
   }
-  string nameProperty(string original){
-		var name = original.Replace(" ","").Replace("<","").Replace("/","").Replace(">","").Replace("(","").Replace(")","").ToLower();
+  string nameProperty(string original, string nameClass){
+		var name = original.ToLower().Replace(" ","").Replace("event","event1").Replace("class","class1").Replace("object","object1").Replace("<","").Replace("/","").Replace(">","").Replace("(","").Replace(")","").ToLower();
 		if(!IsIdentifier(name))
 			name = "generated_"+name;
-		
-		return name;
+    
+      if(nameClass.ToLower() == name)
+      name= "generated_"+name;
+		return name.Trim();
 	}
 	//https://docs.microsoft.com/en-us/dotnet/api/microsoft.codeanalysis.csharp.syntaxfacts?view=roslyn-dotnet
 	bool IsIdentifier(string text)
@@ -65,16 +67,17 @@
 
 		var dt= Model.FindAfterName("@Name@").Value;
     var nameTable =dt.TableName;
+    var nameClass = ClassNameFromTableName(nameTable);
     var dtOptions= Model.FindAfterName("@@Options@@").Value;
     var havePK = (dtOptions.Rows.Find(dt.TableName +"_PK") != null);
     string idTable ="", idType = "";
     if(havePK){
       idTable = dtOptions.Rows.Find(dt.TableName +"_PK")[1].ToString();
-      idTable  =nameProperty(idTable);
+      idTable  =nameProperty(idTable, nameClass);
       idType = dtOptions.Rows.Find(dt.TableName +"_PK_Type")[1].ToString();  
       idType = nameTypeForJS(idType);
     }
-	var nameClass= ClassNameFromTableName(nameTable);
+	
     var Inject=@"@Inject";
 }
 import { environment } from './../../environments/environment';
@@ -122,7 +125,7 @@ export class @(nameClass)Service {
     return this.client.get<@(nameClass)>(url);
   }
   public Update(data:@(nameClass)):Observable<@(nameClass)>{
-    const url = this.baseUrl+'api/@(nameClass)/Put/'+data.@(nameProperty(idTable));
+    const url = this.baseUrl+'api/@(nameClass)/Put/'+data.@(idTable);
     
     return this.client.put<@(nameClass)>(url,data);
   }

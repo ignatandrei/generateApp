@@ -13,12 +13,12 @@ namespace GenerateApp.Controllers
     public class GenerateAppV1 : IValidatableObject
     {
         public DataToSentTable receiveData;
-        public async Task<InfoData> GenerateInfoData()
+        public async Task<InfoData> GenerateInfoData(connTypes connectionType)
         {
             receiveData = new DataToSentTable();
             var dt = new DataTable("DataSource");
             dt.Columns.Add("Number", typeof(int));
-            dt.Columns.Add("TableName", typeof(string));
+            dt.Columns.Add("TableName", typeof(string)).MaxLength = 300;
 
             int id = receiveData.AddNewTable(dt);
             receiveData.Metadata.AddTable(dt, id);
@@ -34,7 +34,7 @@ namespace GenerateApp.Controllers
                 foreach (var field in table.table.fields)
                 {
                     //make the real field type
-                   var dc= dtSheet.Columns.Add(field.name, field.DotNetType());
+                   var dc= dtSheet.Columns.Add(field.name, field.DotNetType(connectionType));
                     if (field.IsPK)
                         dcPK.Add(dc);
 
@@ -55,10 +55,10 @@ namespace GenerateApp.Controllers
 
 
             var dtRels = new DataTable("@@Relations@@");
-            dtRels.Columns.Add("parent_object", typeof(string));
-            dtRels.Columns.Add("parent_column", typeof(string));
-            dtRels.Columns.Add("referenced_object", typeof(string));
-            dtRels.Columns.Add("referenced_column", typeof(string));
+            dtRels.Columns.Add("parent_object", typeof(string)).MaxLength = 300;
+            dtRels.Columns.Add("parent_column", typeof(string)).MaxLength = 300;
+            dtRels.Columns.Add("referenced_object", typeof(string)).MaxLength = 300;
+            dtRels.Columns.Add("referenced_column", typeof(string)).MaxLength = 300;
             
             int idRel = receiveData.AddNewTable(dtRels);
             receiveData.Metadata.AddTable(dtRels, idRel);
@@ -66,6 +66,7 @@ namespace GenerateApp.Controllers
             var all = await payLoadConn.FromPayloadConn();
 
             var ds = all.relations;
+            if(ds?.Length>0)
             foreach (var item in ds)
             {
                 var idParent = all.tables.FirstOrDefault(it => it.ID == item.TableParentId);
@@ -84,7 +85,7 @@ namespace GenerateApp.Controllers
             }
 
 
-            var con = Enum.Parse<SourceData>(this.payLoadConn.connType, true);
+            var con = Enum.Parse<connTypes>(this.payLoadConn.connType, true);
             var i = new InfoData(con)
             {
                 logs = new Logs(),
@@ -100,6 +101,12 @@ namespace GenerateApp.Controllers
         {
             var t = new List<TableGenerator>();
             var all = await payLoadConn.FromPayloadConn();
+            if (!all.Success)
+            {
+                Console.WriteLine("cannot generate data " + all.error);
+                return null;
+            }
+            if (all.tables?.Length>0)
             foreach(var item in all.tables)
             {
                 if (item.name == "dbo.sysdiagrams")
@@ -111,6 +118,8 @@ namespace GenerateApp.Controllers
                 tg.table.fields = item.fields;
                 t.Add(tg);
             }
+            
+            if(all.views?.Length>0)
             foreach (var item in all.views)
             {
                 var tg = new TableGenerator();
@@ -249,12 +258,9 @@ namespace GenerateApp.Controllers
     public enum connTypes
     {
         None = 0,
-        XLS=1,
-        SQLITE,
-        SQLITEMEMO,
+        Excel= 1,
         MSSQL,
         MYSQL,
-        MARIADB
-            
+        MariaDB
     }
 }

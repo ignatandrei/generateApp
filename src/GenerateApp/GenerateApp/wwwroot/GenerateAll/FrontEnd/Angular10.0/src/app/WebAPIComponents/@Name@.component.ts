@@ -8,6 +8,7 @@
 	}
 	var dt= Model.FindAfterName("@Name@").Value;
   var nameTable =dt.TableName;
+  var nameClass = ClassNameFromTableName(nameTable);
   var dtOptions= Model.FindAfterName("@@Options@@").Value;
 
   var havePK = (dtOptions.Rows.Find(dt.TableName +"_PK") != null);
@@ -17,19 +18,20 @@
     idType = dtOptions.Rows.Find(dt.TableName +"_PK_Type")[1].ToString();  
     idTable = lowerCaseFirst(idTable);
   }
-  var nameClass = ClassNameFromTableName(nameTable);
+  
   var nrCols= dt.Columns.Count;
   
 
   string lowerCaseFirst(string s){
 		return char.ToLower(s[0]) + s.Substring(1);
   }
-  string nameProperty(string original){
-		var name = original.Replace(" ","").Replace("<","").Replace("/","").Replace(">","").Replace("(","").Replace(")","").ToLower();
+  string nameProperty(string original, string nameClass){
+		var name = original.ToLower().Replace(" ","").Replace("event","event1").Replace("class","class1").Replace("object","object1").Replace("<","").Replace("/","").Replace(">","").Replace("(","").Replace(")","").ToLower();
 		if(!IsIdentifier(name))
 			name = "generated_"+name;
-		
-		return name;
+      if(nameClass.ToLower() == name)
+      name= "generated_"+name;
+		return name.Trim();
 	}
 	bool IsIdentifier(string text)
 	{
@@ -46,7 +48,7 @@
 	string colNames= "";
 	for(int iCol = 0;iCol < nrCols; iCol++){
     var col = dt.Columns[iCol];
-    colNames += ",'"+ lowerCaseFirst(nameProperty(col.ColumnName)) +"'";
+    colNames += ",'"+ lowerCaseFirst(nameProperty(col.ColumnName,nameClass)) +"'";
   }
 
   string nameTypeForJS(string colTypeName){
@@ -170,7 +172,7 @@ export class @(nameClass)Component implements OnInit {
     // const ndx = this.rows.findIndex(it=>it.id == idDeleted);
       // this.rows.splice(ndx,1);
       // this.dataSource = new MatTableDataSource(this.rows);
-      const ndx = this.rows.findIndex(it => it.@nameProperty(idTable) === idDeleted);
+      const ndx = this.rows.findIndex(it => it.@nameProperty(idTable,nameClass) === idDeleted);
       this.dataSource.data.splice(ndx, 1);
       this.dataSource._updateChangeSubscription();
     })

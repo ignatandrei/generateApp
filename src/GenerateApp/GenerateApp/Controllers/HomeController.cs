@@ -93,7 +93,7 @@ namespace GenerateApp.Controllers
         //to be deleted
 
         //[HttpGet]
-        //public GenerateAppV1 GenerateApp()
+        //public GenerateAppV1 GenerateApp("NETCore3.1", "Angular10.0")
         //{
         //    var v = new GenerateAppV1();
         //    v.payLoadConn = new PayLoadConn();
@@ -229,7 +229,7 @@ namespace GenerateApp.Controllers
         {
             string name = Path.GetFileName(path);
             name = new String(name.Where(it=> it == '.' || Char.IsLetterOrDigit(it)).ToArray());
-            var i = new InfoData(SourceData.Excel)
+            var i = new InfoData(connTypes.Excel)
             {
                 logs = new Logs(),
                 name = name,
@@ -249,7 +249,7 @@ namespace GenerateApp.Controllers
             Task t = new Task(async i =>
             {
                 var info = i as InfoData;
-                info.result = await GenerateApp(i as InfoData);
+                info.result = !string.IsNullOrWhiteSpace(await GenerateApp(i as InfoData));
             }
             , i);
             t.Start();
@@ -275,7 +275,7 @@ namespace GenerateApp.Controllers
             
             return RedirectToAction("Info",new { id = name });
         }
-        public async Task<bool> GenerateApp(InfoData i)
+        public async Task<string> GenerateApp(InfoData i)
         {
             try
             {
@@ -286,7 +286,7 @@ namespace GenerateApp.Controllers
                 }
                 i.logs.AddLog(i.name,"Start generating app");
 
-                var result = await i.GenerateApp();
+                var result = await i.GenerateApp("NETCore3.1", "Angular10.0");
 
                 i.logs.AddLog(i.name,$"Done with result {result}");
                 return result;
@@ -302,7 +302,7 @@ namespace GenerateApp.Controllers
                 catch
                 {
                 }
-                return false;
+                return null;
             }
         }
         public ActionResult Info(string id)

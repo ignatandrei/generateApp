@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Configuration;
+using System.Diagnostics;
 
 namespace GenerateApp.Controllers
 {
@@ -36,12 +37,25 @@ namespace GenerateApp.Controllers
             {
                 null => "does not exist ",
                 string s when s.Contains("int",StringComparison.InvariantCultureIgnoreCase) => "number",
+                string s when s.Contains("double", StringComparison.InvariantCultureIgnoreCase) => "number",
                 string s when s.Contains("varchar", StringComparison.InvariantCultureIgnoreCase) => "string",
+                string s when s.Contains("text", StringComparison.InvariantCultureIgnoreCase) => "string",
+                string s when s.Contains("mediumtext", StringComparison.InvariantCultureIgnoreCase) => "string",
                 string s when s.Contains("bool", StringComparison.InvariantCultureIgnoreCase) => "boolean",
+                string s when s.Contains("bit", StringComparison.InvariantCultureIgnoreCase) => "boolean",
                 string s when s.Contains("date", StringComparison.InvariantCultureIgnoreCase) => "date",
+                string s when s.Contains("varbinary", StringComparison.InvariantCultureIgnoreCase) => "byte[]",
+                string s when s.Contains("blob", StringComparison.InvariantCultureIgnoreCase) => "byte[]",
+                string s when s.Contains("timestamp", StringComparison.InvariantCultureIgnoreCase) => "date",
+                string s when s.Contains("decimal", StringComparison.InvariantCultureIgnoreCase) => "number",
 
-                _ => $"not found {originalType}"
+                _ => notFoundType(originalType)
             };
+        private string notFoundType(string t)
+        {
+            Debug.Assert(false, $"cannot find {t}");
+            return $"not found {t}";
+        }
         //public Type DotNetType()
         //{
         //    var t = DotNetTypeOriginal();
@@ -53,7 +67,7 @@ namespace GenerateApp.Controllers
         //        return t;
         //    return typeof(Nullable<>).MakeGenericType(t);
         //}
-        public Type DotNetType() =>
+        public Type DotNetType(connTypes connectionTypes) =>
             originalType?.ToLower() switch
             {
                 null => null,
@@ -64,7 +78,9 @@ namespace GenerateApp.Controllers
                 string s when s.Contains("money", StringComparison.InvariantCultureIgnoreCase) => typeof(decimal),
                 string s when s.Contains("float", StringComparison.InvariantCultureIgnoreCase) => typeof(double),
                 string s when s.Contains("real", StringComparison.InvariantCultureIgnoreCase) => typeof(Single),
-                string s when s.Contains("timestamp", StringComparison.InvariantCultureIgnoreCase) => typeof(byte[]),
+                string s when connTypes.MSSQL == connectionTypes &&  s.Contains("timestamp", StringComparison.InvariantCultureIgnoreCase) => typeof(byte[]),
+                string s when connTypes.MariaDB == connectionTypes && s.Contains("timestamp", StringComparison.InvariantCultureIgnoreCase) => typeof(DateTime),
+                string s when connTypes.MYSQL == connectionTypes && s.Contains("timestamp", StringComparison.InvariantCultureIgnoreCase) => typeof(DateTime),
 
                 string s when s.Contains("time", StringComparison.InvariantCultureIgnoreCase) => typeof(DateTime),
 
@@ -76,6 +92,8 @@ namespace GenerateApp.Controllers
                 string s when s.Contains("varchar", StringComparison.InvariantCultureIgnoreCase) => typeof(string),
                 string s when s.Contains("sql_variant", StringComparison.InvariantCultureIgnoreCase) => typeof(string),
                 string s when s.Contains("char", StringComparison.InvariantCultureIgnoreCase) => typeof(string),
+                string s when connTypes.MariaDB == connectionTypes  && s.Contains("varbinary") => typeof(byte[]),
+                string s when connTypes.MYSQL == connectionTypes && s.Contains("varbinary") => typeof(byte[]),
                 string s when s.Contains("binary", StringComparison.InvariantCultureIgnoreCase) => typeof(string),
                 string s when s.Contains("text", StringComparison.InvariantCultureIgnoreCase) => typeof(string),
                 string s when s.Contains("xml", StringComparison.InvariantCultureIgnoreCase) => typeof(string),
@@ -83,12 +101,14 @@ namespace GenerateApp.Controllers
 
                 string s when s.Contains("bool", StringComparison.InvariantCultureIgnoreCase) => typeof(bool),
                 string s when s.Contains("date", StringComparison.InvariantCultureIgnoreCase) => typeof(DateTime),
+                string s when s.Contains("double", StringComparison.InvariantCultureIgnoreCase) => typeof(double),
+                string s when s.Contains("blob", StringComparison.InvariantCultureIgnoreCase) => typeof(byte[]),
 
                 _ => DefaultType(originalType?.ToLower())
             };
         public Type DefaultType(string name)
         {
-            System.Diagnostics.Debug.Assert(false, $"cannot find {name}");
+            Debug.Assert(false, $"cannot find {name}");
             return typeof(string);
         }
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
