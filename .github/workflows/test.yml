@@ -44,8 +44,6 @@ jobs:
         run: |
           cd src
           cd GenerateApp
-          dotnet tool restore
-          dotnet tool list
           dotnet pwsh ./setVersion.ps1
           dotnet restore
           dotnet build

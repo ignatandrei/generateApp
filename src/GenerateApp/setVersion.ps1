@@ -1,4 +1,5 @@
 dotnet tool restore
+dotnet tool list
 $TimeNow = Get-Date
 $d = $TimeNow.ToUniversalTime()
 $year = $TimeNow.Year
