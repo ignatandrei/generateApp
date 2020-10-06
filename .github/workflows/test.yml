@@ -43,7 +43,7 @@ jobs:
       - name: Run version and build
         run: |
           cd src
-          cd generate
+          cd Generate
           dotnet tool restore
 
           

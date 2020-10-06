@@ -7,6 +7,12 @@
       "commands": [
         "pwsh"
       ]
+    },
+    "dotnet-property": {
+      "version": "2.0.0.60",
+      "commands": [
+        "dotnet-property"
+      ]
     }
   }
 }
