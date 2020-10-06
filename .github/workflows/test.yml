@@ -45,6 +45,8 @@ jobs:
           cd src
           cd Generate
           dotnet tool restore
+          dotnet tool list
+          dotnet pwsh setVersion.ps1
 
           
       - name: artifacts
