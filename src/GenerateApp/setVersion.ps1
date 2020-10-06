@@ -20,13 +20,8 @@ Write-Host $moniker
 
 
 
-$assemblyVersion=$d.ToString("1.yyyy.1MMdd.1HHmm") +"-beta"+ $d.ToString("ss");
-dotnet-property "**/*.csproj" AssemblyVersion:"$assemblyVersion"
-dotnet dotnet-property "**/*.csproj" AssemblyVersion:"$assemblyVersion"
-
-$version=$d.ToString("1.1.yyyy.") + ($diff.TotalSeconds -as  [int]).ToString()
-dotnet-property "**/*.csproj" Version:"$version"
-dotnet dotnet-property "**/*.csproj" Version:"$version"
+$assemblyVersion=$d.ToString("1.yyyy.1MM.1dd") #+"-beta"+ $d.ToString("1HHmmss");
+$version=$assemblyVersion #$d.ToString("1.yyyy.") + ($diff.TotalSeconds -as  [int]).ToString() +"-beta"+ $d.ToString("ss");
 
 $releaseNotes = "For using please read github.com/ignatandrei/generateapp/"
 # $releaseNotes +="\r\n"
@@ -37,11 +32,26 @@ $releaseNotes += (";BuildNumber $env:BUILD_BUILDNUMBER with name "+ $moniker)
 #$releaseNotes += ";message $env:BUILD_SOURCEVERSIONMESSAGE"
 # $releaseNotes +="\r\n"
 $releaseNotes +=";source for this release //github.com/ignatandrei/generateapp/commit/$env:BUILD_SOURCEVERSION"
-
 $releaseNotes
 
-dotnet-property "**/*.csproj" PackageReleaseNotes:"$releaseNotes"
-dotnet dotnet-property "**/*.csproj" PackageReleaseNotes:"$releaseNotes"
+$projects = Get-ChildItem -Recurse "." -include *.csproj
 
-dotnet-property "**/*.csproj" AssemblyTitle:"generateapp $moniker"
-dotnet dotnet-property "**/*.csproj" AssemblyTitle:"generateapp $moniker"
+foreach ($item in $projects) {
+
+	Write-Host $item.Name
+	$folder= Split-Path -Path $item.FullName
+	Push-Location $folder
+	dotnet-property $item.Name AssemblyVersion:"$assemblyVersion"
+	dotnet dotnet-property $item.Name AssemblyVersion:"$assemblyVersion"
+	
+	dotnet-property $item.Name Version:"$version"
+	dotnet dotnet-property $item.Name Version:"$version"
+
+	dotnet-property $item.Name PackageReleaseNotes:"$releaseNotes"
+	dotnet dotnet-property $item.Name PackageReleaseNotes:"$releaseNotes"
+
+	dotnet-property $item.Name AssemblyTitle:"generateapp $moniker"
+	dotnet dotnet-property $item.Name AssemblyTitle:"generateapp $moniker"
+
+	Pop-Location
+}
