@@ -6,7 +6,7 @@ dotnet tool list
 #c
 cd ./GenerateAppTool
 Write-Host "start copy"
-Copy-Item -Path ../GenerateApp/wwwroot/GenerateAll/* -Destination ./GenerateAll/ -Recurse
+Compress-Archive -Path ../GenerateApp/wwwroot/GenerateAll/* -DestinationPath ./GenerateAll/GenerateAll.zip 
 Write-Host "end copy"
 dotnet build
 dotnet pack  --include-source --include-symbols --output ../output/
