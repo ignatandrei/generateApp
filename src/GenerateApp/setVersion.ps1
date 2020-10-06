@@ -1,3 +1,4 @@
+dotnet tool restore
 $TimeNow = Get-Date
 $d = $TimeNow.ToUniversalTime()
 $year = $TimeNow.Year
@@ -19,7 +20,7 @@ Write-Host $moniker
 
 
 
-$assemblyVersion=$d.ToString("1.yyyy.1MMdd.1HHmm")
+$assemblyVersion=$d.ToString("1.yyyy.1MMdd.1HHmm") +"-beta"+ $d.ToString("ss");
 dotnet-property "**/*.csproj" AssemblyVersion:"$assemblyVersion"
 dotnet dotnet-property "**/*.csproj" AssemblyVersion:"$assemblyVersion"
 
