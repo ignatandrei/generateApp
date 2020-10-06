@@ -21,7 +21,7 @@ Write-Host $moniker
 
 
 $assemblyVersion=$d.ToString("1.yyyy.1MM.1dd") #+"-beta"+ $d.ToString("1HHmmss");
-$version=$assemblyVersion #$d.ToString("1.yyyy.") + ($diff.TotalSeconds -as  [int]).ToString() +"-beta"+ $d.ToString("ss");
+$version=$assemblyVersion + "-beta"+ ($diff.TotalSeconds -as  [int]).ToString() #$d.ToString("1.yyyy.") + ($diff.TotalSeconds -as  [int]).ToString() +"-beta"+ $d.ToString("ss");
 
 $releaseNotes = "For using please read github.com/ignatandrei/generateapp/"
 # $releaseNotes +="\r\n"
