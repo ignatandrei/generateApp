@@ -27,7 +27,7 @@ namespace GenerateAppTool
                 cmd.ShowHelp();
                 return 1;
             }
-            data.OutputToConsole();
+            Console.WriteLine(data.OutputToConsole());
             string cn = optionConnectionString.Value();
 
             var scsb = new MySqlConnectionStringBuilder(cn);
@@ -73,8 +73,13 @@ namespace GenerateAppTool
             moreHelp +=$"EXECUTE with {Environment.NewLine}{Environment.NewLine} generateApptool sqlserver -cn <your connection string here> ...";
             moreHelp += $"{Environment.NewLine}{Environment.NewLine} ";
             moreHelp += $"EXECUTE with {Environment.NewLine}{Environment.NewLine} generateApptool mysql -cn <your connection string here> ...";
+            moreHelp += $"{Environment.NewLine}{Environment.NewLine} ";
+            moreHelp += $"EXECUTE with {Environment.NewLine}{Environment.NewLine} generateApptool mariadb -cn <your connection string here> ...";
+            moreHelp += $"{Environment.NewLine}{Environment.NewLine} ";
+            moreHelp += $"{Environment.NewLine}To modify how it is generated, see options above ";
+            moreHelp += $"{Environment.NewLine}{Environment.NewLine} ";
+            moreHelp += data.OutputToConsole();
 
-            moreHelp += $"To modify how it is generated, see options above ";
             app.ExtendedHelpText = moreHelp;
             app.HelpOption("-h|--help", inherited:true);
             var tf = app.Option<string>("-tf|--templateFolder <folder>", "template Folder", CommandOptionType.SingleOrNoValue);           
@@ -123,13 +128,13 @@ namespace GenerateAppTool
                     var stData = JsonConvert.DeserializeObject<StankinsGenerator>(File.ReadAllText(generator));
                     foreach (var item in stData.backend)
                     {
-                        Console.WriteLine("backend :" + item.name);
+                        Console.WriteLine("backend :" + item.name +" =>"+ item.folder);
 
                     }
 
                     foreach (var item in stData.frontend)
                     {
-                        Console.WriteLine("frontend :" + item.name);
+                        Console.WriteLine("frontend :" + item.name + " =>" + item.folder);
 
                     }
                     return 0;
@@ -152,7 +157,7 @@ namespace GenerateAppTool
                     dbs = dbs.Replace(connTypes.None.ToString(), "");
                     Console.WriteLine(dbs);
                     Console.WriteLine("");
-                    data.OutputToConsole();        
+                    Console.WriteLine(data.OutputToConsole());        
                     Console.WriteLine("see below about how to generate");
                     Console.WriteLine("");
 
@@ -178,7 +183,7 @@ namespace GenerateAppTool
                     }
                     string fileName = optionFileName.Value();
                     Console.WriteLine($"start import {fileName}");
-                    data.OutputToConsole();
+                    Console.WriteLine(data.OutputToConsole());
                     var folder = await ImportExcel(fileName);
                     Console.WriteLine($"generated in folder {data}");
                     return 0;
@@ -202,7 +207,7 @@ namespace GenerateAppTool
                          cmd.ShowHelp();
                          return 1;
                      }
-                     data.OutputToConsole();
+                     Console.WriteLine(data.OutputToConsole());
                      string cn = optionConnectionString.Value();
                      
                      var scsb = new SqlConnectionStringBuilder(cn);

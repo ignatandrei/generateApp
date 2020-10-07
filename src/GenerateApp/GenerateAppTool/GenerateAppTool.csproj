@@ -9,6 +9,9 @@
 
   <ItemGroup>
     <None Remove="GenerateAll\GenerateAll.zip" />
+    <None Remove="GenerateAppTool.1.0.0.nupkg" />
+    <None Remove="GenerateAppTool.1.0.0.snupkg" />
+    <None Remove="test.bat" />
   </ItemGroup>
 
   <ItemGroup>
