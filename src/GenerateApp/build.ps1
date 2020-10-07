@@ -12,4 +12,3 @@ Write-Host "end copy"
 dotnet build
 dotnet pack  --include-source --include-symbols --output ../output/
 cd ..
-

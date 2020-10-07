@@ -44,18 +44,16 @@ jobs:
         run: |
           cd src
           cd GenerateApp
+          dotnet tool restore
           dotnet pwsh ./setVersion.ps1
-          dotnet restore
-          dotnet build
-          cd GenerateAppTool
-          dotnet pack
+          dotnet pwsh ./build.ps1
 
           
       - name: artifacts
         uses: actions/upload-artifact@v2
         with:
-          name: output ${{ env.GITHUB_REF_SLUG  }}         
-          path: LICENSE
+          name: nuget ${{ env.GITHUB_REF_SLUG  }}         
+          path: src/GenerateApp/output
 
       - name: artifacts
         uses: actions/upload-artifact@v2
