@@ -31,6 +31,9 @@
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
   </ItemGroup>
   <PropertyGroup>
+    <Authors>Andrei Ignat;Badita Alexandru</Authors>
+    <Owners>Andrei Ignat;Badita Alexandru</Owners>
+
     <Description>Generate Application Tool</Description>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
