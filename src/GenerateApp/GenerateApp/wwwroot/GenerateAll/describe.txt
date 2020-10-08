@@ -6,10 +6,10 @@
             "Angular10.0"
         ],
         copyTableFiles: [
-            "TestWEBAPI_DAL/@Name@Repository.cs",
-            "TestWebAPI_BL/@Name@BL.cs",
-            "TestWebAPI//Controllers/@Name@ActionController.cs",
-            "TestWebAPI/Controllers/@Name@RESTController.cs"
+            "TestWEBAPI_DAL/Generated/@Name@Repository.cs",
+            "TestWebAPI_BL/Generated/@Name@BL.cs",
+            "TestWebAPI/Generated/Controllers/@Name@ActionController.cs",
+            "TestWebAPI/Generated/Controllers/@Name@RESTController.cs"
         ],
         "execute": [{
             name: "docker",
