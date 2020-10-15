@@ -4,47 +4,35 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Text;
+using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
 
 namespace TestGenerate
 {
-    public class TestGenerateMariaDB
+    public class TestGenerateMySql
     {
         private readonly ITestOutputHelper output;
-        static GenerateAppV1 gen()
+        static async Task<GenerateAppV1> gen()
         {
             var g = new GenerateAppV1();
             g.payLoadConn = payload();
-            var t = new TableGenerator[2];
-            t[0] = new TableGenerator();
-            t[0].table = new Table();
-            t[0].table.name = "table_test";
-            t[0].table.fields = new List<Field>();
-            t[0].table.fields.Add(new Field() { name = "table_id" });
-            t[0].table.fields.Add(new Field() { name = "name" });
-
-            t[1] = new TableGenerator();
-            t[1].table = new Table();
-            t[1].table.name = "table_two";
-            t[1].table.fields = new List<Field>();
-            t[1].table.fields.Add(new Field() { name = "column_1" });
-            t[1].table.fields.Add(new Field() { name = "column_2" });
-            g.input = t;
+            
+            g.input = await g.ReadAllFromDB();
             return g;
         }
         static PayLoadConn payload()
         {
             var p = new PayLoadConn();
-            p.connType = connTypes.MariaDB.ToString();
-            p.connDatabase = "test_schema";
-            p.connHost = "alex360.go.ro";
-            p.connPort = "85";
-            p.connUser = "root";
-            p.connPassword = "datatocode";
+            p.connType = connTypes.MYSQL.ToString();
+            p.connDatabase = "sql7341223";
+            p.connHost = "sql7.freemysqlhosting.net";
+            p.connPort = "3306";
+            p.connUser = "sql7341223";
+            p.connPassword = "sSuvYBVdwu";
             return p;
         }
-        public TestGenerateMariaDB(ITestOutputHelper output)
+        public TestGenerateMySql(ITestOutputHelper output)
         {
             this.output = output;
         }
@@ -73,7 +61,7 @@ namespace TestGenerate
         [InlineData(@"E:\ignatandrei\generateApp\src\GenerateApp\GenerateApp\wwwroot\GenerateAll")]
         public async void TestGenerate(string pathGenerate)
         {
-            var app = gen();
+            var app = await gen();
             int errors = 0;
             await foreach(var item in app.Validate())
             {
