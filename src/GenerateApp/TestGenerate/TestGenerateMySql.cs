@@ -75,7 +75,7 @@ namespace TestGenerate
             var info = await app.GenerateInfoData(typeToLoad);
             info.folderGenerator = pathGenerate;
             info.pathFile = @"E:\test\a.txt";
-            var data = await info.GenerateApp("NETCore3.1", "Angular10.0");
+            var data = await info.GenerateApp("express-api-template", null);
             if (string.IsNullOrWhiteSpace(data))
             {
                 output.WriteLine(info.logs[info.logs.Count - 2]);
