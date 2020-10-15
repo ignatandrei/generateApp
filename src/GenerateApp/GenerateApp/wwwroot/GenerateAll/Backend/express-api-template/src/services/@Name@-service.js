@@ -2,12 +2,12 @@
     var parameter= "@param";
     var returnData ="@return";
 }
-const {ModelDeleteById} = require("../model-operations/model-delete");
-const {ModelFindAll} = require("../model-operations/model-find-alld");
-const {ModelFindById} = require("../model-operations/model-find");
+const {ModelDeleteById} = require("../model-operations/@Name@-delete");
+const {ModelFindAll} = require("../model-operations/@Name@-find-alld");
+const {ModelFindById} = require("../model-operations/@Name@-find");
 const {appConn} = require("../helpers/app-connection");
-const {ModelBulkUpsert} = require("../model-operations/model-upsert");
-const {TestTableModel} = require("../models/test-model");
+const {ModelBulkUpsert} = require("../model-operations/@Name@-upsert");
+const {TestTableModel} = require("../models/@Name@-model");
 const {appConfig} = require("../config");
 
 const getAppConn = (connection, logger) => {
