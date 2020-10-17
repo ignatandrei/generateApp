@@ -24,12 +24,14 @@
         name: "Express API",
         worksWithFrontEnd: [],
         copyTableFiles: [
-			"src/model-operations/@Name@-delete.js",
+	
+           "src/model-operations/@Name@-delete.js",
             "src/model-operations/@Name@-find-alld.js",
             "src/model-operations/@Name@-find.js",
             "src/model-operations/@Name@-upsert.js",
-			"src/models/@Name@-model.js",
-			"src/services/@Name@-service.js",
+            "src/models/@Name@-model.js",
+            "src/services/@Name@-service.js",
+            "src/controllers/@Name@-controller.js",
 			],
 			
         "execute": []
