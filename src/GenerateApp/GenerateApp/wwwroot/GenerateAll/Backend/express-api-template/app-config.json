@@ -7,7 +7,10 @@
 	
     var ds= Model.FindAfterName("DataSource").Value;
     var dtOptions= Model.FindAfterName("@@Options@@").Value;
-    
+
+    var dataSource = dtOptions.Rows.Find("DataSource")[1].ToString();
+
+
     var nrRowsDS=ds.Rows.Count;
     
     var nameTablesToRender = new string[nrRowsDS];
@@ -46,7 +49,29 @@
     {
       "default": true,
       "migrations": false,
-      "dialect": "mysql",
+
+      @switch(dataSource){
+        case "SqlServerInMemory":
+        case "MSSQL":
+            <text>
+            "dialect": "mssql",
+            </text>
+        break;
+        case "MariaDB":
+        case "MYSQL":
+            <text>
+            "dialect": "mysql",
+            </text>
+        break;
+        default:
+            <text>
+            "dialect": "NO SUCH DIALECT",
+            </text>
+            break;
+    }
+
+          
+      
       "timestamps": false,
       "conn": {
         "host": "19.19.19.111",
