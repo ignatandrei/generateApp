@@ -74,6 +74,7 @@
     
 }
 
+//AlexBadita: what to do with views  -they do not have pk?
 module.exports.@(nameClass)DeleteById = (parId, Entity, logger) => {
     return new Promise((res, rej) => {
         Entity.destroy({
@@ -81,6 +82,7 @@ module.exports.@(nameClass)DeleteById = (parId, Entity, logger) => {
                 @{
                     if(havePK){
                         <text>
+                            
                             @(nameProperty(idTable,nameClass)): parId
                         </text>
 
