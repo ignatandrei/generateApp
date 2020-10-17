@@ -82,7 +82,7 @@ const bodyParser = require('body-parser');
 router.use(bodyParser.json());
 const log = require('./../logger');
 
-router.get('/api/@(nameClass)/findAll', (req, res) => {
+router.get('/findAll', (req, res) => {
     const {@(nameClass)FindService} = require("../services/@(nameClass)-service");
     @(nameClass)FindService(null, null, log).then(r => {
         res.send(JSON.stringify(r));
@@ -92,7 +92,7 @@ router.get('/api/@(nameClass)/findAll', (req, res) => {
     });
 });
 
-router.get('/api/@(nameClass)/findBy/:id', (req, res) => {
+router.get('/findBy/:id', (req, res) => {
     const {@(nameClass)FindByIdService} = require("../services/@(nameClass)-service");
     @(nameClass)FindByIdService(req.params.id, null, null, log).then(r => {
         res.send(JSON.stringify(r));
@@ -102,7 +102,7 @@ router.get('/api/@(nameClass)/findBy/:id', (req, res) => {
     });
 });
 
-router.post('/api/@(nameClass)', (req, res) => {
+router.post('', (req, res) => {
     const {@(nameClass)UpsertService} = require("../services/@(nameClass)-service");
     @(nameClass)UpsertService(req.body, null, null, log).then(r => {
         res.send(JSON.stringify(r));
@@ -112,7 +112,7 @@ router.post('/api/@(nameClass)', (req, res) => {
     });
 });
 
-router.put('/api/@(nameClass)', (req, res) => {
+router.put('', (req, res) => {
     const {@(nameClass)UpsertService} = require("../services/@(nameClass)-service");
     @(nameClass)UpsertService(req.body, null, null, log).then(r => {
         res.send(JSON.stringify(r));
@@ -122,7 +122,7 @@ router.put('/api/@(nameClass)', (req, res) => {
     });
 });
 
-router.delete('/api/@(nameClass)/deleteById/:id', (req, res) => {
+router.delete('/deleteById/:id', (req, res) => {
     const {@(nameClass)DeleteByIdService} = require("../services/@(nameClass)-service");
     @(nameClass)DeleteByIdService(req.params.id, null, null, log).then(r => {
         res.send(JSON.stringify(r));
