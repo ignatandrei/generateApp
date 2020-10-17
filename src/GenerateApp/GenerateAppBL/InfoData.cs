@@ -190,7 +190,11 @@ namespace GenerateApp.Controllers
                         dtOptions.Rows.Add("ApplicationName", this.GenerateAppV1.payLoadConn.connDatabase );
                         dtOptions.Rows.Add("DataSource", sourceData.ToString());
                         dtOptions.Rows.Add("DataSourceConnectionString", this.GenerateAppV1.payLoadConn.ConnectionString());
-                        
+                        dtOptions.Rows.Add("DataSourceConnectionHost", this.GenerateAppV1.payLoadConn.connHost);
+                        dtOptions.Rows.Add("DataSourceConnectionUser", this.GenerateAppV1.payLoadConn.connUser);
+                        dtOptions.Rows.Add("DataSourceConnectionPassword", this.GenerateAppV1.payLoadConn.connPassword);
+                        dtOptions.Rows.Add("DataSourceConnectionDatabase", this.GenerateAppV1.payLoadConn.connDatabase);
+                        dtOptions.Rows.Add("DataSourceConnectionPort", this.GenerateAppV1.payLoadConn.connPort);
                         // make here the generated id
                         for (int iRowDS = nrRowsDS - 1; iRowDS > -1; iRowDS--)
                         {

@@ -9,7 +9,12 @@
     var dtOptions= Model.FindAfterName("@@Options@@").Value;
 
     var dataSource = dtOptions.Rows.Find("DataSource")[1].ToString();
-
+    var host =  dtOptions.Rows.Find("DataSourceConnectionHost")?[1]?.ToString();
+    var user =  dtOptions.Rows.Find("DataSourceConnectionUser")?[1]?.ToString();
+    var pwd =  dtOptions.Rows.Find("DataSourceConnectionPassword")?[1]?.ToString();
+    var db =  dtOptions.Rows.Find("DataSourceConnectionDatabase")?[1]?.ToString();
+    var port =  dtOptions.Rows.Find("DataSourceConnectionPort")?[1]?.ToString();
+    
 
     var nrRowsDS=ds.Rows.Count;
     
@@ -74,11 +79,11 @@
       
       "timestamps": false,
       "conn": {
-        "host": "19.19.19.111",
-        "user": "user4code",
-        "password": "user4code",
-        "database": "4data-to-code",
-        "port": 3306,
+        "host": "@(host)",
+        "user": "@(user)",
+        "password": "@(pwd)",
+        "database": "@(db)",
+        "port": @(port),
         "logging": true
       },
       "schema": "",
