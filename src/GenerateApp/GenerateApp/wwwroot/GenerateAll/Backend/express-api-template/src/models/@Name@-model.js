@@ -75,7 +75,7 @@
 const {DataTypes} = require("sequelize");
 
 let entity = null;
-module.exports.TestTableModel = (appConn, options, logger) => {
+module.exports.@(nameClass)TestTable = (appConn, options, logger) => {
     try {
         if (!entity) {
             entity = appConn.define('@(nameClass)', {

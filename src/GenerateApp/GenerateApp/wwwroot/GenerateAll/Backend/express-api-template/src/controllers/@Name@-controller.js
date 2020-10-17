@@ -1,12 +1,90 @@
+
+@model Stankins.Interfaces.IDataToSent
+@{
+	string ClassNameFromTableName(string tableName){
+		return tableName.Replace(" ","").Replace(".","").Replace("(","").Replace(")","");
+	}
+	
+    var dt= Model.FindAfterName("@Name@").Value;
+    var nameTable= dt.TableName;
+    string nameClass= ClassNameFromTableName(nameTable);
+    var dtOptions= Model.FindAfterName("@@Options@@").Value;
+
+    var havePK = (dtOptions.Rows.Find(dt.TableName +"_PK") != null);
+    string idTable ="", idType = "";
+    if(havePK){
+        idTable = dtOptions.Rows.Find(dt.TableName +"_PK")[1].ToString();  
+        idType = dtOptions.Rows.Find(dt.TableName +"_PK_Type")[1].ToString();  
+    }
+	var nrCols =dt.Columns.Count;
+	string nameProperty(string original, string nameClass){
+		var name = original.ToLower().Replace(" ","").Replace("event","event1").Replace("class","class1").Replace("object","object1").Replace("<","").Replace("/","").Replace(">","").Replace("(","").Replace(")","").ToLower();
+		if(!IsIdentifier(name))
+			name = "generated_"+name;
+		if(nameClass.ToLower() == name)
+            name= "generated_"+name;
+		return name.Trim();
+	}
+	//https://docs.microsoft.com/en-us/dotnet/api/microsoft.codeanalysis.csharp.syntaxfacts?view=roslyn-dotnet
+	bool IsIdentifier(string text)
+	{
+     if (string.IsNullOrEmpty(text))
+        return false;
+     if (!char.IsLetter(text[0]) && text[0] != '_')
+        return false;
+     for (int ix = 1; ix < text.Length; ++ix)
+        if (!char.IsLetterOrDigit(text[ix]) && text[ix] != '_')
+           return false;
+     return true;
+    }
+    string nameTypeForJS(string colTypeName){
+		string nameType = "";
+		switch(colTypeName.ToLower()){
+				case "string":
+                case "guid":
+					nameType="DataTypes.STRING";
+                    break;
+                case "boolean":
+                    nameType= "DataTypes.BOOLEAN";
+                    break;
+                case "byte[]"://https://developer.mozilla.org/en-US/docs/Web/JavaScript/Typed_arrays
+                    nameType="DataTypes.BLOB";
+                    break;
+                case "byte":
+                  nameType="DataTypes.BLOB";
+                  break;
+                case "datetime":
+                    nameType = "DataTypes.Date";
+                    break;
+                case "single":
+                case "double":
+				        case "DataTypes.DECIMAL":
+                case "int16":
+                case "int32":
+                case "int64":
+                case "long":
+					nameType="DataTypes.INTEGER";
+					break;
+				default:
+					nameType="!!!!"+colTypeName;
+					break;
+			}
+		return nameType;
+    }
+    
+    
+}
+
+
 const express = require('express');
 const router = express.Router();
 const bodyParser = require('body-parser');
 router.use(bodyParser.json());
 const log = require('./../logger');
 
-router.get('/findAll', (req, res) => {
-    const {ModelFindService} = require("../services/service-model");
-    ModelFindService(null, null, log).then(r => {
+router.get('/api/@(nameClass)/findAll', (req, res) => {
+    const {@(nameClass)FindService} = require("../services/@(nameClass)-service");
+    @(nameClass)FindService(null, null, log).then(r => {
         res.send(JSON.stringify(r));
     }).catch(e => {
         log.error(e);
@@ -14,9 +92,9 @@ router.get('/findAll', (req, res) => {
     });
 });
 
-router.get('/findBy/:id', (req, res) => {
-    const {ModelFindByIdService} = require("../services/service-model");
-    ModelFindByIdService(req.params.id, null, null, log).then(r => {
+router.get('/api/@(nameClass)/findBy/:id', (req, res) => {
+    const {@(nameClass)FindByIdService} = require("../services/@(nameClass)-service");
+    @(nameClass)FindByIdService(req.params.id, null, null, log).then(r => {
         res.send(JSON.stringify(r));
     }).catch(e => {
         log.error(e);
@@ -24,9 +102,9 @@ router.get('/findBy/:id', (req, res) => {
     });
 });
 
-router.post('/', (req, res) => {
-    const {ModelUpsertService} = require("../services/service-model");
-    ModelUpsertService(req.body, null, null, log).then(r => {
+router.post('/api/@(nameClass)', (req, res) => {
+    const {@(nameClass)UpsertService} = require("../services/@(nameClass)-service");
+    @(nameClass)UpsertService(req.body, null, null, log).then(r => {
         res.send(JSON.stringify(r));
     }).catch(e => {
         log.error(e);
@@ -34,9 +112,9 @@ router.post('/', (req, res) => {
     });
 });
 
-router.put('/', (req, res) => {
-    const {ModelUpsertService} = require("../services/service-model");
-    ModelUpsertService(req.body, null, null, log).then(r => {
+router.put('/api/@(nameClass)', (req, res) => {
+    const {@(nameClass)UpsertService} = require("../services/@(nameClass)-service");
+    @(nameClass)UpsertService(req.body, null, null, log).then(r => {
         res.send(JSON.stringify(r));
     }).catch(e => {
         log.error(e);
@@ -44,9 +122,9 @@ router.put('/', (req, res) => {
     });
 });
 
-router.delete('/deleteById/:id', (req, res) => {
-    const {ModelDeleteByIdService} = require("../services/service-model");
-    ModelDeleteByIdService(req.params.id, null, null, log).then(r => {
+router.delete('/api/@(nameClass)/deleteById/:id', (req, res) => {
+    const {@(nameClass)DeleteByIdService} = require("../services/@(nameClass)-service");
+    @(nameClass)DeleteByIdService(req.params.id, null, null, log).then(r => {
         res.send(JSON.stringify(r));
     }).catch(e => {
         log.error(e);
