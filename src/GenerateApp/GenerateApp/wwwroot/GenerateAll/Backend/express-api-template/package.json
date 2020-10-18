@@ -22,7 +22,8 @@
         "nocache": "^2.1.0",
         "node-guard": "^1.0.0",
         "print-message": "^3.0.1",
-        "sequelize": "^6.3.5"
+        "sequelize": "^6.3.5",
+        "tedious": "^9.2.1"
     },
     "publishConfig": {
         "registry": ""

@@ -6,6 +6,8 @@
 	
     var dt= Model.FindAfterName("@Name@").Value;
     var nameTable= dt.TableName;
+    var arr = nameTable.Split('.');
+    var nameTableNoSchema = arr[arr.Length-1];
     string nameClass= ClassNameFromTableName(nameTable);
     var dtOptions= Model.FindAfterName("@@Options@@").Value;
 
@@ -78,7 +80,7 @@ let entity = null;
 module.exports.@(nameClass)TestTable = (appConn, options, logger) => {
     try {
         if (!entity) {
-            entity = appConn.define('@(nameClass)', {
+            entity = appConn.define('@(nameTableNoSchema)', {
                 
                 @(nameProperty(idTable,nameClass) ):{
                     type: @(nameTypeForJS(idType)),
