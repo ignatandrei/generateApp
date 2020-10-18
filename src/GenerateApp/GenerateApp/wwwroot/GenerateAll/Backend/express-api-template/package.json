@@ -4,7 +4,7 @@
     "description": "Backend API generated with data-to-code.",
     "main": "index.js",
     "scripts": {
-        "start": "node index.js"
+        "start": "nodemon index.js"
     },
     "keywords": [],
     "author": "data-to-code.eu",
@@ -28,6 +28,7 @@
         "registry": ""
     },
     "devDependencies": {
-        "jshint": "^2.12.0"
+        "jshint": "^2.12.0",
+        "nodemon": "^2.0.5"
     }
 }

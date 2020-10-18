@@ -12,10 +12,11 @@ try {
                 pattern: 'yyyy-MM-dd.log',
                 compress: true,
                 alwaysIncludePattern: true
-            }
+            },
+            console: { type: 'console' }
         },
         categories: {
-            default: {appenders: ['everything'], level: logLevel}
+            default: {appenders: ['everything','console'], level: logLevel}
         }
     };
 

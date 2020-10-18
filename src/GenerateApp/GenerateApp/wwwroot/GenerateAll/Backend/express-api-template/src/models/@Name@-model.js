@@ -99,7 +99,7 @@ module.exports.@(nameClass)TestTable = (appConn, options, logger) => {
                     <text>
                         , @(colName):{
                             type: @(nameType),
-                            allowNull: @(nullable),
+                            allowNull: @(nullable.ToString().ToLower()),
                             primaryKey: false,                            
                         }
                     </text>
