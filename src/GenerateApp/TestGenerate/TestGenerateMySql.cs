@@ -25,11 +25,16 @@ namespace TestGenerate
         {
             var p = new PayLoadConn();
             p.connType = connTypes.MYSQL.ToString();
-            p.connDatabase = "sql7341223";
-            p.connHost = "sql7.freemysqlhosting.net";
-            p.connPort = "3306";
-            p.connUser = "sql7341223";
-            p.connPassword = "sSuvYBVdwu";
+            //p.connDatabase = "sql7341223";
+            //p.connHost = "sql7.freemysqlhosting.net";
+            //p.connPort = "3306";
+            //p.connUser = "sql7341223";
+            //p.connPassword = "sSuvYBVdwu";
+            p.connDatabase = "4data-to-code";
+            p.connHost = "alex360.go.ro";
+            p.connPort = "85";
+            p.connUser = "user4code";
+            p.connPassword = "user4code";
             return p;
         }
         public TestGenerateMySql(ITestOutputHelper output)

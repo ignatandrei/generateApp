@@ -16,7 +16,8 @@ try {
             console: { type: 'console' }
         },
         categories: {
-            default: {appenders: ['everything','console'], level: logLevel}
+            default: {appenders: ['everything'], level: logLevel},
+            error: { appenders: ['console'], level: 'error' }
         }
     };
 
