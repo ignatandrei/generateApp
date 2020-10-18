@@ -109,7 +109,7 @@ module.exports.@(nameClass)UpsertService = (content, connection, schema, logger)
             name: content.name
         }
 
-        const Entity = TestTable@(nameClass)(conn, null, logger);
+        const Entity = @(nameClass)TestTable(conn, null, logger);
         logger.info("Entity - Upsert");
         let arr = [];
         arr.push(obj);
@@ -131,7 +131,7 @@ module.exports.@(nameClass)UpsertService = (content, connection, schema, logger)
 module.exports.@(nameClass)FindService = (connection, schema, logger) => {
     return new Promise((res, rej) => {
         const conn = getAppConn(connection, logger);
-        const Entity = TestTable@(nameClass)(conn, null, logger);
+        const Entity = @(nameClass)TestTable(conn, null, logger);
         if (Entity)
             return @(nameClass)FindAll(Entity, logger, schema).then((r) => res(r)).catch((ex) => rej(ex));
         else
@@ -151,7 +151,7 @@ module.exports.@(nameClass)FindService = (connection, schema, logger) => {
 module.exports.@(nameClass)FindByIdService = (parId, connection, schema, logger) => {
     return new Promise((res, rej) => {
         const conn = getAppConn(connection, logger);
-        const Entity = TestTable@(nameClass)(conn, null, logger);
+        const Entity = @(nameClass)TestTable(conn, null, logger);
         if (Entity)
             return @(nameClass)FindById(parId, Entity, logger, schema).then((r) => res(r)).catch((ex) => rej(ex));
         else
@@ -171,7 +171,7 @@ module.exports.@(nameClass)FindByIdService = (parId, connection, schema, logger)
 module.exports.@(nameClass)DeleteByIdService = (parId, connection, schema, logger) => {
     return new Promise((res, rej) => {
         const conn = getAppConn(connection, logger);
-        const Entity = TestTable@(nameClass)(conn, null, logger);
+        const Entity = @(nameClass)TestTable(conn, null, logger);
         if (Entity)
             return @(nameClass)DeleteById(parId, Entity, logger, schema).then((r) => res(r)).catch((ex) => rej(ex));
         else
