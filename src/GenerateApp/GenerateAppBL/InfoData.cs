@@ -190,7 +190,19 @@ namespace GenerateApp.Controllers
                         dtOptions.Rows.Add("ApplicationName", this.GenerateAppV1.payLoadConn.connDatabase );
                         dtOptions.Rows.Add("DataSource", sourceData.ToString());
                         dtOptions.Rows.Add("DataSourceConnectionString", this.GenerateAppV1.payLoadConn.ConnectionString());
-                        dtOptions.Rows.Add("DataSourceConnectionHost", this.GenerateAppV1.payLoadConn.connHost);
+                        string host = this.GenerateAppV1.payLoadConn.connHost;
+                        if (host.Contains("."))
+                        {
+                            switch (sourceData)
+                            {
+                                case connTypes.MSSQL:
+                                    host = host.Replace(".",Environment.MachineName);
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                        dtOptions.Rows.Add("DataSourceConnectionHost", host);
                         dtOptions.Rows.Add("DataSourceConnectionUser", this.GenerateAppV1.payLoadConn.connUser);
                         dtOptions.Rows.Add("DataSourceConnectionPassword", this.GenerateAppV1.payLoadConn.connPassword);
                         dtOptions.Rows.Add("DataSourceConnectionDatabase", this.GenerateAppV1.payLoadConn.connDatabase);
