@@ -89,7 +89,7 @@ const getAppConn = (connection, logger) => {
     return connection ? connection : appConn(config, logger);
 }
 
-//AlexBadita: ce este some id si name ?
+
 /**
  * @(nameClass)UpsertService.
  *
@@ -105,8 +105,19 @@ module.exports.@(nameClass)UpsertService = (content, connection, schema, logger)
 
         logger.info("Entity - Mapping data to object");
         let obj = {
-            some_id: content.some_id,
-            name: content.name
+
+            @for(int iCol = 0;iCol < nrCols; iCol++){
+                var col = dt.Columns[iCol];
+                var colType = col.DataType;
+                bool nullable=(col.AllowDBNull);
+                var colName= nameProperty(col.ColumnName,nameClass) ;
+                var nameType = nameTypeForJS(colType.Name);
+                <text>
+                    @(colName): content.@(colName) , 
+                </text>
+                
+            }
+            
         }
 
         const Entity = @(nameClass)TestTable(conn, null, logger);

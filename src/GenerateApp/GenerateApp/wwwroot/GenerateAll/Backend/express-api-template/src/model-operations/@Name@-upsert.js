@@ -71,18 +71,32 @@
 			}
 		return nameType;
     }
-    
-    
+    string updateOnDuplicate="";
+    for(int iCol = 0;iCol < nrCols; iCol++){
+        var col = dt.Columns[iCol];
+        var colType = col.DataType;
+        bool nullable=(col.AllowDBNull);
+        var colName= nameProperty(col.ColumnName,nameClass) ;
+        var nameType = nameTypeForJS(colType.Name);
+
+         if(colName == nameProperty(idTable,nameClass))
+                continue;
+        
+        updateOnDuplicate= colName +",";
+    }
+    if(updateOnDuplicate.Length>1){ //delete last ,
+        updateOnDuplicate=updateOnDuplicate.Substring(0, updateOnDuplicate.Length-1); 
+    }
 }
 
-//AlexBadita: ce e updateonduplicate?
+
 module.exports.@(nameClass)BulkUpsert = (obj, Entity, logger, schema) => {
     return new Promise((res, rej) => {
         Entity.bulkCreate(obj,
             {
                 benchmark: true,
                 searchPath: schema || '',
-                updateOnDuplicate: ["some_id", "name"]
+                updateOnDuplicate: [@Raw(updateOnDuplicate)]
             }
         ).then((data) => {
             res(`Entity-bulk-${data["0"] && data["0"].isNewRecord ? 'insert' : 'update'}`);

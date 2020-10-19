@@ -73,7 +73,7 @@
     
     
 }
-//AlexBadita: What to do with PK not integer?
+
 //AlexBadita: what to do with views  -they do not have pk?
 module.exports.@(nameClass)FindAll = (Entity, logger) => {
     return new Promise((res, rej) => {
@@ -81,7 +81,7 @@ module.exports.@(nameClass)FindAll = (Entity, logger) => {
             @{
                 if(havePK){
                     <text>
-                        @(nameProperty(idTable,nameClass)): (item) => item > 0
+                        @(nameProperty(idTable,nameClass)): (item) => item. @(nameProperty(idTable,nameClass)) =  item.@(nameProperty(idTable,nameClass))
                     </text>
 
                 }
