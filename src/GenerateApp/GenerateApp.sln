@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestGenerate", "TestGenerat
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GenerateFromDB", "GenerateFromDB\GenerateFromDB.csproj", "{B4EB3CFA-D73B-4F20-B68C-DB567DE2F202}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenerateAppTool", "GenerateAppTool\GenerateAppTool.csproj", "{12135987-9DAF-462F-BF45-4E25731C07F9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GenerateAppTool", "GenerateAppTool\GenerateAppTool.csproj", "{12135987-9DAF-462F-BF45-4E25731C07F9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeviceFingerprint", "DeviceFingerprint\DeviceFingerprint.csproj", "{B2EBFAC3-434E-4A45-9B41-FC082C8EA8E2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{12135987-9DAF-462F-BF45-4E25731C07F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{12135987-9DAF-462F-BF45-4E25731C07F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{12135987-9DAF-462F-BF45-4E25731C07F9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B2EBFAC3-434E-4A45-9B41-FC082C8EA8E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B2EBFAC3-434E-4A45-9B41-FC082C8EA8E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B2EBFAC3-434E-4A45-9B41-FC082C8EA8E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B2EBFAC3-434E-4A45-9B41-FC082C8EA8E2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
