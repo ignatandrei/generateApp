@@ -80,38 +80,45 @@ namespace GenerateFromDB.Controllers
             info.pathFile = Path.Combine(environment.WebRootPath, dateNow, "conection.txt");
             var di = Directory.CreateDirectory(Path.GetDirectoryName(info.pathFile));
             System.IO.File.WriteAllText(info.pathFile, app.payLoadConn.ConnectionString());
-            var data = await info.GenerateApp(app.output.ApiType, app.output.UiType);
-            if (!string.IsNullOrWhiteSpace(data))
+            var data = await info.GenerateApp(app.output[0].ApiType, app.output[0].UiType);
+
+            if (string.IsNullOrWhiteSpace(data))
             {
                 Console.WriteLine(info.logs[info.logs.Count - 2]);
                 Console.WriteLine(info.logs[info.logs.Count - 1]);
                 throw new Exception(info.logs[info.logs.Count - 1]);
             }
+            string allZip = Path.Combine(environment.WebRootPath, dateNow+ "generated.zip");
+            Console.WriteLine($"zipping {data} to {allZip}");
+            ZipFile.CreateFromDirectory(data, allZip);
+            if (false)
+            {
+                string pathDir = Path.GetDirectoryName(info.pathFile);
+                var powershellFile = Directory.GetFiles(pathDir, "generateWin.ps1", SearchOption.AllDirectories).FirstOrDefault();
+                if (powershellFile == null)
+                    throw new ArgumentException("cannot find powershell docker file");
 
-            string pathDir = Path.GetDirectoryName(info.pathFile);
-            var powershellFile = Directory.GetFiles(pathDir, "generateWin.ps1", SearchOption.AllDirectories).FirstOrDefault();
-            if (powershellFile == null)
-                throw new ArgumentException("cannot find powershell docker file");
+                var ps = new ProcessStartInfo();
+                ps.FileName = "powershell.exe";
+                ps.WorkingDirectory = Path.GetDirectoryName(powershellFile);
+                ps.Arguments = powershellFile;
+                ps.CreateNoWindow = false;
+                Process.Start(ps).WaitForExit();
 
-            var ps = new ProcessStartInfo();
-            ps.FileName = "powershell.exe";
-            ps.WorkingDirectory = Path.GetDirectoryName(powershellFile);
-            ps.Arguments = powershellFile;
-            ps.CreateNoWindow = false;
-            Process.Start(ps).WaitForExit();
+                string outDir = Path.Combine(Path.GetDirectoryName(powershellFile), "out", "netcore3.1", "win-x64");
+                InfoData.CreateVDir(dateNow, outDir);
 
-            string outDir = Path.Combine(Path.GetDirectoryName(powershellFile), "out", "netcore3.1", "win-x64");
-            InfoData.CreateVDir(dateNow, outDir);
-
-            string generated = Path.Combine(Path.GetDirectoryName(powershellFile), "generated");
-            string zip = Path.Combine(outDir, "wwwroot", "generated.zip");
-            ZipFile.CreateFromDirectory(generated, zip);
+                string generated = Path.Combine(Path.GetDirectoryName(powershellFile), "generated");
+                string zip = Path.Combine(outDir, "wwwroot", "generated.zip");
+                ZipFile.CreateFromDirectory(generated, zip);
+            }
 
             // execute powershell
             return new ReturnData()
             {
                 Site = dateNow,
-                ZipGenerated = $"{dateNow}/generated.zip"
+                //ZipGenerated = $"{dateNow}/generated.zip"
+                ZipGenerated = allZip
             };
          }
         [HttpPost]

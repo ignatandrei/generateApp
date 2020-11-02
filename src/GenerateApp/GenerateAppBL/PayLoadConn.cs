@@ -136,7 +136,7 @@ namespace GenerateApp.Controllers
         public PayLoadConn payLoadConn { get; set; }
         public TableGenerator[] input { get; set; }
         
-        public Output output { get; set; }
+        public Output[] output { get; set; }
         public async IAsyncEnumerable<ValidationResult> Validate()
         {
             var validOrig = Validate(null);
@@ -187,9 +187,10 @@ namespace GenerateApp.Controllers
                 yield break;
             }
 
-            foreach(var item in this.input)
+            if ((this.output?.Length ?? 0) == 0)
             {
-                
+                yield return new ValidationResult("do not have teplates in output");
+                yield break;
             }
         }
     }
