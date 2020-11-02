@@ -136,6 +136,7 @@ namespace GenerateApp.Controllers
         public PayLoadConn payLoadConn { get; set; }
         public TableGenerator[] input { get; set; }
         
+        public Output output { get; set; }
         public async IAsyncEnumerable<ValidationResult> Validate()
         {
             var validOrig = Validate(null);
@@ -191,6 +192,11 @@ namespace GenerateApp.Controllers
                 
             }
         }
+    }
+    public class Output
+    {
+        public string ApiType { get; set; }
+        public string UiType { get; set; }
     }
     public class TableGenerator: IValidatableObject
     {

@@ -46,7 +46,7 @@ namespace GenerateFromDB.Controllers
             info.pathFile = Path.Combine(environment.WebRootPath, dateNow, "conection.txt");
             var di = Directory.CreateDirectory(Path.GetDirectoryName(info.pathFile));
             System.IO.File.WriteAllText(info.pathFile, app.payLoadConn.ConnectionString());
-            var data = await info.GenerateApp("NETCore3.1", "Angular10.0");
+            var data = await info.GenerateApp(app.output.ApiType, app.output.UiType);
             if (!string.IsNullOrWhiteSpace(data))
             {
                 Console.WriteLine(info.logs[info.logs.Count - 2]);
