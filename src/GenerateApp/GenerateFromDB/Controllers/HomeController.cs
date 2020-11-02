@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 
 namespace GenerateFromDB.Controllers
 {
@@ -30,7 +31,40 @@ namespace GenerateFromDB.Controllers
         {
             return await payLoadConn.FromPayloadConn();
         }
+        [HttpGet]
+        public Output[] Templates()
+        {
+            var ret = new List<Output>();
+            var folder = Path.Combine(environment.WebRootPath, "GenerateAll");
+            string generator = Path.Combine(folder, "describe.txt");
+            if (!System.IO.File.Exists(generator))
+            {
+                Console.WriteLine($"cannot find file {generator}");
+                return ret.ToArray();
+            }
+            var stData = JsonConvert.DeserializeObject<StankinsGenerator>(System.IO.File.ReadAllText(generator));
+            foreach (var back in stData.backend)
+            {
+                if (back.worksWithFrontEnd?.Length > 0)
+                {
+                    foreach (var front in back.worksWithFrontEnd)
+                    {
+                        var o = new Output();
+                        o.ApiType = back.folder;
+                        o.UiType = front;
+                        ret.Add(o);
+                    }
 
+                }
+                else
+                {
+                    var o = new Output();
+                    o.ApiType = back.folder;
+                    ret.Add(o);
+                }
+            }
+            return ret.ToArray();
+        }
         [HttpPost]
         public async Task<ReturnData> GenerateApp([FromBody] GenerateAppV1 app)
         {
