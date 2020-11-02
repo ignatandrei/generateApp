@@ -112,13 +112,13 @@ namespace GenerateFromDB.Controllers
                 string zip = Path.Combine(outDir, "wwwroot", "generated.zip");
                 ZipFile.CreateFromDirectory(generated, zip);
             }
-
+        //https://www.data-to-code.eu/data2code/20201102235219generated.zip
             // execute powershell
             return new ReturnData()
             {
                 Site = dateNow,
                 //ZipGenerated = $"{dateNow}/generated.zip"
-                ZipGenerated = allZip
+                ZipGenerated = "data2code/"+Path.GetFileName(allZip)
             };
          }
         [HttpPost]
