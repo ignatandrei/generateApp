@@ -21,6 +21,9 @@ namespace GenerateFromDB
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            var c = (IConfigurationRoot)configuration;
+            var s = c.GetDebugView();
+            
         }
 
         public IConfiguration Configuration { get; }
