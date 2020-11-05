@@ -15,9 +15,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GenerateAppTool", "Generate
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeviceFingerprint", "DeviceFingerprint\DeviceFingerprint.csproj", "{B2EBFAC3-434E-4A45-9B41-FC082C8EA8E2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElasticSearchTestLog4Net", "ElasticSearchTestLog4Net\ElasticSearchTestLog4Net.csproj", "{1D173E53-5C81-4FF8-AF2A-6AA324ED193B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ElasticSearchTestLog4Net", "ElasticSearchTestLog4Net\ElasticSearchTestLog4Net.csproj", "{1D173E53-5C81-4FF8-AF2A-6AA324ED193B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Other_Tests", "Other_Tests", "{EEC0F212-5962-44A9-A35B-2D470445D585}"
+	ProjectSection(SolutionItems) = preProject
+		readme.md = readme.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
