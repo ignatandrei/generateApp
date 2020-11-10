@@ -118,7 +118,8 @@ namespace GenerateFromDB.Controllers
             {
                 Site = dateNow,
                 //ZipGenerated = $"{dateNow}/generated.zip"
-                ZipGenerated = "data2code/"+Path.GetFileName(allZip)
+                //ZipGenerated = "data2code/"+Path.GetFileName(allZip)
+                ZipGenerated= Path.GetFileName(allZip)
             };
          }
         [HttpPost]
