@@ -17,11 +17,24 @@ namespace GenerateAppWPF
         {
             this.Startup += App_Startup;
         }
-        
-        private void App_Startup(object sender, StartupEventArgs e)
-        {            
 
-            GenerateFromDB.Program.Main(new string[1] { "--urls http://localhost:9100" });
+        private void App_Startup(object sender, StartupEventArgs e)
+        {
+
+            Task.Run(() =>
+            // GenerateFromDB.Program.Main(new string[1] { "--urls http://localhost:9100" })
+            {
+                 try
+                 {
+                     GenerateFromDB.Program.Main(e.Args);
+                 }
+                 catch (Exception ex)
+                 {
+                     Console.WriteLine(ex.ToString());
+                 }
+             }
+            );  
+            //GenerateFromDB.Program.Main(e.Args);
         }
     }
 }
