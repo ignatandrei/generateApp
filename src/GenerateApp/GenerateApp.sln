@@ -22,6 +22,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Other_Tests", "Other_Tests"
 		readme.md = readme.md
 	EndProjectSection
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ElectronMvcTest", "ElectronMvcTest\ElectronMvcTest.csproj", "{F50A8A4D-91F5-459F-A84B-DE74B5239AD4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -56,6 +58,10 @@ Global
 		{1D173E53-5C81-4FF8-AF2A-6AA324ED193B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1D173E53-5C81-4FF8-AF2A-6AA324ED193B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1D173E53-5C81-4FF8-AF2A-6AA324ED193B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F50A8A4D-91F5-459F-A84B-DE74B5239AD4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F50A8A4D-91F5-459F-A84B-DE74B5239AD4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F50A8A4D-91F5-459F-A84B-DE74B5239AD4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F50A8A4D-91F5-459F-A84B-DE74B5239AD4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -63,6 +69,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{B2EBFAC3-434E-4A45-9B41-FC082C8EA8E2} = {EEC0F212-5962-44A9-A35B-2D470445D585}
 		{1D173E53-5C81-4FF8-AF2A-6AA324ED193B} = {EEC0F212-5962-44A9-A35B-2D470445D585}
+		{F50A8A4D-91F5-459F-A84B-DE74B5239AD4} = {EEC0F212-5962-44A9-A35B-2D470445D585}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0D6AD195-AB43-4817-B299-684F19F20680}
