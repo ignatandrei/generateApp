@@ -24,7 +24,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Other_Tests", "Other_Tests"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ElectronMvcTest", "ElectronMvcTest\ElectronMvcTest.csproj", "{F50A8A4D-91F5-459F-A84B-DE74B5239AD4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenerateAppWPF", "GenerateAppWPF\GenerateAppWPF.csproj", "{F67DC276-2DDB-4881-9939-738E4DCED36A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GenerateAppWPF", "GenerateAppWPF\GenerateAppWPF.csproj", "{F67DC276-2DDB-4881-9939-738E4DCED36A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
