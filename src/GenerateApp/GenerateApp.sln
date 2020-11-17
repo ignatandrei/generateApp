@@ -24,8 +24,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Other_Tests", "Other_Tests"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MainBuild", "MainBuild", "{F5A6DD2F-1418-4670-995B-16F6185A5D77}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElectronMvcTest", "ElectronMvcTest\ElectronMvcTest.csproj", "{B8BCAF6F-EF06-4E6B-836F-E6184764D507}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -60,10 +58,10 @@ Global
 		{1D173E53-5C81-4FF8-AF2A-6AA324ED193B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1D173E53-5C81-4FF8-AF2A-6AA324ED193B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1D173E53-5C81-4FF8-AF2A-6AA324ED193B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B8BCAF6F-EF06-4E6B-836F-E6184764D507}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B8BCAF6F-EF06-4E6B-836F-E6184764D507}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B8BCAF6F-EF06-4E6B-836F-E6184764D507}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B8BCAF6F-EF06-4E6B-836F-E6184764D507}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F50A8A4D-91F5-459F-A84B-DE74B5239AD4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F50A8A4D-91F5-459F-A84B-DE74B5239AD4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F50A8A4D-91F5-459F-A84B-DE74B5239AD4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F50A8A4D-91F5-459F-A84B-DE74B5239AD4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
