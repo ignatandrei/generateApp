@@ -28,6 +28,7 @@ namespace GenerateAppWPF
         private void MainWnd_Loaded(object sender, RoutedEventArgs e)
         {
             WBMain.Navigate("http://localhost:5000/index.html");
+            WBMain.Refresh(true);
         }
     }
 }
